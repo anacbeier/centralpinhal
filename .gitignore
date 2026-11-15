@@ -1,0 +1,6 @@
+# Só a página vai para o GitHub; o resto desta pasta fica só no Mac.
+*
+!.gitignore
+!index.html
+!pinha.png
+!logo.png

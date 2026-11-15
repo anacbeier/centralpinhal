@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CentralPinhal · lista de espera</title>
+<meta name="description" content="CentralPinhal: um app para Mac que junta tarefas, hábitos, ideias, dinheiro, agenda e os posts das suas redes num lugar só. Entre na lista de espera.">
+<meta property="og:title" content="CentralPinhal · lista de espera">
+<meta property="og:description" content="Seu espaço para organizar o que está crescendo. Um app para Mac, com a Pinha.">
+<meta name="theme-color" content="#FBF7ED">
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&family=Space+Mono:wght@400;700&display=swap">
+<style>
+/* Layout: duas colunas no alto (a conversa à esquerda, o cartão da lista à direita), depois o que tem
+   dentro, como chega no Mac e as perguntas numa coluna só. No celular tudo vira uma coluna. */
+:root {
+  --papel: #FBF7ED;        /* fundo da página */
+  --cartao: #F1EBDD;       /* cartões */
+  --linha: #E2D7C1;        /* bordas finas */
+  --tinta: #3E2C0F;        /* marrom: só nos textos */
+  --tinta-suave: #75664B;
+  --botao: #3F5633;        /* botões em verde */
+  --texto-botao: #FBF7ED;
+  --amarelo: #D68732;      /* detalhes */
+  --telha: #A44919;        /* detalhes */
+  --selecao: #F6E3C8;      /* fundo de uma opção escolhida */
+
+  --f-titulo: "Newsreader", "Iowan Old Style", "Palatino", Georgia, serif;
+  --f-texto: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "Space Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --raio: 22px;
+  --raio-campo: 12px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --papel: #211810;
+    --cartao: #2C2117;
+    --linha: #43352A;
+    --tinta: #EDE6D6;
+    --tinta-suave: #B8A98C;
+    --botao: #8DB880;
+    --texto-botao: #1A2414;
+    --amarelo: #DF9442;
+    --telha: #E07A4A;
+    --selecao: #4A3320;
+    color-scheme: dark;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font: 16px/1.55 var(--f-texto);
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--amarelo); outline-offset: 3px; }
+
+.largura {
+  width: 100%;
+  max-width: 1080px;
+  margin-inline: auto;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+}
+
+/* ---------- marca ---------- */
+.topo { padding-block: 22px 0; }
+.marca {
+  display: inline-flex; align-items: center; gap: 10px;
+  text-decoration: none;
+  font-family: var(--f-titulo); font-weight: 400; font-size: 1.45rem; letter-spacing: -0.01em;
+}
+.marca img { width: 34px; height: 34px; }
+.marca em, h1 em, .rodape-marca em { font-style: italic; color: var(--amarelo); }
+
+.sobretitulo {
+  margin: 0;
+  font-family: var(--f-mono); font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--telha);
+}
+
+/* ---------- palco: conversa + cartão ---------- */
+.palco {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  grid-template-areas: "texto cartao" "pinha cartao";
+  grid-template-rows: auto 1fr;
+  column-gap: 56px; row-gap: 8px;
+  padding-block: 44px 64px;
+  align-items: start;
+}
+.texto { grid-area: texto; display: grid; gap: 18px; min-width: 0; }
+h1 {
+  margin: 0;
+  font-family: var(--f-titulo); font-weight: 300;
+  font-size: clamp(2.4rem, 1.4rem + 3.6vw, 4rem);
+  line-height: 1.02; letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+h1 em { color: var(--telha); }
+.lead { margin: 0; font-size: 1.12rem; color: var(--tinta-suave); max-width: 34em; }
+.lead strong { color: var(--tinta); font-weight: 600; }
+
+/* a Pinha e o balão dela */
+.pinha {
+  grid-area: pinha;
+  margin: 0;
+  display: flex; align-items: flex-end; gap: 4px;
+  min-width: 0;
+}
+.pinha img {
+  width: 230px; flex: none;
+  transform-origin: 50% 90%;
+  animation: oi 1.6s ease-in-out 0.6s 1 both;
+}
+@keyframes oi {
+  0%, 100% { transform: rotate(0); }
+  20% { transform: rotate(-5deg); }
+  40% { transform: rotate(4deg); }
+  60% { transform: rotate(-3deg); }
+  80% { transform: rotate(2deg); }
+}
+@media (prefers-reduced-motion: reduce) { .pinha img { animation: none; } }
+.balao {
+  position: relative;
+  margin-bottom: 150px;
+  padding: 14px 18px;
+  background: var(--cartao);
+  border: 1px solid var(--linha);
+  border-radius: 18px 18px 18px 4px;
+  font-size: 0.98rem; line-height: 1.45;
+  max-width: 260px;
+}
+.balao b { display: block; font-family: var(--f-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amarelo); margin-bottom: 4px; }
+
+/* ---------- cartão da lista ---------- */
+.cartao {
+  grid-area: cartao;
+  background: var(--cartao);
+  border: 1px solid var(--linha);
+  border-radius: var(--raio);
+  padding: 30px 28px 26px;
+  min-width: 0;
+  position: sticky; top: calc(20px + env(safe-area-inset-top, 0px));
+  scroll-margin-top: 20px;
+}
+.cartao h2 {
+  margin: 8px 0 6px;
+  font-family: var(--f-titulo); font-weight: 400; font-size: 2.1rem; line-height: 1.05; letter-spacing: -0.02em;
+}
+.cartao .explica { margin: 0 0 22px; color: var(--tinta-suave); font-size: 0.97rem; }
+
+form { display: grid; gap: 16px; }
+.campo { display: grid; gap: 6px; }
+label, legend {
+  font-size: 0.86rem; font-weight: 600; color: var(--tinta);
+}
+legend { padding: 0; margin-bottom: 8px; }
+.opcional { font-weight: 400; color: var(--tinta-suave); }
+input[type="text"], input[type="email"], input[type="tel"] {
+  width: 100%;
+  font: inherit; font-size: 1rem; color: var(--tinta);
+  background: var(--papel);
+  border: 1px solid var(--linha);
+  border-radius: var(--raio-campo);
+  padding: 12px 14px;
+  transition: border-color .15s;
+}
+input::placeholder { color: var(--tinta-suave); opacity: .75; }
+input:focus { outline: none; border-color: var(--amarelo); box-shadow: 0 0 0 3px color-mix(in srgb, var(--amarelo) 25%, transparent); }
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+
+/* opções em pílula (rádio e caixinhas) */
+.pilulas { display: flex; flex-wrap: wrap; gap: 8px; }
+.pilula { position: relative; }
+.pilula input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.pilula span {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid var(--linha); border-radius: 999px;
+  background: var(--papel);
+  font-size: 0.9rem; line-height: 1.2;
+  cursor: pointer; user-select: none;
+  transition: background-color .15s, border-color .15s;
+}
+.pilula input:checked + span { background: var(--selecao); border-color: var(--amarelo); }
+.pilula input:checked + span::before { content: "✓"; color: var(--telha); font-weight: 700; font-size: 0.8rem; }
+.pilula input:focus-visible + span { outline: 2px solid var(--amarelo); outline-offset: 2px; }
+
+.armadilha { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+
+.botao {
+  appearance: none; border: 0; cursor: pointer;
+  width: 100%;
+  margin-top: 4px;
+  padding: 15px 20px;
+  border-radius: 999px;
+  background: var(--botao); color: var(--texto-botao);
+  font: 600 1.05rem/1.2 var(--f-texto);
+  transition: filter .15s, transform .1s;
+}
+.botao:hover { filter: brightness(1.08); }
+.botao:active { transform: translateY(1px); }
+.botao:disabled { cursor: progress; filter: saturate(.6); }
+
+.aviso {
+  margin: 0; padding: 10px 14px;
+  border: 1px solid var(--telha); border-radius: var(--raio-campo);
+  color: var(--telha); font-size: 0.9rem;
+}
+.miudo { margin: 0; font-size: 0.8rem; line-height: 1.5; color: var(--tinta-suave); }
+.miudo + .miudo { margin-top: 8px; }
+.letras-miudas { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--linha); }
+
+/* depois de entrar na lista */
+.pronto { display: grid; gap: 14px; justify-items: start; }
+.pronto img { width: 120px; }
+.pronto h2 { margin: 0; }
+.pronto p { margin: 0; color: var(--tinta-suave); }
+.pronto .fala { font-size: 1.02rem; color: var(--tinta); }
+.pronto .assinatura { font-family: var(--f-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amarelo); }
+
+/* ---------- seções de baixo ---------- */
+.secao { padding-block: 56px; border-top: 1px solid var(--linha); }
+.secao-cabeca { display: grid; gap: 10px; margin-bottom: 30px; max-width: 40em; }
+.secao h2 {
+  margin: 0;
+  font-family: var(--f-titulo); font-weight: 300;
+  font-size: clamp(1.9rem, 1.3rem + 1.8vw, 2.6rem); line-height: 1.08; letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.secao-cabeca p { margin: 0; color: var(--tinta-suave); }
+
+.areas {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 48px;
+  margin: 0;
+}
+.area { padding-block: 16px; border-top: 1px solid var(--linha); display: grid; gap: 4px; min-width: 0; }
+.area dt {
+  font-family: var(--f-mono); font-size: 0.78rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--tinta);
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.area dt::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--amarelo); flex: none; }
+.selo {
+  font-size: 0.66rem; font-weight: 400; letter-spacing: 0.06em;
+  color: var(--telha); border: 1px solid currentColor; border-radius: 999px; padding: 1px 8px;
+}
+.area dd { margin: 0; color: var(--tinta-suave); }
+.nota-perfis { margin: 26px 0 0; max-width: 44em; color: var(--tinta-suave); }
+.nota-perfis strong { color: var(--tinta); font-weight: 600; }
+
+.passos {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px;
+  counter-reset: passo;
+}
+.passos li {
+  counter-increment: passo;
+  background: var(--cartao); border: 1px solid var(--linha); border-radius: var(--raio);
+  padding: 24px 22px;
+  display: grid; gap: 8px; align-content: start;
+  min-width: 0;
+}
+.passos li::before {
+  content: counter(passo);
+  font-family: var(--f-titulo); font-style: italic; font-size: 2.4rem; line-height: 1;
+  color: var(--amarelo);
+}
+.passos h3 { margin: 0; font-size: 1.05rem; font-weight: 600; }
+.passos p { margin: 0; color: var(--tinta-suave); font-size: 0.97rem; }
+.passos code { font-family: var(--f-mono); font-size: 0.85em; color: var(--tinta); }
+
+.precisa { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
+.lista-certa { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.lista-certa li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; }
+.lista-certa li::before { content: "✓"; color: var(--amarelo); font-weight: 700; }
+.lista-certa strong { font-weight: 600; }
+.lista-certa span { color: var(--tinta-suave); }
+
+.perguntas { display: grid; gap: 0; max-width: 46em; }
+.perguntas details { border-top: 1px solid var(--linha); }
+.perguntas details:last-child { border-bottom: 1px solid var(--linha); }
+.perguntas summary {
+  cursor: pointer; list-style: none;
+  padding: 18px 36px 18px 0; position: relative;
+  font-weight: 600; font-size: 1.02rem;
+}
+.perguntas summary::-webkit-details-marker { display: none; }
+.perguntas summary::after {
+  content: "+"; position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
+  font-family: var(--f-mono); font-size: 1.2rem; color: var(--telha);
+}
+.perguntas details[open] summary::after { content: "–"; }
+.perguntas details p { margin: 0 0 18px; color: var(--tinta-suave); }
+
+.chamada-final {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px;
+  padding-block: 40px 56px; border-top: 1px solid var(--linha);
+}
+.rodape-marca { margin: 0; font-family: var(--f-titulo); font-size: 1.5rem; font-weight: 300; }
+.rodape-marca span { display: block; font-family: var(--f-texto); font-size: 0.92rem; color: var(--tinta-suave); margin-top: 4px; }
+.botao-link {
+  display: inline-block; text-decoration: none;
+  padding: 13px 26px; border-radius: 999px;
+  background: var(--botao); color: var(--texto-botao); font-weight: 600;
+}
+.botao-link:hover { filter: brightness(1.08); }
+
+/* ---------- celular e tablet ---------- */
+@media (max-width: 880px) {
+  .palco {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "texto" "cartao" "pinha";
+    grid-template-rows: auto;
+    row-gap: 28px;
+    padding-block: 28px 48px;
+  }
+  .cartao { position: static; padding: 24px 20px 22px; }
+  .pinha { justify-content: center; }
+  .pinha img { width: 170px; }
+  .balao { margin-bottom: 110px; }
+  .areas { grid-template-columns: minmax(0, 1fr); }
+  .passos { grid-template-columns: minmax(0, 1fr); }
+  .precisa { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .secao { padding-block: 44px; }
+}
+@media (max-width: 420px) {
+  .pinha img { width: 140px; }
+  .balao { margin-bottom: 90px; font-size: 0.92rem; }
+  .cartao h2 { font-size: 1.85rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="topo largura">
+  <a class="marca" href="#lista" aria-label="CentralPinhal, ir para a lista de espera">
+    <img src="logo.png" alt="" width="34" height="34">
+    <span>Central<em>pinhal</em></span>
+  </a>
+</header>
+
+<main>
+  <div class="palco largura">
+    <section class="texto" aria-labelledby="titulo">
+      <p class="sobretitulo">App para Mac · com a Pinha</p>
+      <h1 id="titulo">Seu espaço para organizar o que está <em>crescendo</em>.</h1>
+      <p class="lead">Tarefas, hábitos, ideias, dinheiro, agenda e os posts das suas redes <strong>num lugar só, no seu Mac</strong>. E uma ajudante de feltro que conversa com você e faz o trabalho repetitivo.</p>
+    </section>
+
+    <figure class="pinha">
+      <img src="pinha.png" alt="A Pinha, uma pinha de feltro sorrindo e acenando" width="600" height="592">
+      <figcaption class="balao"><b>Pinha</b>Oiee! Entra na lista que eu te chamo quando a Central abrir. Prometo não mandar spam, eu mal sei usar o e-mail kkkk</figcaption>
+    </figure>
+
+    <aside class="cartao" id="lista" aria-labelledby="titulo-lista">
+      <div id="caixa-form">
+        <p class="sobretitulo">Lista de espera</p>
+        <h2 id="titulo-lista">Quero saber primeiro</h2>
+        <p class="explica">Deixe seu contato e você fica sabendo antes de todo mundo quando a CentralPinhal abrir.</p>
+
+        <form id="form-lista" autocomplete="on">
+          <div class="campo">
+            <label for="nome">Seu nome</label>
+            <input type="text" id="nome" name="nome" autocomplete="name" required maxlength="120" placeholder="Como você quer ser chamada(o)">
+          </div>
+          <div class="campo">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" autocomplete="email" required maxlength="160" placeholder="voce@email.com" inputmode="email">
+          </div>
+          <div class="campo">
+            <label for="whatsapp">WhatsApp <span class="opcional">(opcional)</span></label>
+            <input type="tel" id="whatsapp" name="whatsapp" autocomplete="tel" inputmode="tel" maxlength="30" placeholder="DDD + número">
+          </div>
+
+          <fieldset>
+            <legend>Você usa Mac?</legend>
+            <div class="pilulas">
+              <label class="pilula"><input type="radio" id="mac-sim" name="mac" value="Uso Mac" required><span>Uso Mac</span></label>
+              <label class="pilula"><input type="radio" id="mac-quero" name="mac" value="Ainda não, mas quero"><span>Ainda não, mas quero</span></label>
+              <label class="pilula"><input type="radio" id="mac-ios" name="mac" value="Só iPhone ou iPad"><span>Só iPhone ou iPad</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>O que você mais quer organizar? <span class="opcional">(escolha quantos quiser)</span></legend>
+            <div class="pilulas">
+              <label class="pilula"><input type="checkbox" id="i-tarefas" name="interesse" value="Tarefas"><span>Tarefas</span></label>
+              <label class="pilula"><input type="checkbox" id="i-habitos" name="interesse" value="Hábitos"><span>Hábitos</span></label>
+              <label class="pilula"><input type="checkbox" id="i-ideias" name="interesse" value="Ideias e notas"><span>Ideias e notas</span></label>
+              <label class="pilula"><input type="checkbox" id="i-financeiro" name="interesse" value="Financeiro"><span>Financeiro</span></label>
+              <label class="pilula"><input type="checkbox" id="i-agenda" name="interesse" value="Agenda"><span>Agenda</span></label>
+              <label class="pilula"><input type="checkbox" id="i-conteudo" name="interesse" value="Posts das redes"><span>Posts das redes</span></label>
+              <label class="pilula"><input type="checkbox" id="i-clientes" name="interesse" value="Clientes"><span>Clientes</span></label>
+            </div>
+          </fieldset>
+
+          <div class="armadilha" aria-hidden="true">
+            <label for="site">Deixe este campo vazio</label>
+            <input type="text" id="site" name="site" tabindex="-1" autocomplete="off">
+          </div>
+
+          <p class="aviso" id="aviso" role="alert" hidden></p>
+          <button class="botao" type="submit" id="enviar">Entrar na lista</button>
+        </form>
+
+        <div class="letras-miudas">
+          <p class="miudo">Seus dados servem só para avisar sobre a CentralPinhal. Nada de spam, e você sai da lista quando quiser.</p>
+          <p class="miudo">A Central é um app para Mac que o Claude Code monta no seu computador, com a sua conta do Claude.</p>
+        </div>
+      </div>
+
+      <div class="pronto" id="pronto" hidden tabindex="-1">
+        <img src="pinha.png" alt="" width="600" height="592">
+        <p class="sobretitulo">Você está na lista</p>
+        <h2 id="titulo-pronto">Anotado!</h2>
+        <p class="fala">Quando a CentralPinhal abrir, você fica sabendo antes de todo mundo. Agora vou voltar a olhar pro nada e pensar na vida kkkk</p>
+        <p class="assinatura">— Pinha</p>
+      </div>
+    </aside>
+  </div>
+
+  <section class="secao largura" aria-labelledby="titulo-dentro">
+    <div class="secao-cabeca">
+      <p class="sobretitulo">O que tem dentro</p>
+      <h2 id="titulo-dentro">Uma página para cada parte da sua vida</h2>
+      <p>Você liga só as que fazem sentido para você. As outras ficam escondidas.</p>
+    </div>
+    <dl class="areas">
+      <div class="area"><dt>Início</dt><dd>O painel do dia: calendário, tarefas, o financeiro do mês e as suas ideias.</dd></div>
+      <div class="area"><dt>Tarefas</dt><dd>A semana de segunda a domingo. Arraste um cartão para mudar o dia.</dd></div>
+      <div class="area"><dt>Hábitos</dt><dd>Marque cada dia e veja a sequência de dias seguidos crescer.</dd></div>
+      <div class="area"><dt>Segundo cérebro</dt><dd>Notas, ideias, reflexões e links, com tags e busca.</dd></div>
+      <div class="area"><dt>Financeiro</dt><dd>Entradas e saídas, orçamento do mês, metas e contas a pagar.</dd></div>
+      <div class="area"><dt>Agenda</dt><dd>Os compromissos, no calendário do mês ou em lista.</dd></div>
+      <div class="area"><dt>Conteúdo <span class="selo">opcional</span></dt><dd>Cada post da ideia ao postado, com galeria, calendário editorial e a estratégia da semana.</dd></div>
+      <div class="area"><dt>Clientes <span class="selo">opcional</span></dt><dd>Quem você atende: contato, mensalidade, projetos e as tarefas de cada um.</dd></div>
+    </dl>
+    <p class="nota-perfis"><strong>Pessoal e trabalho separados.</strong> Tenha um perfil seu e outro do seu studio, cada um com os seus dados. O da empresa usa o seu logo, as suas cores e as suas fontes na Central inteira.</p>
+  </section>
+
+  <section class="secao largura" aria-labelledby="titulo-como">
+    <div class="secao-cabeca">
+      <p class="sobretitulo">Como ela chega no seu Mac</p>
+      <h2 id="titulo-como">Você não precisa saber programar</h2>
+      <p>A Central vem como código, com um guia escrito para o Claude. É ele quem monta.</p>
+    </div>
+    <ol class="passos">
+      <li><h3>Você recebe a pasta</h3><p>Com o código da Central e o guia <code>COMECE-AQUI.md</code>.</p></li>
+      <li><h3>O Claude monta</h3><p>Abra a pasta no Claude Code e diga: “Leia o COMECE-AQUI.md e instale a CentralPinhal para mim.”</p></li>
+      <li><h3>Ela abre já sua</h3><p>As boas-vindas perguntam seu nome, sua foto e quais páginas você quer. Depois é só usar.</p></li>
+    </ol>
+  </section>
+
+  <section class="secao largura" aria-labelledby="titulo-precisa">
+    <div class="precisa">
+      <div class="secao-cabeca">
+        <p class="sobretitulo">Do que você precisa</p>
+        <h2 id="titulo-precisa">Um Mac e a sua conta do Claude</h2>
+        <p>A Central foi feita para gastar pouco do seu plano: o que é repetitivo ela faz sozinha, sem IA.</p>
+      </div>
+      <ul class="lista-certa">
+        <li><div><strong>Um Mac com macOS 15</strong> <span>ou mais novo.</span></div></li>
+        <li><div><strong>Xcode</strong> <span>grátis na Mac App Store. O Claude usa ele para montar o app.</span></div></li>
+        <li><div><strong>Claude Code</strong> <span>entrando na sua conta do Claude. A Pinha conversa pela mesma conta, sem chave e sem créditos à parte.</span></div></li>
+        <li><div><strong>Nada da Apple pago.</strong> <span>Não precisa do programa de desenvolvedor.</span></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="secao largura" aria-labelledby="titulo-perguntas">
+    <div class="secao-cabeca">
+      <p class="sobretitulo">Perguntas</p>
+      <h2 id="titulo-perguntas">Antes de entrar na lista</h2>
+    </div>
+    <div class="perguntas">
+      <details>
+        <summary>Quem é a Pinha?</summary>
+        <p>A ajudante de dentro da Central, uma pinha de feltro. Ela avisa o que mudou, conversa com você e manda a equipe dela trabalhar: ler as suas redes, buscar as novidades do seu nicho, montar a estratégia da semana. Publicar e apagar, só com o seu OK.</p>
+      </details>
+      <details>
+        <summary>Funciona no iPhone e no iPad?</summary>
+        <p>A Central é feita para o Mac. O mesmo código também roda no iPhone e no iPad, numa versão mais simples.</p>
+      </details>
+      <details>
+        <summary>Onde ficam os meus dados?</summary>
+        <p>No seu Mac. Para usar em mais de um Mac, a Central sincroniza de graça pelo seu iCloud Drive.</p>
+      </details>
+      <details>
+        <summary>Gasta muito do meu plano do Claude?</summary>
+        <p>Foi feita para gastar pouco. Você escolhe o modelo de cada tarefa da Pinha: o Haiku gasta bem menos, o Sonnet é o equilíbrio e o Opus é o que mais gasta.</p>
+      </details>
+    </div>
+  </section>
+
+  <div class="chamada-final largura">
+    <p class="rodape-marca">Central<em>pinhal</em><span>Seu espaço para organizar o que está crescendo.</span></p>
+    <a class="botao-link" href="#lista">Entrar na lista</a>
+  </div>
+</main>
+
+<script>
+// Cole entre as aspas o endereço do App da Web da planilha (veja COMO-PUBLICAR.md, passo 1).
+const ENDERECO_DA_PLANILHA = "https://script.google.com/macros/s/AKfycbyM1xcRudD3kv1KPO_QltUC8bak9Ohj0tW4VzmB7hNokKiXJY81bHUtm7HdQLiXL8CotA/exec";
+
+const form = document.getElementById("form-lista");
+const aviso = document.getElementById("aviso");
+const botao = document.getElementById("enviar");
+const caixaForm = document.getElementById("caixa-form");
+const pronto = document.getElementById("pronto");
+
+// De onde a pessoa veio: as etiquetas utm do link (ex.: ?utm_source=instagram) ou o site anterior.
+function deOndeVeio() {
+  const q = new URLSearchParams(location.search);
+  const etiquetas = ["utm_source", "utm_medium", "utm_campaign"].map((k) => q.get(k)).filter(Boolean);
+  if (etiquetas.length) return etiquetas.join(" / ");
+  try { if (document.referrer) return new URL(document.referrer).hostname; } catch (e) {}
+  return "direto";
+}
+
+function mostraAviso(texto) {
+  aviso.textContent = texto;
+  aviso.hidden = false;
+}
+
+function mostraPronto(nome) {
+  const primeiro = nome.split(/\s+/)[0];
+  document.getElementById("titulo-pronto").textContent = primeiro ? `Anotado, ${primeiro}!` : "Anotado!";
+  caixaForm.hidden = true;
+  document.querySelector(".pinha").hidden = true; // o balão "entra na lista" já não faz sentido
+  pronto.hidden = false;
+  pronto.focus({ preventScroll: true });
+  document.getElementById("lista").scrollIntoView({ block: "start" });
+}
+
+form.addEventListener("submit", async (evento) => {
+  evento.preventDefault();
+  aviso.hidden = true;
+  const d = new FormData(form);
+  if (d.get("site")) return; // campo escondido: só robô preenche
+
+  const nome = String(d.get("nome") || "").trim();
+  const dados = new URLSearchParams({
+    nome,
+    email: String(d.get("email") || "").trim(),
+    whatsapp: String(d.get("whatsapp") || "").trim(),
+    mac: String(d.get("mac") || ""),
+    interesses: d.getAll("interesse").join(", "),
+    origem: deOndeVeio(),
+  });
+
+  if (!ENDERECO_DA_PLANILHA) {
+    mostraAviso("Falta ligar a página à planilha: o passo a passo está no COMO-PUBLICAR.md.");
+    return;
+  }
+
+  botao.disabled = true;
+  botao.textContent = "Enviando…";
+  try {
+    // A planilha do Google não devolve resposta legível para outro site; se a rede respondeu, chegou.
+    await fetch(ENDERECO_DA_PLANILHA, { method: "POST", mode: "no-cors", body: dados });
+    mostraPronto(nome);
+  } catch (erro) {
+    mostraAviso("Não deu para enviar agora. Confira a sua internet e tente de novo.");
+  } finally {
+    botao.disabled = false;
+    botao.textContent = "Entrar na lista";
+  }
+});
+</script>
+</body>
+</html>
