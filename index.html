@@ -82,8 +82,8 @@ a { color: inherit; }
 .palco {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  grid-template-areas: "texto cartao" "pinha cartao";
-  grid-template-rows: auto 1fr;
+  grid-template-areas: "texto cartao" "video cartao" "pinha cartao";
+  grid-template-rows: auto auto 1fr;
   column-gap: 56px; row-gap: 8px;
   padding-block: 44px 64px;
   align-items: start;
@@ -131,6 +131,21 @@ h1 em { color: var(--telha); }
   max-width: 260px;
 }
 .balao b { display: block; font-family: var(--f-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amarelo); margin-bottom: 4px; }
+
+/* o vídeo da Central, dentro da seção principal */
+.video { grid-area: video; margin: 24px 0 0; position: relative; min-width: 0; }
+.video video {
+  width: 100%; height: auto; aspect-ratio: 16 / 10; display: block;
+  border-radius: var(--raio); border: 1px solid var(--linha); background: var(--cartao);
+}
+.video-botao {
+  position: absolute; right: 12px; bottom: 12px;
+  appearance: none; border: 0; cursor: pointer;
+  padding: 7px 14px; border-radius: 999px;
+  background: var(--botao); color: var(--texto-botao);
+  font: 600 0.82rem/1.2 var(--f-texto);
+}
+.video-botao:hover { filter: brightness(1.08); }
 
 /* ---------- cartão da lista ---------- */
 .cartao {
@@ -255,7 +270,7 @@ html.carregando .pinha img { animation-play-state: paused; }
 @media (max-width: 880px) {
   .palco {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "texto" "cartao" "pinha";
+    grid-template-areas: "texto" "cartao" "video" "pinha";
     grid-template-rows: auto;
     row-gap: 28px;
     padding-block: 28px 48px;
@@ -317,6 +332,12 @@ html.carregando .pinha img { animation-play-state: paused; }
       <h1 id="titulo">Seu espaço para organizar o que está <em>crescendo</em>.</h1>
       <p class="lead">Tarefas, hábitos, ideias, dinheiro, agenda e os posts das suas redes <strong>num lugar só, no seu Mac</strong>. E uma ajudante de feltro que conversa com você e faz o trabalho repetitivo.</p>
     </section>
+
+    <figure class="video">
+      <video id="video-central" src="centralpinhal.mp4" poster="centralpinhal-capa.jpg" muted loop playsinline preload="metadata"
+             aria-label="A CentralPinhal funcionando: a criação da conta, o Início, a Pinha, Tarefas, Hábitos, Segundo cérebro, Financeiro e Agenda"></video>
+      <button class="video-botao" type="button" id="video-botao">Pausar</button>
+    </figure>
 
     <figure class="pinha">
       <img src="pinha.png" alt="A Pinha, uma pinha de feltro sorrindo e acenando" width="600" height="592">
@@ -424,6 +445,21 @@ function mostraPronto(nome) {
   pronto.focus({ preventScroll: true });
   document.getElementById("lista").scrollIntoView({ block: "start" });
 }
+
+// O vídeo toca sem som, em loop, só enquanto está na tela. Quem pede menos movimento aperta "Ver o vídeo".
+(function () {
+  const video = document.getElementById("video-central");
+  const botao = document.getElementById("video-botao");
+  let pausado = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let naTela = false;
+  function atualizar() {
+    if (!pausado && naTela) video.play().catch(() => {}); else video.pause();
+    botao.textContent = pausado ? (video.currentTime > 0 ? "Continuar" : "Ver o vídeo") : "Pausar";
+  }
+  botao.addEventListener("click", () => { pausado = !pausado; atualizar(); });
+  new IntersectionObserver((itens) => { naTela = itens[0].isIntersecting; atualizar(); }, { threshold: 0.3 }).observe(video);
+  atualizar();
+})();
 
 form.addEventListener("submit", async (evento) => {
   evento.preventDefault();
