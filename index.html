@@ -127,8 +127,12 @@ h1 em { color: var(--telha); }
   align-self: stretch; align-content: space-between;
   min-width: 0;
 }
-.ganhos li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 10px; align-items: center; color: var(--tinta-suave); font-size: 0.95rem; line-height: 1.4; }
-.ganhos img { width: 44px; height: 44px; object-fit: contain; }
+.ganhos li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; color: var(--tinta-suave); font-size: 0.95rem; line-height: 1.4; }
+.ganhos li::before {
+  content: "✓"; width: 22px; height: 22px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--selecao); color: var(--telha); font-size: 0.75rem; font-weight: 700;
+}
 
 /* ---------- cartão da lista ---------- */
 .cartao {
@@ -357,18 +361,18 @@ html.carregando .abertura {
     </figure>
 
     <ul class="ganhos">
-      <li><img src="pinhas/animada.png" alt="" width="44" height="44" loading="lazy">Você escreve, a Pinha cria a tarefa, o gasto ou o compromisso</li>
-      <li><img src="pinhas/acenando.png" alt="" width="44" height="44" loading="lazy">Um painel do dia que muda com a hora</li>
-      <li><img src="pinhas/diario.png" alt="" width="44" height="44" loading="lazy">A semana dividida em manhã, tarde e noite: arraste para mudar</li>
-      <li><img src="pinhas/exercitando.png" alt="" width="44" height="44" loading="lazy">Hábitos com sequência de dias e uma pinha para cada um</li>
-      <li><img src="pinhas/pensando.png" alt="" width="44" height="44" loading="lazy">Cartões, faturas, parcelas e orçamento do mês à vista</li>
-      <li><img src="pinhas/agua.png" alt="" width="44" height="44" loading="lazy">Agenda com lembretes de compromissos e contas a pagar</li>
-      <li><img src="pinhas/lendo.png" alt="" width="44" height="44" loading="lazy">Segundo cérebro: notas, ideias e links com tags</li>
-      <li><img src="pinhas/estudando.png" alt="" width="44" height="44" loading="lazy">A Pinha lê a sua semana e diz o que funcionou</li>
-      <li><img src="pinhas/parada.png" alt="" width="44" height="44" loading="lazy">Perfil pessoal e do seu estúdio, cada um com os seus dados</li>
-      <li><img src="pinhas/meditando.png" alt="" width="44" height="44" loading="lazy">Sincroniza grátis entre os seus Macs pelo iCloud Drive</li>
-      <li><img src="pinhas/dormindo.png" alt="" width="44" height="44" loading="lazy">Seus dados ficam no seu Mac, não na nuvem de ninguém</li>
-      <li><img src="pinhas/dieta.png" alt="" width="44" height="44" loading="lazy">Feita para gastar pouco do seu plano do Claude</li>
+      <li>Você escreve, a Pinha cria a tarefa, o gasto ou o compromisso</li>
+      <li>Um painel do dia que muda com a hora</li>
+      <li>A semana dividida em manhã, tarde e noite: arraste para mudar</li>
+      <li>Hábitos com sequência de dias e uma pinha para cada um</li>
+      <li>Cartões, faturas, parcelas e orçamento do mês à vista</li>
+      <li>Agenda com lembretes de compromissos e contas a pagar</li>
+      <li>Segundo cérebro: notas, ideias e links com tags</li>
+      <li>A Pinha lê a sua semana e diz o que funcionou</li>
+      <li>Perfil pessoal e do seu estúdio, cada um com os seus dados</li>
+      <li>Sincroniza grátis entre os seus Macs pelo iCloud Drive</li>
+      <li>Seus dados ficam no seu Mac, não na nuvem de ninguém</li>
+      <li>Feita para gastar pouco do seu plano do Claude</li>
     </ul>
 
     <aside class="cartao" id="lista" aria-labelledby="titulo-lista">
