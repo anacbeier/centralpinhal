@@ -118,8 +118,9 @@ h1 em { color: var(--telha); }
 .video-botao:hover { filter: brightness(1.08); }
 
 .ganhos {
-  grid-area: ganhos; list-style: none; margin: 22px 0 0; padding: 0;
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px;
+  grid-area: ganhos; list-style: none; margin: 26px 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 24px;
+  align-self: stretch; align-content: space-between;
   min-width: 0;
 }
 .ganhos li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; color: var(--tinta-suave); font-size: 0.95rem; line-height: 1.4; }
@@ -156,11 +157,11 @@ h1 em { color: var(--telha); }
 .bonus-selo {
   position: absolute; top: -13px; left: 14px;
   padding: 7px 12px; border-radius: 999px;
-  background: linear-gradient(#1478FF, #0869F5); color: #fff;
+  background: #465BE1; color: #FBF7ED;
   font: 700 0.78rem/1 var(--f-texto);
 }
 .bonus-titulo { margin: 0; font-weight: 700; font-size: 1rem; }
-.bonus-incluso { color: #0869F5; font-weight: 700; font-size: 0.92rem; }
+.bonus-incluso { color: #465BE1; font-weight: 700; font-size: 0.92rem; }
 .bonus-texto { grid-column: 1 / -1; margin: 0; color: var(--tinta-suave); font-size: 0.92rem; line-height: 1.45; }
 
 form { display: grid; gap: 16px; }
@@ -203,29 +204,37 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 .armadilha { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 
 .botao {
-  appearance: none; border: 0; cursor: pointer;
-  width: 100%;
-  margin-top: 4px;
-  padding: 15px 20px;
-  border-radius: 999px;
-  background: linear-gradient(#1478FF, #0869F5); color: #fff;
-  font: 700 1.08rem/1.2 var(--f-texto);
-  transition: filter .15s, transform .1s;
+  appearance: none; cursor: pointer;
+  width: 100%; min-height: 3.5rem;
+  margin-top: 6px;
+  padding: 12px 24px;
+  border: 5px solid #AAB4FF; border-radius: 999px;
+  background: #465BE1; color: #FBF7ED;
+  font: 700 1rem/1.4 var(--f-mono);
+  display: inline-flex; align-items: center; justify-content: center;
   position: relative;
+  transition: background-color .18s;
   animation: pulsar 2.4s ease-in-out infinite;
 }
 .botao::after {
-  content: ""; position: absolute; inset: 0; border-radius: inherit;
-  border: 2px solid #1478FF; pointer-events: none;
+  content: ""; position: absolute; inset: -5px; border-radius: inherit;
+  border: 2px solid #465BE1; pointer-events: none;
   opacity: 0; animation: onda 2.4s ease-out infinite;
 }
-@keyframes pulsar { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.025); } }
+@keyframes pulsar { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
 @keyframes onda { 0% { opacity: .6; transform: scale(1); } 100% { opacity: 0; transform: scale(1.06, 1.45); } }
+.botao:hover { background: #3B4FCE; animation-play-state: paused; }
+.botao:active { transform: scale(.98); }
+.botao:focus-visible { outline: 3px solid var(--amarelo); outline-offset: 4px; }
+.botao:disabled { opacity: .6; cursor: progress; }
 .botao:disabled, .botao:disabled::after { animation: none; }
 @media (prefers-reduced-motion: reduce) { .botao, .botao::after { animation: none; } }
-.botao:hover { filter: brightness(1.08); animation-play-state: paused; }
-.botao:active { transform: translateY(1px); }
-.botao:disabled { cursor: progress; filter: saturate(.6); }
+/* o texto rola para cima ao passar o mouse, como no site do Studio Tchê */
+.rolo { position: relative; display: inline-flex; flex-direction: column; overflow: hidden; }
+.rolo-texto { display: block; transition: transform .42s cubic-bezier(.22, 1, .36, 1); }
+.rolo-texto--copia { position: absolute; inset: 0; transform: translateY(100%); }
+.botao:hover .rolo-texto { transform: translateY(-100%); }
+.botao:hover .rolo-texto--copia { transform: translateY(0); }
 
 .aviso {
   margin: 0; padding: 10px 14px;
@@ -348,8 +357,16 @@ html.carregando .abertura {
     <ul class="ganhos">
       <li>Você escreve, a Pinha cria a tarefa, o gasto ou o compromisso</li>
       <li>Um painel do dia que muda com a hora</li>
-      <li>Cartões, faturas e orçamento do mês à vista</li>
-      <li>Seus dados ficam no seu Mac</li>
+      <li>A semana dividida em manhã, tarde e noite: arraste para mudar</li>
+      <li>Hábitos com sequência de dias e uma pinha para cada um</li>
+      <li>Cartões, faturas, parcelas e orçamento do mês à vista</li>
+      <li>Agenda com lembretes de compromissos e contas a pagar</li>
+      <li>Segundo cérebro: notas, ideias e links com tags</li>
+      <li>A Pinha lê a sua semana e diz o que funcionou</li>
+      <li>Perfil pessoal e do seu estúdio, cada um com os seus dados</li>
+      <li>Sincroniza grátis entre os seus Macs pelo iCloud Drive</li>
+      <li>Seus dados ficam no seu Mac, não na nuvem de ninguém</li>
+      <li>Feita para gastar pouco do seu plano do Claude</li>
     </ul>
 
     <aside class="cartao" id="lista" aria-labelledby="titulo-lista">
@@ -406,7 +423,7 @@ html.carregando .abertura {
           </div>
 
           <p class="aviso" id="aviso" role="alert" hidden></p>
-          <button class="botao" type="submit" id="enviar">Quero entrar na lista</button>
+          <button class="botao" type="submit" id="enviar"><span class="rolo"><span class="rolo-texto">Quero entrar na lista</span><span class="rolo-texto rolo-texto--copia" aria-hidden="true">Quero entrar na lista</span></span></button>
         </form>
 
         <div class="letras-miudas">
@@ -435,6 +452,7 @@ const aviso = document.getElementById("aviso");
 const botao = document.getElementById("enviar");
 const caixaForm = document.getElementById("caixa-form");
 const pronto = document.getElementById("pronto");
+function rotulo(texto) { botao.querySelectorAll(".rolo-texto").forEach((t) => { t.textContent = texto; }); }
 
 // De onde a pessoa veio: as etiquetas utm do link (ex.: ?utm_source=instagram) ou o site anterior.
 function deOndeVeio() {
@@ -496,7 +514,7 @@ form.addEventListener("submit", async (evento) => {
   }
 
   botao.disabled = true;
-  botao.textContent = "Enviando…";
+  rotulo("Enviando…");
   try {
     // A planilha do Google não devolve resposta legível para outro site; se a rede respondeu, chegou.
     await fetch(ENDERECO_DA_PLANILHA, { method: "POST", mode: "no-cors", body: dados });
@@ -505,7 +523,7 @@ form.addEventListener("submit", async (evento) => {
     mostraAviso("Não deu para enviar agora. Confira a sua internet e tente de novo.");
   } finally {
     botao.disabled = false;
-    botao.textContent = "Quero entrar na lista";
+    rotulo("Quero entrar na lista");
   }
 });
 </script>
