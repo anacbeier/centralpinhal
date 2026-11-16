@@ -81,8 +81,8 @@ a { color: inherit; }
 .palco {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  grid-template-areas: "texto cartao" "cenas cartao" "pinha cartao";
-  grid-template-rows: auto auto 1fr;
+  grid-template-areas: "texto cartao" "pinha cartao";
+  grid-template-rows: auto 1fr;
   column-gap: 56px; row-gap: 8px;
   padding-block: 44px 64px;
   align-items: start;
@@ -307,87 +307,11 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 }
 .botao-link:hover { filter: brightness(1.08); }
 
-/* ---------- cenas da Central (vídeos curtos, um depois do outro) ---------- */
-.tela {
-  background: var(--cartao);
-  border: 1px solid var(--linha);
-  border-radius: var(--raio);
-  padding: 14px;
-  display: grid; gap: 12px;
-  padding: 10px;
-}
-.tela video {
-  width: 100%; height: auto; aspect-ratio: 16 / 10; display: block;
-  border-radius: calc(var(--raio) - 10px);
-  background: var(--papel);
-}
-.tela-baixo {
-  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 20px; align-items: start;
-  padding: 0 8px 4px;
-}
-.cena-legenda { margin: 0; font-family: var(--f-titulo); font-weight: 400; font-size: 1.3rem; line-height: 1.15; letter-spacing: -0.01em; }
-.cena-apoio { margin: 4px 0 0; color: var(--tinta-suave); font-size: 0.97rem; }
-.pausar {
-  appearance: none; cursor: pointer;
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 9px 16px; border-radius: 999px;
-  border: 0; background: var(--botao); color: var(--texto-botao);
-  font: 600 0.9rem/1.2 var(--f-texto);
-  white-space: nowrap;
-  justify-self: start;
-}
-.pausar:hover { filter: brightness(1.08); }
-.cenas-lista { display: flex; flex-wrap: wrap; gap: 8px; padding: 4px 4px 0; margin: 0; list-style: none; }
-.cenas-lista button {
-  appearance: none; cursor: pointer;
-  padding: 6px 11px;
-  border: 1px solid var(--linha); border-radius: 999px;
-  background: var(--papel); color: var(--tinta);
-  font: 0.8rem/1.2 var(--f-texto);
-  transition: background-color .15s, border-color .15s;
-}
-.cenas-lista button[aria-current="true"] { background: var(--selecao); border-color: var(--amarelo); }
-.cenas-lista button span { font-family: var(--f-mono); font-size: 0.72rem; color: var(--telha); margin-right: 6px; }
-.cenas { grid-area: cenas; min-width: 0; margin-top: 22px; }
-.nota-cenas { margin: 10px 4px 0; font-size: 0.8rem; color: var(--tinta-suave); }
-
-/* ---------- abertura: a pinha se monta de baixo para cima e a cortina sobe ---------- */
-.abertura { display: none; }
-html.carregando { overflow: hidden; }
-html.carregando .abertura {
-  position: fixed; inset: 0; z-index: 1000;
-  display: grid; place-items: center;
-  background: var(--papel);
-  will-change: transform;
-}
-html.carregando .pinha img { animation-play-state: paused; }
-.abertura svg { width: clamp(92px, 10vw, 124px); height: auto; overflow: visible; }
-.abertura path { fill: var(--botao); opacity: 0; transform-box: fill-box; transform-origin: 50% 50%; }
-.abertura .p-ponta { animation: ab-ponta .6s cubic-bezier(.22, 1, .36, 1) .35s both; }
-.abertura .p-fileira { animation: ab-escama .6s cubic-bezier(.22, 1, .36, 1) both; }
-.abertura .p-fileira--1 { animation-delay: .7s; }
-.abertura .p-fileira--2 { animation-delay: .92s; }
-.abertura .p-fileira--3 { animation-delay: 1.14s; }
-.abertura .p-topo { transform-origin: 50% 100%; animation: ab-topo .55s cubic-bezier(.34, 1.56, .64, 1) 1.42s both; }
-@keyframes ab-ponta { from { opacity: 1; transform: translate3d(0, 60%, 0); } to { opacity: 1; transform: none; } }
-@keyframes ab-escama { from { opacity: 0; transform: translate3d(0, 22%, 0) scale(.55); } to { opacity: 1; transform: none; } }
-@keyframes ab-topo {
-  0% { opacity: 0; transform: translate3d(0, -35%, 0) scale(.7); }
-  70% { opacity: 1; transform: translate3d(0, 3%, 0) scale(1.04); }
-  100% { opacity: 1; transform: none; }
-}
-.abertura.saindo { transform: translate3d(0, -100%, 0); transition: transform .9s cubic-bezier(.76, 0, .24, 1); }
-.abertura.saindo svg { opacity: 0; transform: translate3d(0, -28px, 0); transition: opacity .4s, transform .45s cubic-bezier(.76, 0, .24, 1); }
-@media (prefers-reduced-motion: reduce) {
-  .abertura path { animation: none !important; opacity: 1; }
-  .abertura.saindo { transform: none; opacity: 0; transition: opacity .3s; }
-}
-
 /* ---------- celular e tablet ---------- */
 @media (max-width: 880px) {
   .palco {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "texto" "cartao" "cenas" "pinha";
+    grid-template-areas: "texto" "cartao" "pinha";
     grid-template-rows: auto;
     row-gap: 28px;
     padding-block: 28px 48px;
@@ -400,11 +324,6 @@ html.carregando .pinha img { animation-play-state: paused; }
   .passos { grid-template-columns: minmax(0, 1fr); }
   .precisa { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .secao { padding-block: 44px; }
-  .tela { padding: 8px; gap: 12px; }
-  .tela-baixo { grid-template-columns: minmax(0, 1fr); padding: 0 6px; }
-  .cena-legenda { font-size: 1.2rem; }
-  .cenas { margin-top: 0; }
-  .cenas-lista { padding: 2px 2px 0; }
 }
 @media (max-width: 420px) {
   .pinha img { width: 140px; }
@@ -458,23 +377,6 @@ html.carregando .pinha img { animation-play-state: paused; }
       <h1 id="titulo">Seu espaço para organizar o que está <em>crescendo</em>.</h1>
       <p class="lead">Tarefas, hábitos, ideias, dinheiro, agenda e os posts das suas redes <strong>num lugar só, no seu Mac</strong>. E uma ajudante de feltro que conversa com você e faz o trabalho repetitivo.</p>
     </section>
-
-    <div class="cenas">
-      <div class="tela">
-        <ul class="cenas-lista" id="cenas-lista" aria-label="Cenas"></ul>
-        <video id="cena" muted playsinline preload="metadata"
-               src="cenas/01a-boas-vindas-nome.mp4" poster="cenas/01a-boas-vindas-nome.jpg"
-               aria-describedby="cena-legenda cena-apoio"></video>
-        <div class="tela-baixo">
-          <div aria-live="polite">
-            <p class="cena-legenda" id="cena-legenda">Em poucos passos, a Central fica com a sua cara.</p>
-            <p class="cena-apoio" id="cena-apoio">Você escolhe o tipo de conta e diz como quer ser chamado(a). A prévia ao lado já muda.</p>
-          </div>
-          <button class="pausar" type="button" id="pausar">Pausar</button>
-        </div>
-      </div>
-      <p class="nota-cenas">Cenas gravadas na Central, com nomes, valores e posts de exemplo.</p>
-    </div>
 
     <figure class="pinha">
       <img src="pinha.png" alt="A Pinha, uma pinha de feltro sorrindo e acenando" width="600" height="592">
@@ -660,62 +562,6 @@ function mostraPronto(nome) {
   pronto.focus({ preventScroll: true });
   document.getElementById("lista").scrollIntoView({ block: "start" });
 }
-
-// ---------- cenas da Central ----------
-// Tocam uma depois da outra, sem som, só enquanto a seção está na tela. Quem pede menos movimento
-// no sistema vê a primeira parada e aperta "Ver as cenas".
-const CENAS = [
-  ["01a-boas-vindas-nome", "Boas-vindas", "Em poucos passos, a Central fica com a sua cara.", "Você escolhe o tipo de conta e diz como quer ser chamado(a). A prévia ao lado já muda."],
-  ["01b-boas-vindas-foto-e-paginas", "Foto e páginas", "Arraste a sua foto e escolha as páginas.", "Conteúdo e Clientes são opcionais. Dá para ligar ou desligar depois em Ajustes."],
-  ["02-inicio", "Início", "O seu dia inteiro numa tela só.", "Tarefas, compromissos, hábitos, contas a pagar e o alcance dos posts, lado a lado."],
-  ["03-tarefas", "Tarefas", "Arraste para mudar o dia.", "A semana é dividida em manhã, tarde e noite. A tarefa atrasada vai para hoje num gesto."],
-  ["04-habitos", "Hábitos", "Marque o hábito e veja a sequência subir.", "A semana, o mês e a porcentagem de hábitos feitos se atualizam na hora."],
-  ["05-financeiro", "Financeiro", "O mês, os cartões e o orçamento juntos.", "Cada gasto aparece na categoria, perto do limite que você definiu."],
-  ["06-conteudo", "Conteúdo", "Cada post anda pelas etapas, da ideia ao postado.", "Os posts publicados ficam com os números de cada rede."],
-  ["07-pinha", "Pinha", "Peça para a Pinha, e ela faz.", "A Pinha é a IA da Central: cria tarefas, responde sobre o seu dia e ajuda nos posts."],
-  ["08-perfis", "Perfis", "Um clique troca de perfil.", "Cada perfil tem os seus dados e as suas páginas. No do estúdio, Tarefas vira Demandas."],
-];
-const video = document.getElementById("cena");
-const listaCenas = document.getElementById("cenas-lista");
-const botaoPausar = document.getElementById("pausar");
-const menosMovimento = matchMedia("(prefers-reduced-motion: reduce)").matches;
-let atual = 0;
-let pausado = menosMovimento;
-let naTela = false;
-
-CENAS.forEach(([, nome], n) => {
-  const li = document.createElement("li");
-  const b = document.createElement("button");
-  b.type = "button";
-  b.innerHTML = `<span>${String(n + 1).padStart(2, "0")}</span>${nome}`;
-  b.addEventListener("click", () => { pausado = false; mostrarCena(n); });
-  li.append(b);
-  listaCenas.append(li);
-});
-
-function atualizarBotao() { botaoPausar.textContent = pausado ? (menosMovimento && video.currentTime === 0 ? "Ver as cenas" : "Continuar") : "Pausar"; }
-
-function tocarSePuder() {
-  if (!pausado && naTela) video.play().catch(() => {});
-  else video.pause();
-  atualizarBotao();
-}
-
-function mostrarCena(n) {
-  atual = (n + CENAS.length) % CENAS.length;
-  const [arquivo, , legenda, apoio] = CENAS[atual];
-  video.src = `cenas/${arquivo}.mp4`;
-  video.poster = `cenas/${arquivo}.jpg`;
-  document.getElementById("cena-legenda").textContent = legenda;
-  document.getElementById("cena-apoio").textContent = apoio;
-  listaCenas.querySelectorAll("button").forEach((b, k) => b.setAttribute("aria-current", k === atual ? "true" : "false"));
-  tocarSePuder();
-}
-
-video.addEventListener("ended", () => mostrarCena(atual + 1));
-botaoPausar.addEventListener("click", () => { pausado = !pausado; tocarSePuder(); });
-new IntersectionObserver((itens) => { naTela = itens[0].isIntersecting; tocarSePuder(); }, { threshold: 0.35 }).observe(video);
-mostrarCena(0);
 
 form.addEventListener("submit", async (evento) => {
   evento.preventDefault();
