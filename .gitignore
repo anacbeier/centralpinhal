@@ -9,3 +9,7 @@
 !cenas/*.jpg
 !centralpinhal.mp4
 !centralpinhal-capa.jpg
+!fontes/
+!fontes/*.woff2
+!pinhas/
+!pinhas/*.png

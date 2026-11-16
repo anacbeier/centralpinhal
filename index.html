@@ -10,10 +10,14 @@
 <meta name="theme-color" content="#FBF7ED">
 <meta name="color-scheme" content="only light">
 <link rel="icon" type="image/png" href="logo.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&family=Space+Mono:wght@400;700&display=swap">
+<link rel="preload" href="fontes/IvyOraText-Light-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fontes/SpaceMono-Bold-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+/* as fontes da identidade visual (as mesmas do site studiotche.com) */
+@font-face { font-family: "IvyOra Text"; font-style: normal; font-weight: 300; font-display: swap; src: url("fontes/IvyOraText-Light-latin.woff2") format("woff2"); }
+@font-face { font-family: "IvyOra Text"; font-style: italic; font-weight: 300; font-display: swap; src: url("fontes/IvyOraText-LightItalic-latin.woff2") format("woff2"); }
+@font-face { font-family: "Space Mono"; font-style: normal; font-weight: 400; font-display: swap; src: url("fontes/SpaceMono-Regular-latin.woff2") format("woff2"); }
+@font-face { font-family: "Space Mono"; font-style: normal; font-weight: 700; font-display: swap; src: url("fontes/SpaceMono-Bold-latin.woff2") format("woff2"); }
 /* Layout: duas colunas no alto (a conversa à esquerda, o cartão da lista à direita), depois o que tem
    dentro, como chega no Mac e as perguntas numa coluna só. No celular tudo vira uma coluna. */
 :root {
@@ -28,7 +32,7 @@
   --telha: #A44919;        /* detalhes */
   --selecao: #F6E3C8;      /* fundo de uma opção escolhida */
 
-  --f-titulo: "Newsreader", "Iowan Old Style", "Palatino", Georgia, serif;
+  --f-titulo: "IvyOra Text", "Iowan Old Style", "Palatino", Georgia, serif;
   --f-texto: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --f-mono: "Space Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
@@ -66,7 +70,7 @@ a { color: inherit; }
 .marca {
   display: inline-flex; align-items: center; gap: 10px;
   text-decoration: none;
-  font-family: var(--f-titulo); font-weight: 400; font-size: 1.45rem; letter-spacing: -0.01em;
+  font-family: var(--f-titulo); font-weight: 300; font-size: 1.45rem; letter-spacing: -0.01em;
 }
 .marca img { width: 34px; height: 34px; }
 .marca em, h1 em { font-style: italic; color: var(--amarelo); }
@@ -123,12 +127,8 @@ h1 em { color: var(--telha); }
   align-self: stretch; align-content: space-between;
   min-width: 0;
 }
-.ganhos li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; color: var(--tinta-suave); font-size: 0.95rem; line-height: 1.4; }
-.ganhos li::before {
-  content: "✓"; width: 22px; height: 22px; border-radius: 50%;
-  display: grid; place-items: center;
-  background: var(--selecao); color: var(--telha); font-size: 0.75rem; font-weight: 700;
-}
+.ganhos li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 10px; align-items: center; color: var(--tinta-suave); font-size: 0.95rem; line-height: 1.4; }
+.ganhos img { width: 44px; height: 44px; object-fit: contain; }
 
 /* ---------- cartão da lista ---------- */
 .cartao {
@@ -143,7 +143,7 @@ h1 em { color: var(--telha); }
 }
 .cartao h2 {
   margin: 8px 0 6px;
-  font-family: var(--f-titulo); font-weight: 400; font-size: 2.1rem; line-height: 1.05; letter-spacing: -0.02em;
+  font-family: var(--f-titulo); font-weight: 300; font-size: 2.1rem; line-height: 1.05; letter-spacing: -0.02em;
 }
 .cartao .explica { margin: 0 0 22px; color: var(--tinta-suave); font-size: 0.97rem; }
 .preco { display: flex; align-items: baseline; gap: 10px; margin: 4px 0 10px; }
@@ -159,7 +159,9 @@ h1 em { color: var(--telha); }
   padding: 7px 12px; border-radius: 999px;
   background: #465BE1; color: #FBF7ED;
   font: 700 0.78rem/1 var(--f-texto);
+  display: inline-flex; align-items: center; gap: 6px;
 }
+.bonus-selo img { width: 22px; height: 22px; margin: -5px 0 -5px -4px; }
 .bonus-titulo { margin: 0; font-weight: 700; font-size: 1rem; }
 .bonus-incluso { color: #465BE1; font-weight: 700; font-size: 0.92rem; }
 .bonus-texto { grid-column: 1 / -1; margin: 0; color: var(--tinta-suave); font-size: 0.92rem; line-height: 1.45; }
@@ -210,7 +212,7 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
   padding: 12px 24px;
   border: 5px solid #AAB4FF; border-radius: 999px;
   background: #465BE1; color: #FBF7ED;
-  font: 700 1rem/1.4 var(--f-mono);
+  font: 700 0.875rem/1.4 var(--f-mono); text-transform: uppercase;
   display: inline-flex; align-items: center; justify-content: center;
   position: relative;
   transition: background-color .18s;
@@ -355,18 +357,18 @@ html.carregando .abertura {
     </figure>
 
     <ul class="ganhos">
-      <li>Você escreve, a Pinha cria a tarefa, o gasto ou o compromisso</li>
-      <li>Um painel do dia que muda com a hora</li>
-      <li>A semana dividida em manhã, tarde e noite: arraste para mudar</li>
-      <li>Hábitos com sequência de dias e uma pinha para cada um</li>
-      <li>Cartões, faturas, parcelas e orçamento do mês à vista</li>
-      <li>Agenda com lembretes de compromissos e contas a pagar</li>
-      <li>Segundo cérebro: notas, ideias e links com tags</li>
-      <li>A Pinha lê a sua semana e diz o que funcionou</li>
-      <li>Perfil pessoal e do seu estúdio, cada um com os seus dados</li>
-      <li>Sincroniza grátis entre os seus Macs pelo iCloud Drive</li>
-      <li>Seus dados ficam no seu Mac, não na nuvem de ninguém</li>
-      <li>Feita para gastar pouco do seu plano do Claude</li>
+      <li><img src="pinhas/animada.png" alt="" width="44" height="44" loading="lazy">Você escreve, a Pinha cria a tarefa, o gasto ou o compromisso</li>
+      <li><img src="pinhas/acenando.png" alt="" width="44" height="44" loading="lazy">Um painel do dia que muda com a hora</li>
+      <li><img src="pinhas/diario.png" alt="" width="44" height="44" loading="lazy">A semana dividida em manhã, tarde e noite: arraste para mudar</li>
+      <li><img src="pinhas/exercitando.png" alt="" width="44" height="44" loading="lazy">Hábitos com sequência de dias e uma pinha para cada um</li>
+      <li><img src="pinhas/pensando.png" alt="" width="44" height="44" loading="lazy">Cartões, faturas, parcelas e orçamento do mês à vista</li>
+      <li><img src="pinhas/agua.png" alt="" width="44" height="44" loading="lazy">Agenda com lembretes de compromissos e contas a pagar</li>
+      <li><img src="pinhas/lendo.png" alt="" width="44" height="44" loading="lazy">Segundo cérebro: notas, ideias e links com tags</li>
+      <li><img src="pinhas/estudando.png" alt="" width="44" height="44" loading="lazy">A Pinha lê a sua semana e diz o que funcionou</li>
+      <li><img src="pinhas/parada.png" alt="" width="44" height="44" loading="lazy">Perfil pessoal e do seu estúdio, cada um com os seus dados</li>
+      <li><img src="pinhas/meditando.png" alt="" width="44" height="44" loading="lazy">Sincroniza grátis entre os seus Macs pelo iCloud Drive</li>
+      <li><img src="pinhas/dormindo.png" alt="" width="44" height="44" loading="lazy">Seus dados ficam no seu Mac, não na nuvem de ninguém</li>
+      <li><img src="pinhas/dieta.png" alt="" width="44" height="44" loading="lazy">Feita para gastar pouco do seu plano do Claude</li>
     </ul>
 
     <aside class="cartao" id="lista" aria-labelledby="titulo-lista">
@@ -376,7 +378,7 @@ html.carregando .abertura {
         <div class="preco"><span class="preco-valor">R$ 75</span><span class="preco-nota">valor de lançamento</span></div>
         <p class="explica">Deixe seu contato e receba o convite assim que a CentralPinhal abrir.</p>
         <div class="bonus">
-          <span class="bonus-selo">Para as 5 primeiras pessoas</span>
+          <span class="bonus-selo"><img src="pinhas/animada.png" alt="" width="22" height="22">Para as 5 primeiras pessoas</span>
           <p class="bonus-titulo">Atualizações por 3 meses</p>
           <span class="bonus-incluso">Incluído</span>
           <p class="bonus-texto">Toda novidade e correção da Central nesse período, mais suporte por e-mail.</p>
