@@ -69,7 +69,7 @@ a { color: inherit; }
   font-family: var(--f-titulo); font-weight: 400; font-size: 1.45rem; letter-spacing: -0.01em;
 }
 .marca img { width: 34px; height: 34px; }
-.marca em, h1 em, .rodape-marca em { font-style: italic; color: var(--amarelo); }
+.marca em, h1 em { font-style: italic; color: var(--amarelo); }
 
 .sobretitulo {
   margin: 0;
@@ -219,94 +219,37 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 .pronto .fala { font-size: 1.02rem; color: var(--tinta); }
 .pronto .assinatura { font-family: var(--f-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amarelo); }
 
-/* ---------- seções de baixo ---------- */
-.secao { padding-block: 56px; border-top: 1px solid var(--linha); }
-.secao-cabeca { display: grid; gap: 10px; margin-bottom: 30px; max-width: 40em; }
-.secao h2 {
-  margin: 0;
-  font-family: var(--f-titulo); font-weight: 300;
-  font-size: clamp(1.9rem, 1.3rem + 1.8vw, 2.6rem); line-height: 1.08; letter-spacing: -0.02em;
-  text-wrap: balance;
+/* ---------- abertura: a pinha se monta de baixo para cima e a cortina sobe ---------- */
+.abertura { display: none; }
+html.carregando { overflow: hidden; }
+html.carregando .abertura {
+  position: fixed; inset: 0; z-index: 1000;
+  display: grid; place-items: center;
+  background: var(--papel);
+  will-change: transform;
 }
-.secao-cabeca p { margin: 0; color: var(--tinta-suave); }
-
-.areas {
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 48px;
-  margin: 0;
+html.carregando .pinha img { animation-play-state: paused; }
+.abertura svg { width: clamp(92px, 10vw, 124px); height: auto; overflow: visible; }
+.abertura path { fill: var(--botao); opacity: 0; transform-box: fill-box; transform-origin: 50% 50%; }
+.abertura .p-ponta { animation: ab-ponta .6s cubic-bezier(.22, 1, .36, 1) .35s both; }
+.abertura .p-fileira { animation: ab-escama .6s cubic-bezier(.22, 1, .36, 1) both; }
+.abertura .p-fileira--1 { animation-delay: .7s; }
+.abertura .p-fileira--2 { animation-delay: .92s; }
+.abertura .p-fileira--3 { animation-delay: 1.14s; }
+.abertura .p-topo { transform-origin: 50% 100%; animation: ab-topo .55s cubic-bezier(.34, 1.56, .64, 1) 1.42s both; }
+@keyframes ab-ponta { from { opacity: 1; transform: translate3d(0, 60%, 0); } to { opacity: 1; transform: none; } }
+@keyframes ab-escama { from { opacity: 0; transform: translate3d(0, 22%, 0) scale(.55); } to { opacity: 1; transform: none; } }
+@keyframes ab-topo {
+  0% { opacity: 0; transform: translate3d(0, -35%, 0) scale(.7); }
+  70% { opacity: 1; transform: translate3d(0, 3%, 0) scale(1.04); }
+  100% { opacity: 1; transform: none; }
 }
-.area { padding-block: 16px; border-top: 1px solid var(--linha); display: grid; gap: 4px; min-width: 0; }
-.area dt {
-  font-family: var(--f-mono); font-size: 0.78rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.08em;
-  color: var(--tinta);
-  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+.abertura.saindo { transform: translate3d(0, -100%, 0); transition: transform .9s cubic-bezier(.76, 0, .24, 1); }
+.abertura.saindo svg { opacity: 0; transform: translate3d(0, -28px, 0); transition: opacity .4s, transform .45s cubic-bezier(.76, 0, .24, 1); }
+@media (prefers-reduced-motion: reduce) {
+  .abertura path { animation: none !important; opacity: 1; }
+  .abertura.saindo { transform: none; opacity: 0; transition: opacity .3s; }
 }
-.area dt::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--amarelo); flex: none; }
-.selo {
-  font-size: 0.66rem; font-weight: 400; letter-spacing: 0.06em;
-  color: var(--telha); border: 1px solid currentColor; border-radius: 999px; padding: 1px 8px;
-}
-.area dd { margin: 0; color: var(--tinta-suave); }
-.nota-perfis { margin: 26px 0 0; max-width: 44em; color: var(--tinta-suave); }
-.nota-perfis strong { color: var(--tinta); font-weight: 600; }
-
-.passos {
-  list-style: none; margin: 0; padding: 0;
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px;
-  counter-reset: passo;
-}
-.passos li {
-  counter-increment: passo;
-  background: var(--cartao); border: 1px solid var(--linha); border-radius: var(--raio);
-  padding: 24px 22px;
-  display: grid; gap: 8px; align-content: start;
-  min-width: 0;
-}
-.passos li::before {
-  content: counter(passo);
-  font-family: var(--f-titulo); font-style: italic; font-size: 2.4rem; line-height: 1;
-  color: var(--amarelo);
-}
-.passos h3 { margin: 0; font-size: 1.05rem; font-weight: 600; }
-.passos p { margin: 0; color: var(--tinta-suave); font-size: 0.97rem; }
-.passos code { font-family: var(--f-mono); font-size: 0.85em; color: var(--tinta); }
-
-.precisa { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
-.lista-certa { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-.lista-certa li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; }
-.lista-certa li::before { content: "✓"; color: var(--amarelo); font-weight: 700; }
-.lista-certa strong { font-weight: 600; }
-.lista-certa span { color: var(--tinta-suave); }
-
-.perguntas { display: grid; gap: 0; max-width: 46em; }
-.perguntas details { border-top: 1px solid var(--linha); }
-.perguntas details:last-child { border-bottom: 1px solid var(--linha); }
-.perguntas summary {
-  cursor: pointer; list-style: none;
-  padding: 18px 36px 18px 0; position: relative;
-  font-weight: 600; font-size: 1.02rem;
-}
-.perguntas summary::-webkit-details-marker { display: none; }
-.perguntas summary::after {
-  content: "+"; position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
-  font-family: var(--f-mono); font-size: 1.2rem; color: var(--telha);
-}
-.perguntas details[open] summary::after { content: "–"; }
-.perguntas details p { margin: 0 0 18px; color: var(--tinta-suave); }
-
-.chamada-final {
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px;
-  padding-block: 40px 56px; border-top: 1px solid var(--linha);
-}
-.rodape-marca { margin: 0; font-family: var(--f-titulo); font-size: 1.5rem; font-weight: 300; }
-.rodape-marca span { display: block; font-family: var(--f-texto); font-size: 0.92rem; color: var(--tinta-suave); margin-top: 4px; }
-.botao-link {
-  display: inline-block; text-decoration: none;
-  padding: 13px 26px; border-radius: 999px;
-  background: var(--botao); color: var(--texto-botao); font-weight: 600;
-}
-.botao-link:hover { filter: brightness(1.08); }
 
 /* ---------- celular e tablet ---------- */
 @media (max-width: 880px) {
@@ -321,10 +264,6 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
   .pinha { justify-content: center; }
   .pinha img { width: 170px; }
   .balao { margin-bottom: 110px; }
-  .areas { grid-template-columns: minmax(0, 1fr); }
-  .passos { grid-template-columns: minmax(0, 1fr); }
-  .precisa { grid-template-columns: minmax(0, 1fr); gap: 24px; }
-  .secao { padding-block: 44px; }
 }
 @media (max-width: 420px) {
   .pinha img { width: 140px; }
@@ -449,84 +388,6 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
         <p class="assinatura">— Pinha</p>
       </div>
     </aside>
-  </div>
-
-  <section class="secao largura" aria-labelledby="titulo-dentro">
-    <div class="secao-cabeca">
-      <p class="sobretitulo">O que tem dentro</p>
-      <h2 id="titulo-dentro">Uma página para cada parte da sua vida</h2>
-      <p>Você liga só as que fazem sentido para você. As outras ficam escondidas.</p>
-    </div>
-    <dl class="areas">
-      <div class="area"><dt>Início</dt><dd>O painel do dia: calendário, tarefas, o financeiro do mês e as suas ideias.</dd></div>
-      <div class="area"><dt>Tarefas</dt><dd>A semana de segunda a domingo. Arraste um cartão para mudar o dia.</dd></div>
-      <div class="area"><dt>Hábitos</dt><dd>Marque cada dia e veja a sequência de dias seguidos crescer.</dd></div>
-      <div class="area"><dt>Segundo cérebro</dt><dd>Notas, ideias, reflexões e links, com tags e busca.</dd></div>
-      <div class="area"><dt>Financeiro</dt><dd>Entradas e saídas, orçamento do mês, metas e contas a pagar.</dd></div>
-      <div class="area"><dt>Agenda</dt><dd>Os compromissos, no calendário do mês ou em lista.</dd></div>
-      <div class="area"><dt>Conteúdo <span class="selo">opcional</span></dt><dd>Cada post da ideia ao postado, com galeria, calendário editorial e a estratégia da semana.</dd></div>
-      <div class="area"><dt>Clientes <span class="selo">opcional</span></dt><dd>Quem você atende: contato, mensalidade, projetos e as tarefas de cada um.</dd></div>
-    </dl>
-    <p class="nota-perfis"><strong>Pessoal e trabalho separados.</strong> Tenha um perfil seu e outro do seu studio, cada um com os seus dados. O da empresa usa o seu logo, as suas cores e as suas fontes na Central inteira.</p>
-  </section>
-
-  <section class="secao largura" aria-labelledby="titulo-como">
-    <div class="secao-cabeca">
-      <p class="sobretitulo">Como ela chega no seu Mac</p>
-      <h2 id="titulo-como">Você não precisa saber programar</h2>
-      <p>A Central vem como código, com um guia escrito para o Claude. É ele quem monta.</p>
-    </div>
-    <ol class="passos">
-      <li><h3>Você recebe a pasta</h3><p>Com o código da Central e o guia <code>COMECE-AQUI.md</code>.</p></li>
-      <li><h3>O Claude monta</h3><p>Abra a pasta no Claude Code e diga: “Leia o COMECE-AQUI.md e instale a CentralPinhal para mim.”</p></li>
-      <li><h3>Ela abre já sua</h3><p>As boas-vindas perguntam seu nome, sua foto e quais páginas você quer. Depois é só usar.</p></li>
-    </ol>
-  </section>
-
-  <section class="secao largura" aria-labelledby="titulo-precisa">
-    <div class="precisa">
-      <div class="secao-cabeca">
-        <p class="sobretitulo">Do que você precisa</p>
-        <h2 id="titulo-precisa">Um Mac e a sua conta do Claude</h2>
-        <p>A Central foi feita para gastar pouco do seu plano: o que é repetitivo ela faz sozinha, sem IA.</p>
-      </div>
-      <ul class="lista-certa">
-        <li><div><strong>Um Mac com macOS 15</strong> <span>ou mais novo.</span></div></li>
-        <li><div><strong>Xcode</strong> <span>grátis na Mac App Store. O Claude usa ele para montar o app.</span></div></li>
-        <li><div><strong>Claude Code</strong> <span>entrando na sua conta do Claude. A Pinha conversa pela mesma conta, sem chave e sem créditos à parte.</span></div></li>
-        <li><div><strong>Nada da Apple pago.</strong> <span>Não precisa do programa de desenvolvedor.</span></div></li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="secao largura" aria-labelledby="titulo-perguntas">
-    <div class="secao-cabeca">
-      <p class="sobretitulo">Perguntas</p>
-      <h2 id="titulo-perguntas">Antes de entrar na lista</h2>
-    </div>
-    <div class="perguntas">
-      <details>
-        <summary>Quem é a Pinha?</summary>
-        <p>A ajudante de dentro da Central, uma pinha de feltro. Ela avisa o que mudou, conversa com você e manda a equipe dela trabalhar: ler as suas redes, buscar as novidades do seu nicho, montar a estratégia da semana. Publicar e apagar, só com o seu OK.</p>
-      </details>
-      <details>
-        <summary>Funciona no iPhone e no iPad?</summary>
-        <p>A Central é feita para o Mac. O mesmo código também roda no iPhone e no iPad, numa versão mais simples.</p>
-      </details>
-      <details>
-        <summary>Onde ficam os meus dados?</summary>
-        <p>No seu Mac. Para usar em mais de um Mac, a Central sincroniza de graça pelo seu iCloud Drive.</p>
-      </details>
-      <details>
-        <summary>Gasta muito do meu plano do Claude?</summary>
-        <p>Foi feita para gastar pouco. Você escolhe o modelo de cada tarefa da Pinha: o Haiku gasta bem menos, o Sonnet é o equilíbrio e o Opus é o que mais gasta.</p>
-      </details>
-    </div>
-  </section>
-
-  <div class="chamada-final largura">
-    <p class="rodape-marca">Central<em>pinhal</em><span>Seu espaço para organizar o que está crescendo.</span></p>
-    <a class="botao-link" href="#lista">Entrar na lista</a>
   </div>
 </main>
 
