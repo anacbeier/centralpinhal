@@ -35,21 +35,6 @@
   --raio-campo: 12px;
   color-scheme: light;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --papel: #211810;
-    --cartao: #2C2117;
-    --linha: #43352A;
-    --tinta: #EDE6D6;
-    --tinta-suave: #B8A98C;
-    --botao: #8DB880;
-    --texto-botao: #1A2414;
-    --amarelo: #DF9442;
-    --telha: #E07A4A;
-    --selecao: #4A3320;
-    color-scheme: dark;
-  }
-}
 
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -96,8 +81,8 @@ a { color: inherit; }
 .palco {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  grid-template-areas: "texto cartao" "pinha cartao";
-  grid-template-rows: auto 1fr;
+  grid-template-areas: "texto cartao" "cenas cartao" "pinha cartao";
+  grid-template-rows: auto auto 1fr;
   column-gap: 56px; row-gap: 8px;
   padding-block: 44px 64px;
   align-items: start;
@@ -328,8 +313,8 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
   border: 1px solid var(--linha);
   border-radius: var(--raio);
   padding: 14px;
-  display: grid; gap: 14px;
-  max-width: 920px;
+  display: grid; gap: 12px;
+  padding: 10px;
 }
 .tela video {
   width: 100%; height: auto; aspect-ratio: 16 / 10; display: block;
@@ -340,7 +325,7 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
   display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 20px; align-items: start;
   padding: 0 8px 4px;
 }
-.cena-legenda { margin: 0; font-family: var(--f-titulo); font-weight: 400; font-size: 1.5rem; line-height: 1.15; letter-spacing: -0.01em; }
+.cena-legenda { margin: 0; font-family: var(--f-titulo); font-weight: 400; font-size: 1.3rem; line-height: 1.15; letter-spacing: -0.01em; }
 .cena-apoio { margin: 4px 0 0; color: var(--tinta-suave); font-size: 0.97rem; }
 .pausar {
   appearance: none; cursor: pointer;
@@ -355,15 +340,16 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 .cenas-lista { display: flex; flex-wrap: wrap; gap: 8px; padding: 4px 4px 0; margin: 0; list-style: none; }
 .cenas-lista button {
   appearance: none; cursor: pointer;
-  padding: 7px 13px;
+  padding: 6px 11px;
   border: 1px solid var(--linha); border-radius: 999px;
   background: var(--papel); color: var(--tinta);
-  font: 0.86rem/1.2 var(--f-texto);
+  font: 0.8rem/1.2 var(--f-texto);
   transition: background-color .15s, border-color .15s;
 }
 .cenas-lista button[aria-current="true"] { background: var(--selecao); border-color: var(--amarelo); }
 .cenas-lista button span { font-family: var(--f-mono); font-size: 0.72rem; color: var(--telha); margin-right: 6px; }
-.nota-cenas { margin: 14px 0 0; max-width: 920px; font-size: 0.8rem; color: var(--tinta-suave); }
+.cenas { grid-area: cenas; min-width: 0; margin-top: 22px; }
+.nota-cenas { margin: 10px 4px 0; font-size: 0.8rem; color: var(--tinta-suave); }
 
 /* ---------- abertura: a pinha se monta de baixo para cima e a cortina sobe ---------- */
 .abertura { display: none; }
@@ -377,12 +363,12 @@ html.carregando .abertura {
 html.carregando .pinha img { animation-play-state: paused; }
 .abertura svg { width: clamp(92px, 10vw, 124px); height: auto; overflow: visible; }
 .abertura path { fill: var(--botao); opacity: 0; transform-box: fill-box; transform-origin: 50% 50%; }
-.abertura .p-ponta { animation: ab-ponta .5s cubic-bezier(.22, 1, .36, 1) .15s both; }
-.abertura .p-fileira { animation: ab-escama .55s cubic-bezier(.22, 1, .36, 1) both; }
-.abertura .p-fileira--1 { animation-delay: .4s; }
-.abertura .p-fileira--2 { animation-delay: .54s; }
-.abertura .p-fileira--3 { animation-delay: .68s; }
-.abertura .p-topo { transform-origin: 50% 100%; animation: ab-topo .45s cubic-bezier(.34, 1.56, .64, 1) .9s both; }
+.abertura .p-ponta { animation: ab-ponta .6s cubic-bezier(.22, 1, .36, 1) .35s both; }
+.abertura .p-fileira { animation: ab-escama .6s cubic-bezier(.22, 1, .36, 1) both; }
+.abertura .p-fileira--1 { animation-delay: .7s; }
+.abertura .p-fileira--2 { animation-delay: .92s; }
+.abertura .p-fileira--3 { animation-delay: 1.14s; }
+.abertura .p-topo { transform-origin: 50% 100%; animation: ab-topo .55s cubic-bezier(.34, 1.56, .64, 1) 1.42s both; }
 @keyframes ab-ponta { from { opacity: 1; transform: translate3d(0, 60%, 0); } to { opacity: 1; transform: none; } }
 @keyframes ab-escama { from { opacity: 0; transform: translate3d(0, 22%, 0) scale(.55); } to { opacity: 1; transform: none; } }
 @keyframes ab-topo {
@@ -390,7 +376,7 @@ html.carregando .pinha img { animation-play-state: paused; }
   70% { opacity: 1; transform: translate3d(0, 3%, 0) scale(1.04); }
   100% { opacity: 1; transform: none; }
 }
-.abertura.saindo { transform: translate3d(0, -100%, 0); transition: transform .7s cubic-bezier(.76, 0, .24, 1); }
+.abertura.saindo { transform: translate3d(0, -100%, 0); transition: transform .9s cubic-bezier(.76, 0, .24, 1); }
 .abertura.saindo svg { opacity: 0; transform: translate3d(0, -28px, 0); transition: opacity .4s, transform .45s cubic-bezier(.76, 0, .24, 1); }
 @media (prefers-reduced-motion: reduce) {
   .abertura path { animation: none !important; opacity: 1; }
@@ -401,7 +387,7 @@ html.carregando .pinha img { animation-play-state: paused; }
 @media (max-width: 880px) {
   .palco {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "texto" "cartao" "pinha";
+    grid-template-areas: "texto" "cartao" "cenas" "pinha";
     grid-template-rows: auto;
     row-gap: 28px;
     padding-block: 28px 48px;
@@ -416,7 +402,8 @@ html.carregando .pinha img { animation-play-state: paused; }
   .secao { padding-block: 44px; }
   .tela { padding: 8px; gap: 12px; }
   .tela-baixo { grid-template-columns: minmax(0, 1fr); padding: 0 6px; }
-  .cena-legenda { font-size: 1.3rem; }
+  .cena-legenda { font-size: 1.2rem; }
+  .cenas { margin-top: 0; }
   .cenas-lista { padding: 2px 2px 0; }
 }
 @media (max-width: 420px) {
@@ -438,21 +425,22 @@ html.carregando .pinha img { animation-play-state: paused; }
   </svg>
 </div>
 <script>
-// Abertura: some quando a página terminou de carregar, depois de a pinha se montar (uns 1,7 s).
+// Abertura: a pinha se monta em 2 s, fica um pouco à vista e a cortina sobe (uns 2,8 s no total).
 (function () {
   const abertura = document.getElementById("abertura");
-  const minimo = matchMedia("(prefers-reduced-motion: reduce)").matches ? 300 : 1700;
+  const inicio = performance.now();
+  const minimo = matchMedia("(prefers-reduced-motion: reduce)").matches ? 400 : 2800;
   let saiu = false;
   function sair() {
     if (saiu) return;
     saiu = true;
     setTimeout(() => {
       abertura.classList.add("saindo");
-      setTimeout(() => { document.documentElement.classList.remove("carregando"); abertura.remove(); }, 750);
-    }, Math.max(0, minimo - performance.now()));
+      setTimeout(() => { document.documentElement.classList.remove("carregando"); abertura.remove(); }, 950);
+    }, Math.max(0, minimo - (performance.now() - inicio)));
   }
   if (document.readyState === "complete") sair(); else addEventListener("load", sair, { once: true });
-  setTimeout(sair, 4000); // se algo demorar demais, a página aparece mesmo assim
+  setTimeout(sair, 6000); // se algo demorar demais, a página aparece mesmo assim
 })();
 </script>
 
@@ -470,6 +458,23 @@ html.carregando .pinha img { animation-play-state: paused; }
       <h1 id="titulo">Seu espaço para organizar o que está <em>crescendo</em>.</h1>
       <p class="lead">Tarefas, hábitos, ideias, dinheiro, agenda e os posts das suas redes <strong>num lugar só, no seu Mac</strong>. E uma ajudante de feltro que conversa com você e faz o trabalho repetitivo.</p>
     </section>
+
+    <div class="cenas">
+      <div class="tela">
+        <ul class="cenas-lista" id="cenas-lista" aria-label="Cenas"></ul>
+        <video id="cena" muted playsinline preload="metadata"
+               src="cenas/01a-boas-vindas-nome.mp4" poster="cenas/01a-boas-vindas-nome.jpg"
+               aria-describedby="cena-legenda cena-apoio"></video>
+        <div class="tela-baixo">
+          <div aria-live="polite">
+            <p class="cena-legenda" id="cena-legenda">Em poucos passos, a Central fica com a sua cara.</p>
+            <p class="cena-apoio" id="cena-apoio">Você escolhe o tipo de conta e diz como quer ser chamado(a). A prévia ao lado já muda.</p>
+          </div>
+          <button class="pausar" type="button" id="pausar">Pausar</button>
+        </div>
+      </div>
+      <p class="nota-cenas">Cenas gravadas na Central, com nomes, valores e posts de exemplo.</p>
+    </div>
 
     <figure class="pinha">
       <img src="pinha.png" alt="A Pinha, uma pinha de feltro sorrindo e acenando" width="600" height="592">
@@ -542,28 +547,6 @@ html.carregando .pinha img { animation-play-state: paused; }
       </div>
     </aside>
   </div>
-
-  <section class="secao largura" aria-labelledby="titulo-ver">
-    <div class="secao-cabeca">
-      <p class="sobretitulo">Por dentro</p>
-      <h2 id="titulo-ver">Veja a Central funcionando</h2>
-      <p>Cenas curtas gravadas na Central, uma depois da outra. Clique numa para ver de novo.</p>
-    </div>
-    <div class="tela">
-      <ul class="cenas-lista" id="cenas-lista" aria-label="Cenas"></ul>
-      <video id="cena" muted playsinline preload="metadata"
-             src="cenas/01a-boas-vindas-nome.mp4" poster="cenas/01a-boas-vindas-nome.jpg"
-             aria-describedby="cena-legenda cena-apoio"></video>
-      <div class="tela-baixo">
-        <div aria-live="polite">
-          <p class="cena-legenda" id="cena-legenda">Em poucos passos, a Central fica com a sua cara.</p>
-          <p class="cena-apoio" id="cena-apoio">Você escolhe o tipo de conta e diz como quer ser chamado(a). A prévia ao lado já muda.</p>
-        </div>
-        <button class="pausar" type="button" id="pausar">Pausar</button>
-      </div>
-    </div>
-    <p class="nota-cenas">Os nomes, os valores e os posts das cenas são exemplos inventados.</p>
-  </section>
 
   <section class="secao largura" aria-labelledby="titulo-dentro">
     <div class="secao-cabeca">
