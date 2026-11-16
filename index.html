@@ -112,14 +112,6 @@ h1 em { color: var(--telha); }
   width: 100%; height: auto; aspect-ratio: 16 / 10; display: block;
   border-radius: var(--raio); border: 1px solid var(--linha); background: var(--cartao);
 }
-.video-botao {
-  position: absolute; right: 12px; bottom: 12px;
-  appearance: none; border: 0; cursor: pointer;
-  padding: 7px 14px; border-radius: 999px;
-  background: var(--botao); color: var(--texto-botao);
-  font: 600 0.82rem/1.2 var(--f-texto);
-}
-.video-botao:hover { filter: brightness(1.08); }
 
 .ganhos {
   grid-area: ganhos; list-style: none; margin: 26px 0 0; padding: 0;
@@ -357,7 +349,6 @@ html.carregando .abertura {
     <figure class="video">
       <video id="video-central" src="centralpinhal.mp4?v=3" poster="centralpinhal-capa.jpg?v=3" muted loop playsinline preload="metadata"
              aria-label="A CentralPinhal funcionando: a criação da conta, o Início, a Pinha, Tarefas, Hábitos, Segundo cérebro, Financeiro e Agenda"></video>
-      <button class="video-botao" type="button" id="video-botao">Pausar</button>
     </figure>
 
     <ul class="ganhos">
@@ -483,19 +474,14 @@ function mostraPronto(nome) {
   document.getElementById("lista").scrollIntoView({ block: "start" });
 }
 
-// O vídeo toca sem som, em loop, só enquanto está na tela. Quem pede menos movimento aperta "Ver o vídeo".
+// O vídeo toca sem som, em loop, só enquanto está na tela. Quem pede menos movimento no sistema
+// vê o vídeo parado, com os controles do navegador para tocar quando quiser.
 (function () {
   const video = document.getElementById("video-central");
-  const botao = document.getElementById("video-botao");
-  let pausado = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let naTela = false;
-  function atualizar() {
-    if (!pausado && naTela) video.play().catch(() => {}); else video.pause();
-    botao.textContent = pausado ? (video.currentTime > 0 ? "Continuar" : "Ver o vídeo") : "Pausar";
-  }
-  botao.addEventListener("click", () => { pausado = !pausado; atualizar(); });
-  new IntersectionObserver((itens) => { naTela = itens[0].isIntersecting; atualizar(); }, { threshold: 0.3 }).observe(video);
-  atualizar();
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) { video.controls = true; return; }
+  new IntersectionObserver((itens) => {
+    if (itens[0].isIntersecting) video.play().catch(() => {}); else video.pause();
+  }, { threshold: 0.3 }).observe(video);
 })();
 
 form.addEventListener("submit", async (evento) => {
