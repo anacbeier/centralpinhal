@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>CentralPinhal · lista de espera</title>
-<meta name="description" content="CentralPinhal: um app para Mac que junta tarefas, hábitos, ideias, dinheiro, agenda e os posts das suas redes num lugar só. Entre na lista de espera.">
+<meta name="description" content="CentralPinhal: sua vida num lugar só, no seu Mac, com a Pinha, a IA que faz o resto. R$ 75 no lançamento. Entre na lista de espera.">
 <meta property="og:title" content="CentralPinhal · lista de espera">
-<meta property="og:description" content="Seu espaço para organizar o que está crescendo. Um app para Mac, com a Pinha.">
+<meta property="og:description" content="Sua vida num lugar só. A Pinha faz o resto. Um app para Mac, com IA.">
 <meta name="theme-color" content="#FBF7ED">
 <meta name="color-scheme" content="only light">
 <link rel="icon" type="image/png" href="logo.png">
@@ -85,7 +85,9 @@ a { color: inherit; }
   grid-template-areas: "texto cartao" "video cartao" "ganhos cartao";
   grid-template-rows: auto auto 1fr;
   column-gap: 56px; row-gap: 8px;
-  padding-block: 44px 64px;
+  padding-block: 32px 48px;
+  min-height: calc(100svh - 70px);
+  align-content: center;
   align-items: start;
 }
 .texto { grid-area: texto; display: grid; gap: 18px; min-width: 0; }
@@ -143,6 +145,23 @@ h1 em { color: var(--telha); }
   font-family: var(--f-titulo); font-weight: 400; font-size: 2.1rem; line-height: 1.05; letter-spacing: -0.02em;
 }
 .cartao .explica { margin: 0 0 22px; color: var(--tinta-suave); font-size: 0.97rem; }
+.preco { display: flex; align-items: baseline; gap: 10px; margin: 4px 0 10px; }
+.preco-valor { font-family: var(--f-titulo); font-size: 2.6rem; line-height: 1; letter-spacing: -0.02em; }
+.preco-nota { font-size: 0.9rem; color: var(--tinta-suave); }
+.bonus {
+  position: relative; margin: 8px 0 24px; padding: 26px 18px 16px;
+  border: 1px solid var(--linha); border-radius: 16px; background: var(--papel);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: baseline;
+}
+.bonus-selo {
+  position: absolute; top: -13px; left: 14px;
+  padding: 7px 12px; border-radius: 999px;
+  background: linear-gradient(#1478FF, #0869F5); color: #fff;
+  font: 700 0.78rem/1 var(--f-texto);
+}
+.bonus-titulo { margin: 0; font-weight: 700; font-size: 1rem; }
+.bonus-incluso { color: #0869F5; font-weight: 700; font-size: 0.92rem; }
+.bonus-texto { grid-column: 1 / -1; margin: 0; color: var(--tinta-suave); font-size: 0.92rem; line-height: 1.45; }
 
 form { display: grid; gap: 16px; }
 .campo { display: grid; gap: 6px; }
@@ -189,15 +208,15 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
   margin-top: 4px;
   padding: 15px 20px;
   border-radius: 999px;
-  background: var(--botao); color: var(--texto-botao);
-  font: 600 1.05rem/1.2 var(--f-texto);
+  background: linear-gradient(#1478FF, #0869F5); color: #fff;
+  font: 700 1.08rem/1.2 var(--f-texto);
   transition: filter .15s, transform .1s;
   position: relative;
   animation: pulsar 2.4s ease-in-out infinite;
 }
 .botao::after {
   content: ""; position: absolute; inset: 0; border-radius: inherit;
-  border: 2px solid var(--botao); pointer-events: none;
+  border: 2px solid #1478FF; pointer-events: none;
   opacity: 0; animation: onda 2.4s ease-out infinite;
 }
 @keyframes pulsar { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.025); } }
@@ -315,9 +334,9 @@ html.carregando .abertura {
 <main>
   <div class="palco largura">
     <section class="texto" aria-labelledby="titulo">
-      <p class="sobretitulo">App para Mac · com a Pinha</p>
-      <h1 id="titulo">Seu espaço para organizar o que está <em>crescendo</em>.</h1>
-      <p class="lead">Tarefas, hábitos, ideias, dinheiro, agenda e os posts das suas redes <strong>num lugar só, no seu Mac</strong>. E uma ajudante de feltro que conversa com você e faz o trabalho repetitivo.</p>
+      <p class="sobretitulo">App para Mac · com IA</p>
+      <h1 id="titulo">Sua vida num lugar só. <em>A Pinha faz o resto.</em></h1>
+      <p class="lead">Tarefas, hábitos, dinheiro, agenda e ideias <strong>numa tela só, no seu Mac</strong>. E a Pinha, a IA da Central: escreva “gasto: 45,90 mercado” e ela lança. “Dentista sexta 14h” e ela agenda.</p>
     </section>
 
     <figure class="video">
@@ -327,17 +346,24 @@ html.carregando .abertura {
     </figure>
 
     <ul class="ganhos">
-      <li>Tarefas, hábitos, agenda e ideias num lugar só</li>
-      <li>Financeiro com cartões, faturas e orçamento</li>
-      <li>A Pinha cria tarefas, gastos e compromissos por você</li>
-      <li>Tudo no seu computador, com a sua conta do Claude</li>
+      <li>Você escreve, a Pinha cria a tarefa, o gasto ou o compromisso</li>
+      <li>Um painel do dia que muda com a hora</li>
+      <li>Cartões, faturas e orçamento do mês à vista</li>
+      <li>Seus dados ficam no seu Mac</li>
     </ul>
 
     <aside class="cartao" id="lista" aria-labelledby="titulo-lista">
       <div id="caixa-form">
         <p class="sobretitulo">Lista de espera</p>
-        <h2 id="titulo-lista">Quero saber primeiro</h2>
-        <p class="explica">Deixe seu contato e você fica sabendo antes de todo mundo quando a CentralPinhal abrir.</p>
+        <h2 id="titulo-lista">Entre antes de todo mundo</h2>
+        <div class="preco"><span class="preco-valor">R$ 75</span><span class="preco-nota">valor de lançamento</span></div>
+        <p class="explica">Deixe seu contato e receba o convite assim que a CentralPinhal abrir.</p>
+        <div class="bonus">
+          <span class="bonus-selo">Para as 5 primeiras pessoas</span>
+          <p class="bonus-titulo">Atualizações por 3 meses</p>
+          <span class="bonus-incluso">Incluído</span>
+          <p class="bonus-texto">Toda novidade e correção da Central nesse período, mais suporte por e-mail.</p>
+        </div>
 
         <form id="form-lista" autocomplete="on">
           <div class="campo">
@@ -380,7 +406,7 @@ html.carregando .abertura {
           </div>
 
           <p class="aviso" id="aviso" role="alert" hidden></p>
-          <button class="botao" type="submit" id="enviar">Entrar na lista</button>
+          <button class="botao" type="submit" id="enviar">Quero entrar na lista</button>
         </form>
 
         <div class="letras-miudas">
@@ -479,7 +505,7 @@ form.addEventListener("submit", async (evento) => {
     mostraAviso("Não deu para enviar agora. Confira a sua internet e tente de novo.");
   } finally {
     botao.disabled = false;
-    botao.textContent = "Entrar na lista";
+    botao.textContent = "Quero entrar na lista";
   }
 });
 </script>
