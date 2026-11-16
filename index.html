@@ -82,7 +82,7 @@ a { color: inherit; }
 .palco {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  grid-template-areas: "texto cartao" "video cartao" "pinha cartao";
+  grid-template-areas: "texto cartao" "video cartao" "ganhos cartao";
   grid-template-rows: auto auto 1fr;
   column-gap: 56px; row-gap: 8px;
   padding-block: 44px 64px;
@@ -100,38 +100,6 @@ h1 em { color: var(--telha); }
 .lead { margin: 0; font-size: 1.12rem; color: var(--tinta-suave); max-width: 34em; }
 .lead strong { color: var(--tinta); font-weight: 600; }
 
-/* a Pinha e o balão dela */
-.pinha {
-  grid-area: pinha;
-  margin: 0;
-  display: flex; align-items: flex-end; gap: 4px;
-  min-width: 0;
-}
-.pinha img {
-  width: 230px; flex: none;
-  transform-origin: 50% 90%;
-  animation: oi 1.6s ease-in-out 0.6s 1 both;
-}
-@keyframes oi {
-  0%, 100% { transform: rotate(0); }
-  20% { transform: rotate(-5deg); }
-  40% { transform: rotate(4deg); }
-  60% { transform: rotate(-3deg); }
-  80% { transform: rotate(2deg); }
-}
-@media (prefers-reduced-motion: reduce) { .pinha img { animation: none; } }
-.balao {
-  position: relative;
-  margin-bottom: 150px;
-  padding: 14px 18px;
-  background: var(--cartao);
-  border: 1px solid var(--linha);
-  border-radius: 18px 18px 18px 4px;
-  font-size: 0.98rem; line-height: 1.45;
-  max-width: 260px;
-}
-.balao b { display: block; font-family: var(--f-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amarelo); margin-bottom: 4px; }
-
 /* o vídeo da Central, dentro da seção principal */
 .video { grid-area: video; margin: 24px 0 0; position: relative; min-width: 0; }
 .video video {
@@ -146,6 +114,18 @@ h1 em { color: var(--telha); }
   font: 600 0.82rem/1.2 var(--f-texto);
 }
 .video-botao:hover { filter: brightness(1.08); }
+
+.ganhos {
+  grid-area: ganhos; list-style: none; margin: 22px 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px;
+  min-width: 0;
+}
+.ganhos li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; color: var(--tinta-suave); font-size: 0.95rem; line-height: 1.4; }
+.ganhos li::before {
+  content: "✓"; width: 22px; height: 22px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--selecao); color: var(--telha); font-size: 0.75rem; font-weight: 700;
+}
 
 /* ---------- cartão da lista ---------- */
 .cartao {
@@ -212,8 +192,19 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
   background: var(--botao); color: var(--texto-botao);
   font: 600 1.05rem/1.2 var(--f-texto);
   transition: filter .15s, transform .1s;
+  position: relative;
+  animation: pulsar 2.4s ease-in-out infinite;
 }
-.botao:hover { filter: brightness(1.08); }
+.botao::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  border: 2px solid var(--botao); pointer-events: none;
+  opacity: 0; animation: onda 2.4s ease-out infinite;
+}
+@keyframes pulsar { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.025); } }
+@keyframes onda { 0% { opacity: .6; transform: scale(1); } 100% { opacity: 0; transform: scale(1.06, 1.45); } }
+.botao:disabled, .botao:disabled::after { animation: none; }
+@media (prefers-reduced-motion: reduce) { .botao, .botao::after { animation: none; } }
+.botao:hover { filter: brightness(1.08); animation-play-state: paused; }
 .botao:active { transform: translateY(1px); }
 .botao:disabled { cursor: progress; filter: saturate(.6); }
 
@@ -243,7 +234,6 @@ html.carregando .abertura {
   background: var(--papel);
   will-change: transform;
 }
-html.carregando .pinha img { animation-play-state: paused; }
 .abertura svg { width: clamp(92px, 10vw, 124px); height: auto; overflow: visible; }
 .abertura path { fill: var(--botao); opacity: 0; transform-box: fill-box; transform-origin: 50% 50%; }
 .abertura .p-ponta { animation: ab-ponta .6s cubic-bezier(.22, 1, .36, 1) .35s both; }
@@ -270,19 +260,16 @@ html.carregando .pinha img { animation-play-state: paused; }
 @media (max-width: 880px) {
   .palco {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "texto" "cartao" "video" "pinha";
+    grid-template-areas: "texto" "cartao" "video" "ganhos";
     grid-template-rows: auto;
     row-gap: 28px;
     padding-block: 28px 48px;
   }
   .cartao { position: static; padding: 24px 20px 22px; }
-  .pinha { justify-content: center; }
-  .pinha img { width: 170px; }
-  .balao { margin-bottom: 110px; }
+  .ganhos { margin-top: 0; }
 }
 @media (max-width: 420px) {
-  .pinha img { width: 140px; }
-  .balao { margin-bottom: 90px; font-size: 0.92rem; }
+  .ganhos { grid-template-columns: minmax(0, 1fr); }
   .cartao h2 { font-size: 1.85rem; }
 }
 </style>
@@ -339,10 +326,12 @@ html.carregando .pinha img { animation-play-state: paused; }
       <button class="video-botao" type="button" id="video-botao">Pausar</button>
     </figure>
 
-    <figure class="pinha">
-      <img src="pinha.png" alt="A Pinha, uma pinha de feltro sorrindo e acenando" width="600" height="592">
-      <figcaption class="balao"><b>Pinha</b>Oiee! Entra na lista que eu te chamo quando a Central abrir. Prometo não mandar spam, eu mal sei usar o e-mail kkkk</figcaption>
-    </figure>
+    <ul class="ganhos">
+      <li>Tarefas, hábitos, agenda e ideias num lugar só</li>
+      <li>Financeiro com cartões, faturas e orçamento</li>
+      <li>A Pinha cria tarefas, gastos e compromissos por você</li>
+      <li>Tudo no seu computador, com a sua conta do Claude</li>
+    </ul>
 
     <aside class="cartao" id="lista" aria-labelledby="titulo-lista">
       <div id="caixa-form">
@@ -365,11 +354,10 @@ html.carregando .pinha img { animation-play-state: paused; }
           </div>
 
           <fieldset>
-            <legend>Você usa Mac?</legend>
+            <legend>Qual sistema você usa?</legend>
             <div class="pilulas">
-              <label class="pilula"><input type="radio" id="mac-sim" name="mac" value="Uso Mac" required><span>Uso Mac</span></label>
-              <label class="pilula"><input type="radio" id="mac-quero" name="mac" value="Ainda não, mas quero"><span>Ainda não, mas quero</span></label>
-              <label class="pilula"><input type="radio" id="mac-ios" name="mac" value="Só iPhone ou iPad"><span>Só iPhone ou iPad</span></label>
+              <label class="pilula"><input type="radio" id="sis-apple" name="mac" value="Apple" required><span>Apple</span></label>
+              <label class="pilula"><input type="radio" id="sis-windows" name="mac" value="Windows"><span>Windows</span></label>
             </div>
           </fieldset>
 
@@ -440,7 +428,6 @@ function mostraPronto(nome) {
   const primeiro = nome.split(/\s+/)[0];
   document.getElementById("titulo-pronto").textContent = primeiro ? `Anotado, ${primeiro}!` : "Anotado!";
   caixaForm.hidden = true;
-  document.querySelector(".pinha").hidden = true; // o balão "entra na lista" já não faz sentido
   pronto.hidden = false;
   pronto.focus({ preventScroll: true });
   document.getElementById("lista").scrollIntoView({ block: "start" });
