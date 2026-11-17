@@ -12,7 +12,7 @@
 <meta name="color-scheme" content="only light">
 <link rel="icon" type="image/png" href="../logo.png">
 <link rel="preload" href="../fontes/IvyOraText-Regular-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="../varanda.webp" as="image" type="image/webp">
+<link rel="preload" href="../varanda-foto.webp" as="image" type="image/webp">
 <style>
 @font-face { font-family: "IvyOra Text"; font-style: normal; font-weight: 400; font-display: swap; src: url("../fontes/IvyOraText-Regular-latin.woff2") format("woff2"); }
 @font-face { font-family: "IvyOra Text"; font-style: italic; font-weight: 400; font-display: swap; src: url("../fontes/IvyOraText-RegularItalic-latin.woff2") format("woff2"); }
@@ -50,13 +50,17 @@ a { color: inherit; }
   border: 1px solid var(--linha);
   border-radius: 80px / 85px;
   background-color: var(--verde);    /* enquanto a aquarela carrega */
-  /* dentro da moldura, a aquarela da varanda (Figma: x -454 de 2478 → 77%) */
-  background-image: url("../varanda.webp");
+  /* dentro da moldura, a foto da varanda (Figma: x -445 de 2494 → 74%, y 15 → 73%);
+     a aquarela fica "por trás" e aparece com a tinta do mouse */
+  background-image: url("../varanda-foto.webp");
   background-size: cover;
-  background-position: 77% 50%;
+  background-position: 74% 73%;
   animation: aparecer .6s ease both;
 }
-main { flex: 1; display: grid; place-items: center; padding-top: calc(var(--roda-fora) + 48px); }
+main { flex: 1; display: grid; place-items: center; padding-top: calc(var(--roda-fora) + 48px); position: relative; z-index: 1; }
+/* o canvas da tinta do mouse: fica entre a foto e o conteúdo */
+.revela { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 79px / 84px; pointer-events: none; z-index: 0; }
+@media (max-width: 1080px) { .revela { display: none; } }
 
 /* o cartão, com a Pinha num círculo saindo por cima */
 .pronto {
@@ -138,6 +142,7 @@ h1 .pinhal { color: var(--amarelo); }
 
 /* rodapé no recorte de baixo da moldura */
 .rodape {
+  z-index: 1;
   position: absolute; left: 50%; bottom: -1px; translate: -50% 0;
   width: min(1092px, 100% - 160px); height: 47px;
   display: flex;
@@ -190,6 +195,7 @@ h1 .pinhal { color: var(--amarelo); }
 </head>
 <body>
 <div class="moldura">
+  <canvas class="revela" aria-hidden="true"></canvas>
   <main>
     <section class="pronto" aria-labelledby="titulo">
       <div class="roda">
@@ -299,6 +305,87 @@ h1 .pinhal { color: var(--amarelo); }
   const video = document.getElementById("pinha-video");
   if (calma) { video.removeAttribute("autoplay"); video.pause(); }
   else video.play().catch(() => {});
+})();
+</script>
+<script>
+// Tinta do mouse (inspirada no landonorris.com): por onde o mouse passa na paisagem, gotas de tinta com a borda
+// ondulada revelam a aquarela que fica "por trás" da foto; em pouco mais de 1 s elas se espalham, desbotam e a foto volta.
+// Leve: um canvas com metade da resolução, que só desenha enquanto há gotas. Só em computador com mouse.
+(function () {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches || !matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+  const moldura = document.querySelector(".moldura"), tela = moldura.querySelector(".revela"), g = tela.getContext("2d");
+  const ESC = .5;
+  let W = 0, H = 0, capa = null;
+  const aquarela = new Image();
+  aquarela.src = "../varanda.webp";
+  function medir() {
+    const r = moldura.getBoundingClientRect();
+    W = r.width; H = r.height;
+    tela.width = Math.ceil(W * ESC); tela.height = Math.ceil(H * ESC);
+    if (aquarela.naturalWidth) {                         // "cover" na mesma posição do Figma (77% 50%)
+      const s = Math.max(W / aquarela.naturalWidth, H / aquarela.naturalHeight);
+      const dw = aquarela.naturalWidth * s, dh = aquarela.naturalHeight * s;
+      capa = { dx: (W - dw) * .77, dy: (H - dh) * .5, dw, dh };
+    }
+  }
+  aquarela.onload = medir;
+  let espera;
+  addEventListener("resize", () => { clearTimeout(espera); espera = setTimeout(medir, 120); });
+
+  // formas de gota: círculos com a borda ondulada (desenhadas uma vez, com raio 1)
+  const formas = Array.from({ length: 6 }, (_, n) => {
+    const f = new Path2D(), N = 40, fase = n * 1.7;
+    for (let i = 0; i <= N; i++) {
+      const t = i / N * Math.PI * 2;
+      const r = 1 + .12 * Math.sin(3 * t + fase) + .07 * Math.sin(5 * t + fase * 2) + .04 * Math.sin(9 * t + fase * 3);
+      i ? f.lineTo(Math.cos(t) * r, Math.sin(t) * r) : f.moveTo(Math.cos(t) * r, Math.sin(t) * r);
+    }
+    f.closePath();
+    return f;
+  });
+
+  const gotas = [];
+  let ultimo = null, rodando = false;
+  moldura.addEventListener("pointermove", (e) => {
+    if (!capa) return;
+    const r = moldura.getBoundingClientRect();
+    const x = e.clientX - r.left, y = e.clientY - r.top;
+    const dist = ultimo ? Math.hypot(x - ultimo.x, y - ultimo.y) : 0;
+    const passos = Math.min(5, Math.max(1, Math.round(dist / 18)));
+    for (let i = 1; i <= passos; i++) {
+      const t = i / passos;
+      gotas.push({
+        x: (ultimo ? ultimo.x + (x - ultimo.x) * t : x) + (Math.random() - .5) * 16,
+        y: (ultimo ? ultimo.y + (y - ultimo.y) * t : y) + (Math.random() - .5) * 16,
+        r: 30 + Math.random() * 28 + Math.min(dist, 90) * .35,
+        rot: Math.random() * 6.28, forma: formas[(Math.random() * formas.length) | 0], vida: 1,
+      });
+    }
+    if (gotas.length > 70) gotas.splice(0, gotas.length - 70);
+    ultimo = { x, y };
+    if (!rodando) { rodando = true; requestAnimationFrame(quadro); }
+  });
+  moldura.addEventListener("pointerleave", () => { ultimo = null; });
+
+  function quadro() {
+    g.setTransform(ESC, 0, 0, ESC, 0, 0);
+    g.globalCompositeOperation = "source-over";
+    g.clearRect(0, 0, W, H);
+    g.fillStyle = "#000";
+    for (let i = gotas.length - 1; i >= 0; i--) {
+      const d = gotas[i];
+      d.vida -= .012;                                  // some em uns 1,4 s
+      if (d.vida <= 0) { gotas.splice(i, 1); continue; }
+      const cresce = d.r * (1 + (1 - d.vida) * .45);    // a tinta se espalha enquanto seca
+      g.globalAlpha = Math.min(1, d.vida * 1.8);
+      g.save(); g.translate(d.x, d.y); g.rotate(d.rot); g.scale(cresce, cresce); g.fill(d.forma); g.restore();
+    }
+    g.globalAlpha = 1;
+    g.globalCompositeOperation = "source-in";          // só onde tem tinta, aparece a aquarela
+    g.drawImage(aquarela, capa.dx, capa.dy, capa.dw, capa.dh);
+    g.globalCompositeOperation = "source-over";
+    if (gotas.length) requestAnimationFrame(quadro); else { g.clearRect(0, 0, W, H); rodando = false; }
+  }
 })();
 </script>
 </body>
