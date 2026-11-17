@@ -153,9 +153,12 @@ h1 {
 .opcional { font-weight: 400; color: var(--tinta); }
 .bonus-rotulo { margin: 24px 0 0; }
 /* aulas e material de apoio que vêm com a Central (na coluna da esquerda, depois da lista) */
+/* o título do bloco usa a fonte dos títulos, menor que os principais */
+.aulas-titulo { margin: 0; font: 400 clamp(1.5rem, 1rem + 0.7vw, 1.875rem)/1.1 var(--f-titulo); color: var(--tinta); }
+.aulas-titulo em { font-style: italic; color: var(--amarelo); }
 .aulas-bloco { grid-area: aulas; margin: 40px 0 0; min-width: 0; }
 .aulas {
-  list-style: none; margin: 12px 0 0; padding: 16px 20px;
+  list-style: none; margin: 14px 0 0; padding: 16px 20px;
   display: grid; gap: 10px;
   background: var(--cartao); border: 1px solid var(--linha); border-radius: 24px; /* o mesmo creme do cartão do formulário */
   text-transform: uppercase; line-height: 1.5;
@@ -480,7 +483,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
     </ul>
 
     <section class="aulas-bloco entra" aria-labelledby="titulo-aulas">
-      <p class="rotulo" id="titulo-aulas">Vem com aulas e material de apoio</p>
+      <h2 class="aulas-titulo" id="titulo-aulas">Vem com <em>aulas e material de apoio</em></h2>
       <ul class="aulas">
         <li>Como instalar a Central no seu Mac</li>
         <li>Como usar a Central no seu dia a dia</li>

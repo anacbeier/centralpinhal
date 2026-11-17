@@ -256,19 +256,18 @@ h1 .pinhal { color: var(--amarelo); }
       alvo.textContent = texto.slice(0, i);
       // pausa um pouco mais nas vírgulas e nos pontos, como quem fala
       if (i < texto.length) relogio = setTimeout(letra, /[.,!?…]/.test(texto[i - 1]) ? 220 : 34);
+      else relogio = setTimeout(esconde, 6000); // a fala fica uns segundos e o balão volta para a Pinha
     })();
   }
+  function esconde() { balao.classList.remove("volta"); balao.classList.add("some"); }
   let fila = [];
   function proximaPiada() {
     if (!fila.length) fila = piadas.slice().sort(() => Math.random() - 0.5);
     const piada = fila.shift();
     if (calma) { fala(piada); return; }
-    // o balão volta para a Pinha e sai de novo com a fala nova
-    balao.classList.remove("volta"); balao.classList.add("some");
-    setTimeout(() => {
-      balao.classList.remove("some"); void balao.offsetWidth; balao.classList.add("volta");
-      fala(piada);
-    }, 300);
+    // o balão sai de novo da Pinha com a fala nova
+    balao.classList.remove("some", "volta"); void balao.offsetWidth; balao.classList.add("volta");
+    fala(piada);
   }
   // o balão começa a aparecer em 1,15 s (no CSS), já com os pontinhos; o texto vem logo depois
   if (calma) fala(oi); else relogio = setTimeout(() => digita(oi), 2100);
