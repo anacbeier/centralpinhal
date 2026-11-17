@@ -91,6 +91,16 @@ a { color: inherit; }
 .titulo-secao em { font-style: italic; color: var(--amarelo); }
 .palco--2 .ganhos, .palco--2 .aulas-bloco { margin-top: 0; }
 
+/* ---------- efeito de tinta: o mouse deixa um rastro líquido que revela a grade em verde e some sozinho ---------- */
+.tinta {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 0;
+  clip-path: inset(0 round 79px / 84px);
+}
+.moldura > .palco { position: relative; z-index: 1; }
+.moldura > .rodape { z-index: 1; }
+@media (max-width: 1080px) { .tinta { clip-path: inset(0 round 39px); } }
+
 /* ---------- coluna da esquerda ---------- */
 .texto { grid-area: texto; padding-top: 29px; min-width: 0; }
 .marca {
@@ -606,6 +616,71 @@ function vaiProObrigado() {
   form.reset();
   location.assign("obrigado/");
 }
+
+// Efeito de tinta (inspirado no landonorris.com): por onde o mouse passa, nascem gotas que se juntam como tinta
+// líquida e revelam a grade da moldura em verde; em pouco mais de 1 s elas encolhem e somem.
+// Só em computador com mouse e para quem não pediu menos movimento.
+(function () {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches || !matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+  const NS = "http://www.w3.org/2000/svg";
+  document.querySelectorAll(".moldura").forEach((moldura, n) => {
+    const id = "tinta" + n;
+    moldura.insertAdjacentHTML("afterbegin", `
+      <svg class="tinta" aria-hidden="true" focusable="false">
+        <defs>
+          <filter id="${id}-goo" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b"/>
+            <feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -11"/>
+          </filter>
+          <pattern id="${id}-grade" width="84" height="85.75" x="75" y="80" patternUnits="userSpaceOnUse">
+            <rect width="84" height="85.75" fill="rgba(63, 86, 51, .14)"/>
+            <path d="M0 .5H84M.5 0V85.75" fill="none" stroke="rgba(63, 86, 51, .5)" stroke-width="1"/>
+          </pattern>
+          <mask id="${id}-mascara" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+            <g class="tinta-gotas" filter="url(#${id}-goo)" fill="#fff"></g>
+          </mask>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#${id}-grade)" mask="url(#${id}-mascara)"/>
+      </svg>`);
+    const grupo = moldura.querySelector(".tinta-gotas");
+    const gotas = [];
+    const MAX = 140;
+    let ultimo = null, rodando = false;
+
+    function nova(x, y, forca) {
+      let c = gotas.length >= MAX ? gotas.shift().el : document.createElementNS(NS, "circle");
+      if (!c.parentNode) grupo.appendChild(c);
+      gotas.push({ el: c, x: x + (Math.random() - .5) * 14, y: y + (Math.random() - .5) * 14,
+                   r: 14 + Math.random() * 22 + forca, vida: 1 });
+    }
+    moldura.addEventListener("pointermove", (e) => {
+      const r = moldura.getBoundingClientRect();
+      const x = e.clientX - r.left, y = e.clientY - r.top;
+      const dist = ultimo ? Math.hypot(x - ultimo.x, y - ultimo.y) : 0;
+      const passos = Math.min(6, Math.max(1, Math.round(dist / 16)));
+      for (let i = 1; i <= passos; i++) {
+        const t = i / passos;
+        nova(ultimo ? ultimo.x + (x - ultimo.x) * t : x, ultimo ? ultimo.y + (y - ultimo.y) * t : y, Math.min(dist, 80) * .25);
+      }
+      ultimo = { x, y };
+      if (!rodando) { rodando = true; requestAnimationFrame(passo); }
+    });
+    moldura.addEventListener("pointerleave", () => { ultimo = null; });
+
+    function passo() {
+      for (let i = gotas.length - 1; i >= 0; i--) {
+        const g = gotas[i];
+        g.vida -= 0.013;                       // some em pouco mais de 1 s
+        if (g.vida <= 0) { g.el.remove(); gotas.splice(i, 1); continue; }
+        const k = 1 - Math.pow(1 - g.vida, 2);  // encolhe devagar no começo e mais rápido no fim
+        g.el.setAttribute("cx", g.x.toFixed(1));
+        g.el.setAttribute("cy", g.y.toFixed(1));
+        g.el.setAttribute("r", (g.r * k).toFixed(1));
+      }
+      if (gotas.length) requestAnimationFrame(passo); else rodando = false;
+    }
+  });
+})();
 
 // O vídeo toca sem som, em loop, só enquanto está na tela. Quem pede menos movimento no sistema
 // vê o vídeo parado, com os controles do navegador para tocar quando quiser.
