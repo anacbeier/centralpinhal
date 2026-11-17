@@ -425,6 +425,10 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
       });
     }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
     itens.forEach((el) => olho.observe(el));
+    // Segurança: se o navegador não avisar (aba em segundo plano, por exemplo), o que está na tela aparece mesmo assim.
+    setTimeout(() => {
+      itens.forEach((el) => { if (el.getBoundingClientRect().top < innerHeight) el.classList.add("visivel"); });
+    }, 2500);
   }
   if (document.readyState === "complete") sair(); else addEventListener("load", sair, { once: true });
   setTimeout(sair, 6000); // se algo demorar demais, a página aparece mesmo assim
