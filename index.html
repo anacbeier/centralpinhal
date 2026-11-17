@@ -454,17 +454,24 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
     const comeco = (logo.width * .36) / (lado / 3); // começa escondida atrás do selo, no centro dele
     abertura.classList.add("saindo");
     // 1) a tinta creme sai do centro do selo e se espalha pela tela (só transform: roda na placa de vídeo, sem travar)
+    // ela nasce oval como o selo, primeiro transborda devagar da borda dele (com as gotinhas) e depois acelera
+    const c = comeco;
     camada.animate([
-      { transform: `translate(-50%, -50%) scale(${comeco}) rotate(0deg)` },
+      { transform: `translate(-50%, -50%) scale(${c}, ${c * 1.2}) rotate(0deg)`, easing: "cubic-bezier(.3, .7, .4, 1)" },
+      { transform: `translate(-50%, -50%) scale(${c * 1.55}, ${c * 1.7}) rotate(5deg)`, offset: .32, easing: "cubic-bezier(.6, 0, .3, 1)" },
       { transform: "translate(-50%, -50%) scale(1.15) rotate(20deg)" },
-    ], { duration: 1000, delay: 120, easing: "cubic-bezier(.3, .65, .2, 1)", fill: "forwards" });
+    ], { duration: 1300, delay: 150, fill: "forwards" });
+    // o selo dá uma pulsadinha, como se espremesse a tinta para fora
+    abertura.querySelector(".abertura-logo").animate([
+      { transform: "scale(1)" }, { transform: "scale(1.07)", offset: .4 }, { transform: "scale(1)" },
+    ], { duration: 450, easing: "ease-in-out" });
     // 2) a tela creme se dissolve e a página aparece (só opacidade)
     setTimeout(() => {
       comecaEntradas();
       const fade = abertura.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 600, easing: "ease", fill: "forwards" });
       fade.onfinish = some;
-    }, 900);
-    setTimeout(some, 2400); // segurança, se a animação não rodar
+    }, 1250);
+    setTimeout(some, 2800); // segurança, se a animação não rodar
   }
 
   function sair() {
