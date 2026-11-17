@@ -57,7 +57,7 @@ a { color: inherit; }
 .moldura {
   position: relative;
   margin: clamp(10px, 2.1vw, 40px) clamp(10px, 2.24vw, 43px);
-  padding: 66px 0 116px;
+  padding: 40px 0 80px;
   border: 1px solid var(--linha);
   border-radius: 80px / 85px;
   background-color: var(--fundo);
@@ -68,19 +68,26 @@ a { color: inherit; }
   background-position: 75px 80px;
 }
 
+/* No computador, tudo cabe na primeira tela: em cima o título; embaixo o vídeo com as aulas e a lista;
+   à direita o cartão. */
 .palco {
-  width: min(1388px, 100% - 96px);
+  width: min(1720px, 100% - 96px);
   margin-inline: auto;
   display: grid;
-  grid-template-columns: minmax(0, 674fr) minmax(0, 679fr);
-  grid-template-areas: "texto cartao" "video cartao" "ganhos cartao" "aulas cartao";
-  grid-template-rows: auto auto auto 1fr;
-  column-gap: 35px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.15fr);
+  grid-template-areas: "texto texto cartao" "video ganhos cartao" "aulas ganhos cartao";
+  grid-template-rows: auto auto 1fr;
+  column-gap: 40px;
   align-items: start;
 }
+/* O encaixe (feito no script do fim da página) deixa a moldura do tamanho da tela e, se faltar espaço,
+   diminui a página inteira junto, como um slide. */
+html.encaixe .moldura { height: calc(100svh - 2 * clamp(10px, 2.1vw, 40px)); padding: 32px 0 64px; }
+html.encaixe .palco { position: absolute; left: 0; top: 0; margin: 0; transform-origin: 0 0; }
+.cartao { align-self: center; }
 
 /* ---------- coluna da esquerda ---------- */
-.texto { grid-area: texto; padding-top: 29px; min-width: 0; }
+.texto { grid-area: texto; min-width: 0; }
 .marca {
   display: flex; align-items: center; gap: 14px;
   font: 400 clamp(1.75rem, 1rem + 1vw, 2.125rem)/1 var(--f-titulo);
@@ -89,15 +96,15 @@ a { color: inherit; }
 .marca svg { width: auto; height: clamp(40px, 2.5vw, 48px); flex: none; }
 .marca em, h1 em { font-style: italic; color: var(--amarelo); }
 h1 {
-  margin: 26px 0 0;
+  margin: 22px 0 0;
   font: 400 clamp(2rem, 0.9rem + 1.9vw, 2.875rem)/1.067 var(--f-titulo);
   text-wrap: balance;
 }
-.lead { margin: 24px 0 0; text-transform: uppercase; }
+.lead { margin: 18px 0 0; text-transform: uppercase; }
 .lead strong { font-weight: 700; }
 
 /* o vídeo num cartão, com outro cartão atrás e o selo da Pinha no canto */
-.video { grid-area: video; position: relative; margin: 27px 0 0; padding: 20px 20px 0 0; min-width: 0; }
+.video { grid-area: video; position: relative; margin: 28px 0 0; padding: 20px 20px 0 0; min-width: 0; }
 .video::before {
   content: ""; position: absolute; top: 0; right: 0; bottom: 20px; left: 20px;
   background: var(--cartao); border: 1px solid var(--linha); border-radius: 30px;
@@ -107,31 +114,30 @@ h1 {
   width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover;
   background: var(--cartao); border: 1px solid var(--linha); border-radius: 20px;
 }
-.selo { position: absolute; left: -39px; bottom: -7px; width: 160px; height: 162px; pointer-events: none; }
+.selo { position: absolute; left: -33px; bottom: -6px; width: 136px; height: 138px; pointer-events: none; }
 .selo img { position: absolute; }
 .selo-anel { inset: 0; width: 100%; height: 100%; }
 .selo-pinha { left: 25.2%; top: 24.8%; width: 57%; height: auto; }
 
 .ganhos {
-  grid-area: ganhos; list-style: none; margin: 32px 0 0; padding: 0; min-width: 0;
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(4, auto);
-  grid-auto-flow: column; gap: 22px 23px;
+  grid-area: ganhos; list-style: none; margin: 28px 0 0; padding: 0; min-width: 0;
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px;
   text-transform: uppercase;
 }
-.ganhos li { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 11px; align-items: center; }
+.ganhos li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; align-items: center; }
 .ganhos li::before {
-  content: ""; width: 32px; height: 32px;
+  content: ""; width: 28px; height: 28px;
   background: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E %3Cpath d='M16 0C7.16364 0 0 7.16364 0 16C0 24.8364 7.16364 32 16 32C24.8364 32 32 24.8364 32 16C32 7.16364 24.8364 0 16 0ZM22.9353 13.2945C23.063 13.1486 23.1602 12.9785 23.2212 12.7944C23.2822 12.6103 23.3058 12.4159 23.2906 12.2225C23.2753 12.0292 23.2216 11.8408 23.1325 11.6686C23.0434 11.4963 22.9207 11.3436 22.7717 11.2194C22.6227 11.0952 22.4504 11.0021 22.2649 10.9455C22.0794 10.889 21.8844 10.8701 21.6915 10.8899C21.4985 10.9098 21.3115 10.9681 21.1414 11.0613C20.9714 11.1545 20.8216 11.2808 20.7011 11.4327L14.4465 18.9367L11.2102 15.6989C10.9359 15.434 10.5684 15.2873 10.1871 15.2907C9.80568 15.294 9.44086 15.4469 9.17117 15.7166C8.90149 15.9863 8.74852 16.3511 8.7452 16.7325C8.74189 17.1139 8.8885 17.4813 9.15345 17.7556L13.5171 22.1193C13.66 22.2621 13.8311 22.3736 14.0195 22.4466C14.2079 22.5197 14.4095 22.5527 14.6113 22.5435C14.8131 22.5343 15.0109 22.4832 15.1919 22.3934C15.3729 22.3036 15.5332 22.177 15.6625 22.0218L22.9353 13.2945Z' fill-rule='evenodd' clip-rule='evenodd' fill='%23D68732'/%3E %3C/svg%3E") center / contain no-repeat;
 }
 
 /* ---------- cartão da lista ---------- */
 .cartao {
   grid-area: cartao; min-width: 0;
-  background: var(--cartao); border: 1px solid var(--linha); border-radius: 50px;
-  padding: 43px 42px;
+  background: var(--cartao); border: 1px solid var(--linha); border-radius: 40px;
+  padding: 30px 34px 26px;
   scroll-margin-top: 20px;
 }
-.cartao h2 { margin: 0; font: 400 clamp(1.75rem, 1rem + 1vw, 2.125rem)/1.1 var(--f-titulo); }
+.cartao h2 { margin: 0; font: 400 clamp(1.75rem, 1rem + 1vw, 2rem)/1.1 var(--f-titulo); }
 .preco {
   font-style: italic; color: var(--verde-preco); white-space: nowrap;
   text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.1em;
@@ -141,18 +147,18 @@ h1 {
   font: 700 11px/13px var(--f-mono); text-transform: uppercase;
 }
 .preco-nota span { color: var(--amarelo); }
-.explica { margin: 20px 0 0; text-transform: uppercase; }
+.explica { margin: 12px 0 0; text-transform: uppercase; }
 
 .rotulo, label, legend {
   font: 700 var(--mono)/20px var(--f-mono); text-transform: uppercase; color: var(--amarelo);
 }
 .opcional { font-weight: 400; color: var(--tinta); }
-.bonus-rotulo { margin: 24px 0 0; }
+.bonus-rotulo { margin: 16px 0 0; }
 /* aulas e material de apoio que vêm com a Central (na coluna da esquerda, depois da lista) */
-.aulas-bloco { grid-area: aulas; margin: 40px 0 0; min-width: 0; }
+.aulas-bloco { grid-area: aulas; margin: 26px 0 0; min-width: 0; }
 .aulas {
-  list-style: none; margin: 12px 0 0; padding: 16px 20px;
-  display: grid; gap: 10px;
+  list-style: none; margin: 10px 0 0; padding: 14px 18px;
+  display: grid; gap: 8px;
   background: var(--fundo); border: 1px solid var(--linha); border-radius: 24px;
   text-transform: uppercase; line-height: 1.5;
 }
@@ -162,19 +168,21 @@ h1 {
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='12' fill='%23D68732'/%3E%3Cpath d='M10 8.2v7.6l6-3.8z' fill='%23FAF7ED'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 .bonus {
-  margin: 12px 0 0; padding: 10px 28px 10px 16px;
-  display: grid; grid-template-columns: 60px minmax(0, 1fr); gap: 14px; align-items: center;
+  margin: 8px 0 0; padding: 8px 24px 8px 10px;
+  display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 12px; align-items: center;
   background: var(--verde); color: var(--creme); border-radius: 50px;
   font: 400 11px/18px var(--f-mono); text-transform: uppercase;
 }
-.bonus svg { width: 60px; height: 60px; }
+.bonus svg { width: 48px; height: 48px; }
 .bonus p { margin: 0; }
 .bonus strong { display: block; font-weight: 700; }
 
-form { margin-top: 27px; display: grid; gap: 26px; }
-.campo { display: grid; gap: 12px; }
+/* nome e e-mail lado a lado; WhatsApp e sistema lado a lado; o resto ocupa a largura toda */
+form { margin-top: 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 16px; }
+form > fieldset:last-of-type, form > .aviso, form > .botao { grid-column: 1 / -1; }
+.campo { display: grid; gap: 8px; }
 input[type="text"], input[type="email"], input[type="tel"] {
-  width: 100%; height: 41px; padding: 0 20px;
+  width: 100%; height: 38px; padding: 0 18px;
   font: 400 13px var(--f-mono); color: var(--tinta);
   background: var(--fundo); border: 1px solid var(--linha); border-radius: 999px;
   transition: border-color .15s;
@@ -182,17 +190,17 @@ input[type="text"], input[type="email"], input[type="tel"] {
 input::placeholder { color: var(--linha); opacity: 1; font-size: 10px; text-transform: uppercase; }
 input:focus { outline: none; border-color: var(--amarelo); box-shadow: 0 0 0 3px rgba(214, 135, 50, .22); }
 fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
-legend { padding: 0; margin-bottom: 18px; }
-.legenda-dupla { margin-bottom: 15px; }
+legend { padding: 0; margin-bottom: 8px; }
 
 /* opções em pílula (rádio e caixinhas) */
-.pilulas { display: flex; flex-wrap: wrap; gap: 18px 12px; }
+.pilulas { display: flex; flex-wrap: wrap; gap: 10px 8px; }
 .pilula { position: relative; flex: 1 1 auto; }
 .pilulas--fixas .pilula { flex: 0 0 94px; }
+.pilulas--fixas .pilula span { height: 38px; }
 .pilula input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
 .pilula span {
   display: flex; align-items: center; justify-content: center;
-  height: 41px; padding: 0 16px;
+  height: 34px; padding: 0 10px;
   border: 1px solid var(--linha); border-radius: 999px; background: var(--fundo);
   font: 700 10px/1 var(--f-mono); text-transform: uppercase; color: var(--tinta);
   position: relative; white-space: nowrap; cursor: pointer; user-select: none;
@@ -220,8 +228,8 @@ legend { padding: 0; margin-bottom: 18px; }
 /* o botão azul do Studio Tchê, com o aro claro, pulsando devagar */
 .botao {
   appearance: none; cursor: pointer;
-  width: 100%; min-height: 72px; padding: 8px 24px;
-  border: 9px solid rgba(70, 100, 251, .5); border-radius: 999px;
+  width: 100%; min-height: 58px; margin-top: 4px; padding: 6px 24px;
+  border: 7px solid rgba(70, 100, 251, .5); border-radius: 999px;
   background: var(--azul) padding-box; color: #F6F5EF;
   font: 700 clamp(13px, 0.4vw + 7px, 15px)/1.25 var(--f-mono); text-transform: uppercase;
   display: inline-flex; align-items: center; justify-content: center; text-align: center;
@@ -230,7 +238,7 @@ legend { padding: 0; margin-bottom: 18px; }
   animation: pulsar 2.4s ease-in-out infinite;
 }
 .botao::after {
-  content: ""; position: absolute; inset: -9px; border-radius: inherit;
+  content: ""; position: absolute; inset: -7px; border-radius: inherit;
   border: 2px solid var(--azul); pointer-events: none;
   opacity: 0; animation: onda 2.4s ease-out infinite;
 }
@@ -254,7 +262,7 @@ legend { padding: 0; margin-bottom: 18px; }
   border: 1px solid var(--telha); border-radius: 20px;
   color: var(--telha); font-size: 12px; line-height: 1.5;
 }
-.letras-miudas { margin-top: 27px; font: 400 10px/14px var(--f-mono); text-transform: uppercase; }
+.letras-miudas { margin-top: 16px; font: 400 10px/14px var(--f-mono); text-transform: uppercase; }
 .letras-miudas p { margin: 0; }
 .letras-miudas p + p { margin-top: 14px; }
 .letras-miudas b { font-weight: 700; color: var(--amarelo); }
@@ -371,6 +379,7 @@ html.anima .video.visivel .selo { opacity: 1; transform: none; transition: opaci
   .bonus { border-radius: 28px; padding: 12px 18px 12px 12px; grid-template-columns: 48px minmax(0, 1fr); gap: 12px; }
   .bonus svg { width: 48px; height: 48px; }
   .pilula span { padding: 0 12px; }
+  form { grid-template-columns: minmax(0, 1fr); }
   input[type="text"], input[type="email"], input[type="tel"] { font-size: 16px; } /* sem zoom no iPhone */
   input::placeholder { font-size: 11px; }
   .selo { left: -12px; bottom: -14px; width: 112px; height: 113px; }
@@ -414,12 +423,15 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
     const itens = document.querySelectorAll(".entra");
     if (!document.documentElement.classList.contains("anima")) return;
     if (!("IntersectionObserver" in window)) { itens.forEach((el) => el.classList.add("visivel")); return; }
+    let primeira = true;
     const olho = new IntersectionObserver((vistos) => {
       let ordem = 0;
+      const base = primeira ? 0.4 : 0;
+      primeira = false;
       vistos.forEach((v) => {
         if (!v.isIntersecting) return;
         const el = v.target;
-        if (!el.style.getPropertyValue("--atraso")) el.style.setProperty("--atraso", (ordem++ * 0.08) + "s");
+        if (!el.style.getPropertyValue("--atraso")) el.style.setProperty("--atraso", (base + ordem++ * 0.06).toFixed(2) + "s");
         el.classList.add("visivel");
         olho.unobserve(el);
       });
@@ -523,7 +535,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
         </fieldset>
 
         <fieldset>
-          <legend class="legenda-dupla">O que você mais quer organizar?<br><span class="opcional">(escolha quantos quiser)</span></legend>
+          <legend>O que você mais quer organizar? <span class="opcional">(escolha quantos quiser)</span></legend>
           <div class="pilulas">
             <label class="pilula"><input type="checkbox" id="i-tarefas" name="interesse" value="Tarefas"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 12.5l3 3 5-6"/></svg>Tarefas</span></label>
             <label class="pilula"><input type="checkbox" id="i-habitos" name="interesse" value="Hábitos"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 20v-4h-4"/></svg>Hábitos</span></label>
@@ -594,6 +606,41 @@ function vaiProObrigado(nome) {
   form.reset();
   location.assign("obrigado/");
 }
+
+// Encaixe: no computador, a página inteira cabe na primeira tela. A largura é a da moldura; se a altura
+// não der, tudo diminui junto (como um slide), mas a página nunca fica mais estreita que 1400px por dentro.
+(function () {
+  const raiz = document.documentElement;
+  const moldura = document.querySelector(".moldura");
+  const palco = document.querySelector(".palco");
+  const LARGURA_MAX = 1720, LARGURA_MIN = 1400, MENOR = 0.5;
+  function encaixa() {
+    palco.style.width = ""; palco.style.transform = ""; moldura.style.height = "";
+    if (innerWidth <= 1080) { raiz.classList.remove("encaixe"); return; }
+    raiz.classList.add("encaixe");
+    const cs = getComputedStyle(moldura);
+    const topo = parseFloat(cs.paddingTop), baixo = parseFloat(cs.paddingBottom);
+    const livreL = moldura.clientWidth - 96;
+    const livreA = moldura.clientHeight - topo - baixo;
+    const mede = (z) => { const w = Math.min(LARGURA_MAX, livreL / z); palco.style.width = w + "px"; return { w, h: palco.offsetHeight }; };
+    let alto = Math.min(1, livreL / LARGURA_MIN), z = alto, m = mede(alto);
+    if (m.h * alto > livreA) {
+      let baixoZ = MENOR;
+      for (let i = 0; i < 12; i++) { const meio = (baixoZ + alto) / 2; if (mede(meio).h * meio <= livreA) baixoZ = meio; else alto = meio; }
+      z = baixoZ; m = mede(z);
+      if (m.h * z > livreA) moldura.style.height = Math.ceil(m.h * z + topo + baixo + 2) + "px"; // tela pequena demais: a moldura cresce
+    }
+    const livreA2 = Math.max(livreA, m.h * z);
+    const x = Math.round((moldura.clientWidth - m.w * z) / 2);
+    const y = Math.round(topo + (livreA2 - m.h * z) / 2);
+    palco.style.transform = `translate(${x}px, ${y}px) scale(${z})`;
+  }
+  let espera;
+  addEventListener("resize", () => { clearTimeout(espera); espera = setTimeout(encaixa, 80); });
+  encaixa();
+  if (document.fonts) document.fonts.ready.then(encaixa);
+  addEventListener("load", encaixa);
+})();
 
 // O vídeo toca sem som, em loop, só enquanto está na tela. Quem pede menos movimento no sistema
 // vê o vídeo parado, com os controles do navegador para tocar quando quiser.
