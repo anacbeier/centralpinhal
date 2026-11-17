@@ -91,16 +91,6 @@ a { color: inherit; }
 .titulo-secao em { font-style: italic; color: var(--amarelo); }
 .palco--2 .ganhos, .palco--2 .aulas-bloco { margin-top: 0; }
 
-/* ---------- efeito de tinta: o mouse deixa um rastro líquido que revela a grade em verde e some sozinho ---------- */
-.tinta {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  pointer-events: none; z-index: 0;
-  clip-path: inset(0 round 79px / 84px);
-}
-.moldura > .palco { position: relative; z-index: 1; }
-.moldura > .rodape { z-index: 1; }
-@media (max-width: 1080px) { .tinta { clip-path: inset(0 round 39px); } }
-
 /* ---------- coluna da esquerda ---------- */
 .texto { grid-area: texto; padding-top: 29px; min-width: 0; }
 .marca {
@@ -616,72 +606,6 @@ function vaiProObrigado() {
   form.reset();
   location.assign("obrigado/");
 }
-
-// Efeito de tinta (inspirado no landonorris.com), bem sutil: por onde o mouse passa, a tinta pinga no papel,
-// se espalha com a borda irregular (como aquarela) e desbota em uns 1,6 s, revelando a grade um pouco mais verde.
-// Só em computador com mouse e para quem não pediu menos movimento.
-(function () {
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches || !matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-  const NS = "http://www.w3.org/2000/svg";
-  document.querySelectorAll(".moldura").forEach((moldura, n) => {
-    const id = "tinta" + n;
-    moldura.insertAdjacentHTML("afterbegin", `
-      <svg class="tinta" aria-hidden="true" focusable="false">
-        <defs>
-          <!-- a borda da mancha "sangra" seguindo uma textura de papel (ruído), como tinta molhada -->
-          <filter id="${id}-aquarela" x="-40%" y="-40%" width="180%" height="180%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="11" result="papel"/>
-            <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="mancha"/>
-            <feDisplacementMap in="mancha" in2="papel" scale="34" xChannelSelector="R" yChannelSelector="G" result="borda"/>
-            <feComponentTransfer in="borda"><feFuncA type="table" tableValues="0 0.55 0.85 1"/></feComponentTransfer>
-          </filter>
-          <pattern id="${id}-grade" width="84" height="85.75" x="75" y="80" patternUnits="userSpaceOnUse">
-            <rect width="84" height="85.75" fill="rgba(63, 86, 51, .07)"/>
-            <path d="M0 .5H84M.5 0V85.75" fill="none" stroke="rgba(63, 86, 51, .22)" stroke-width="1"/>
-          </pattern>
-          <mask id="${id}-mascara" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
-            <g class="tinta-gotas" filter="url(#${id}-aquarela)" fill="#fff"></g>
-          </mask>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#${id}-grade)" mask="url(#${id}-mascara)"/>
-      </svg>`);
-    const grupo = moldura.querySelector(".tinta-gotas");
-    const gotas = [];
-    const MAX = 80;
-    let ultimo = null, rodando = false;
-
-    function pinga(x, y, forca) {
-      const c = gotas.length >= MAX ? gotas.shift().el : document.createElementNS(NS, "circle");
-      if (!c.parentNode) grupo.appendChild(c);
-      gotas.push({ el: c, x: x + (Math.random() - .5) * 10, y: y + (Math.random() - .5) * 10,
-                   r: 8 + Math.random() * 12 + forca, vida: 1 });
-    }
-    moldura.addEventListener("pointermove", (e) => {
-      const r = moldura.getBoundingClientRect();
-      const x = e.clientX - r.left, y = e.clientY - r.top;
-      const dist = ultimo ? Math.hypot(x - ultimo.x, y - ultimo.y) : 99;
-      if (dist < 22) return;                    // uma gota a cada pedacinho do caminho
-      pinga(x, y, Math.min(dist, 70) * .12);
-      ultimo = { x, y };
-      if (!rodando) { rodando = true; requestAnimationFrame(passo); }
-    });
-    moldura.addEventListener("pointerleave", () => { ultimo = null; });
-
-    function passo() {
-      for (let i = gotas.length - 1; i >= 0; i--) {
-        const g = gotas[i];
-        g.vida -= 0.011;                        // desbota em uns 1,6 s
-        if (g.vida <= 0) { g.el.remove(); gotas.splice(i, 1); continue; }
-        const espalha = 1 + (1 - g.vida) * 0.9; // a tinta se espalha no papel enquanto seca
-        g.el.setAttribute("cx", g.x.toFixed(1));
-        g.el.setAttribute("cy", g.y.toFixed(1));
-        g.el.setAttribute("r", (g.r * espalha).toFixed(1));
-        g.el.setAttribute("fill-opacity", (g.vida * g.vida).toFixed(3));
-      }
-      if (gotas.length) requestAnimationFrame(passo); else rodando = false;
-    }
-  });
-})();
 
 // O vídeo toca sem som, em loop, só enquanto está na tela. Quem pede menos movimento no sistema
 // vê o vídeo parado, com os controles do navegador para tocar quando quiser.
