@@ -57,7 +57,7 @@ a { color: inherit; }
 .moldura {
   position: relative;
   margin: clamp(10px, 2.1vw, 40px) clamp(10px, 2.24vw, 43px);
-  padding: 66px 0 116px;
+  padding: 32px 0 116px; /* menos espaço no topo, a pedido da Ana */
   border: 1px solid var(--linha);
   border-radius: 80px / 85px;
   background-color: var(--fundo);
@@ -202,7 +202,7 @@ legend { padding: 0; margin-bottom: 18px; }
 .pilula input:checked + span { background: var(--verde); border-color: var(--verde); color: var(--creme); }
 /* cada opção tem um ícone antes do texto; ao escolher, o ✓ entra no lugar do ícone (a largura não muda) */
 .ico {
-  flex: none; width: 13px; height: 13px; margin-right: 7px;
+  flex: none; width: 13px; height: 13px; margin-right: 7px; color: var(--telha); /* ícones em telha #A44919 */
   fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
 }
 .ico--cheia { fill: currentColor; stroke: none; }

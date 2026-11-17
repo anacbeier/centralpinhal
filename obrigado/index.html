@@ -54,6 +54,7 @@ a { color: inherit; }
     linear-gradient(to bottom, var(--grade) 1px, transparent 1px);
   background-size: 84px 85.75px;
   background-position: 75px 80px;
+  animation: aparecer .6s ease both;
 }
 main { flex: 1; display: grid; place-items: center; padding-top: calc(var(--roda-fora) + 48px); }
 
@@ -64,20 +65,19 @@ main { flex: 1; display: grid; place-items: center; padding-top: calc(var(--roda
   padding: calc(var(--roda) - var(--roda-fora) + 22px) 48px 64px;
   background: var(--cartao); border: 1px solid var(--linha); border-radius: 34px;
   text-align: center;
-  animation: subir .7s cubic-bezier(.22, 1, .36, 1) both;
+  animation: subir .8s cubic-bezier(.22, 1, .36, 1) .1s both;
 }
 .roda {
   position: absolute; left: 50%; top: calc(-1 * var(--roda-fora)); translate: -50% 0;
   width: var(--roda); height: var(--roda);
+  animation: brotar .8s cubic-bezier(.34, 1.56, .64, 1) .3s both;
 }
 .roda-circulo {
   position: absolute; inset: 0; overflow: hidden;
   background: var(--cartao); border: 1px solid var(--linha); border-radius: 50%;
 }
-.roda-circulo img {
-  position: absolute; left: -11.4%; top: 6.5%; width: 126.2%; height: auto; max-width: none;
-  transform-origin: 50% 100%; animation: pular .8s cubic-bezier(.34, 1.56, .64, 1) .25s both;
-}
+/* o vídeo da Pinha acenando (já vem cortado no enquadramento do círculo, sobre o creme) */
+.roda-circulo video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 /* o balão de fala da Pinha */
 .balao {
   position: absolute; left: 86.3%; top: 2px;
@@ -85,9 +85,17 @@ main { flex: 1; display: grid; place-items: center; padding-top: calc(var(--roda
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 270 83'%3E%3Cpath d='M5.87283 14.5336V48.6122C5.87283 66.1527 -1.1425 79.9444 0.861259 82.32C2.86501 84.6956 17.9006 62.6446 34.9399 62.6446H255.449C262.465 62.6446 269.482 55.1273 269.482 48.6122V18.0417C269.482 11.5266 265.973 0.501157 251.941 0.501157H19.9052C9.38093 0.501157 5.87283 11.0255 5.87283 14.5336Z' fill='%23FAF7ED' stroke-width='1.00231' stroke='%23BEB084'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat;
   font: 400 8px/15px var(--f-mono); text-transform: uppercase; text-align: left;
   transform-origin: 2% 100%;
-  animation: balao .5s cubic-bezier(.34, 1.56, .64, 1) .9s both;
+  animation: balao .5s cubic-bezier(.34, 1.56, .64, 1) 1.15s both;
 }
+.balao.de-novo { animation: balao-de-novo .45s cubic-bezier(.34, 1.56, .64, 1) both; }
 .balao p { margin: 0; }
+.cursor {
+  display: inline-block; width: 5px; height: 9px; margin-left: 2px; vertical-align: -1px;
+  background: var(--amarelo); animation: piscar 1s steps(1) infinite;
+}
+.so-leitor { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+/* cada parte do cartão entra uma depois da outra */
+.entra { animation: entrar .7s cubic-bezier(.22, 1, .36, 1) var(--atraso, 0s) both; }
 
 .marca {
   display: inline-flex; align-items: center; gap: 14px; text-decoration: none;
@@ -108,7 +116,7 @@ h1 .pinhal { color: var(--amarelo); }
 
 /* rodapé no recorte de baixo da moldura */
 .rodape {
-  position: absolute; left: 50%; bottom: -1px; transform: translateX(-50%);
+  position: absolute; left: 50%; bottom: -1px; translate: -50% 0;
   width: min(1092px, 100% - 160px); height: 47px;
   display: flex;
 }
@@ -134,11 +142,16 @@ h1 .pinhal { color: var(--amarelo); }
   100% { opacity: 1; transform: none; }
 }
 @keyframes balao { from { opacity: 0; scale: .5; } to { opacity: 1; scale: 1; } }
-@media (prefers-reduced-motion: reduce) { .pronto, .roda-circulo img, .balao { animation: none; } }
+@keyframes balao-de-novo { from { scale: .85; } to { scale: 1; } }
+@keyframes brotar { from { opacity: 0; scale: .6; } to { opacity: 1; scale: 1; } }
+@keyframes entrar { from { opacity: 0; transform: translate3d(0, 14px, 0); } to { opacity: 1; transform: none; } }
+@keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
+@keyframes piscar { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .moldura, .pronto, .roda, .balao, .entra, .cursor { animation: none; } }
 
 @media (max-width: 1080px) {
   .moldura { border-radius: 40px; padding-bottom: 0; }
-  .rodape { position: static; transform: none; width: auto; height: auto; margin: 40px auto 0; }
+  .rodape { position: static; translate: none; width: auto; height: auto; margin: 40px auto 0; }
   .rodape-curva { display: none; }
   .rodape-meio { flex-wrap: wrap; gap: 8px 16px; padding: 4px 20px 28px; background: none; border: 0; white-space: normal; text-align: center; }
 }
@@ -157,10 +170,11 @@ h1 .pinhal { color: var(--amarelo); }
   <main>
     <section class="pronto" aria-labelledby="titulo">
       <div class="roda">
-        <div class="roda-circulo"><img src="../pinha.png" alt="A Pinha, a assistente da CentralPinhal" width="600" height="592"></div>
-        <div class="balao"><p>Oieee, eu sou a Pinha, a assistente virtual da CentralPinhal, e estou ansiosa para a gente organizar a sua vida!</p></div>
+        <div class="roda-circulo"><video id="pinha-video" src="../pinhas/pinha-oi.mp4" poster="../pinhas/pinha-oi.jpg" autoplay muted loop playsinline preload="auto" aria-label="A Pinha, a assistente da CentralPinhal, acenando"></video></div>
+        <div class="balao" aria-hidden="true"><p><span class="digitando"></span><span class="cursor"></span></p></div>
+        <p class="so-leitor">A Pinha diz: Oieee, eu sou a Pinha, a assistente virtual da CentralPinhal, e estou ansiosa para a gente organizar a sua vida!</p>
       </div>
-      <a class="marca" href="../" aria-label="CentralPinhal, voltar para a página da lista">
+      <a class="marca entra" style="--atraso: .5s" href="../" aria-label="CentralPinhal, voltar para a página da lista">
         <svg class="logo" aria-hidden="true" focusable="false" viewBox="0 0 56 68" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M38.5858 65.199C34.1772 67.5008 29.9013 68.3421 24.9338 67.8764C21.7402 67.577 18.689 66.6293 15.8822 65.0768C12.2945 63.0922 9.19278 60.376 6.6611 57.158C4.84 54.8437 3.43855 52.2904 2.34641 49.5604C1.12622 46.5099 0.390028 43.3714 0.129308 40.0923C-0.131412 36.8133 0.0137245 33.8797 0.460298 30.7721C1.34556 24.6179 3.34529 18.5609 6.62301 13.2789C8.77707 9.80745 11.5708 6.61576 14.945 4.3054C18.6128 1.79211 22.7528 0.182477 27.2449 0.017639C29.7798 -0.0749593 32.2517 0.191015 34.6626 0.95807C37.0734 1.72513 39.1973 2.80872 41.218 4.26206C45.1452 7.08598 48.2299 10.8589 50.4457 15.1486C53.2604 20.5968 54.8956 26.4837 55.3993 32.5958C55.7073 36.3365 55.5281 40.1029 54.7505 43.7792C54.2606 46.0955 53.5001 48.2699 52.5189 50.4102C51.3972 52.8578 49.9873 55.0736 48.285 57.1501C45.6233 60.3963 42.3095 63.2551 38.5865 65.199H38.5858ZM28.0224 17.0754C29.657 20.9678 33.0359 23.3754 37.2875 22.9755C38.4854 22.8625 39.5887 22.5236 40.5698 21.8623C41.0906 21.511 41.2994 20.9514 41.0387 20.3275C40.2566 18.4572 38.8019 16.8889 36.9802 15.9544C35.6266 15.2602 34.1608 15.0455 32.6642 15.2077L29.9959 15.496C29.9059 15.5059 29.7227 15.4513 29.6741 15.3903C29.4015 15.0494 30.6605 11.2693 30.8818 10.6133C31.1117 9.93223 31.331 9.28798 31.4774 8.58856C31.5779 8.1085 31.3159 7.63828 30.8542 7.48395C29.5986 7.06365 26.7878 7.21995 25.4231 7.43601C24.8307 7.52992 24.4846 8.09274 24.6206 8.66212C24.7966 9.39765 25.0113 10.082 25.2418 10.807C25.4421 11.4368 26.621 15.1368 26.3386 15.4014C26.2768 15.4592 26.1015 15.4953 25.9971 15.4822C25.19 15.3791 24.4419 15.2648 23.6289 15.2241C22.2577 15.1558 20.9245 15.3266 19.6643 15.8769C17.9771 16.6138 16.552 17.7899 15.454 19.2571C14.9115 19.9821 14.289 21.0453 15.144 21.75C16.8627 23.1652 19.7529 23.3511 21.8604 22.85C24.8373 22.1014 26.8988 19.9322 28.0224 17.0754ZM40.2638 32.0987C42.0671 32.1657 44.3769 31.8018 45.7304 30.7025C46.1395 30.3702 46.3208 29.8684 46.2091 29.3477C45.7888 27.39 43.8121 24.6816 42.0002 23.6729C40.2999 24.7355 38.444 25.3187 36.4344 25.3791C33.3452 25.4658 30.497 24.656 28.0677 22.6386C24.0801 25.7895 18.205 26.6196 13.8365 23.6821C12.2413 24.9942 10.1326 27.3026 9.56514 29.2708C9.19343 30.5882 10.6192 31.2587 11.6325 31.6127C12.6537 31.9693 13.6749 32.0691 14.7612 32.1085C20.2146 32.3069 25.4047 29.4941 28.0382 24.6573C30.4188 29.1126 35.2582 31.9135 40.2644 32.0987H40.2638ZM35.9596 34.038C37.3643 37.7432 40.5823 40.4214 44.4997 40.6933C45.8532 40.7294 48.0479 40.5764 48.1517 38.8314C48.2634 36.9558 47.2842 34.6468 45.9766 33.2348C43.7569 34.5319 41.1444 34.7814 38.6029 34.4911C36.1054 34.2009 34.0446 33.4108 31.9148 32.121C29.3011 33.464 26.6676 33.4318 24.1116 32.0737C22.9006 32.8579 21.666 33.4594 20.2987 33.9198C17.017 34.8806 12.7004 35.0073 9.65577 33.2322C8.43163 34.6671 7.34016 36.8672 7.45114 38.748C7.61204 41.0801 11.1662 40.8213 12.7549 40.4627C16.1606 39.6937 18.9156 37.3131 20.2606 34.0478C21.5057 37.2592 24.5976 40.0543 28.094 40.0457C31.7874 40.0365 34.698 37.4024 35.9583 34.0387L35.9596 34.038ZM28.0467 43.4101C29.2433 45.8124 31.0223 47.6053 33.3261 48.7375C34.8176 49.5111 36.3976 49.9702 38.0729 50.1245C40.3084 50.2677 42.2957 49.6871 43.4903 47.6979C44.3539 46.2308 44.5739 44.4766 44.0268 42.848C42.4815 42.8178 41.0505 42.3975 39.7154 41.6002C38.3921 42.2241 36.9815 42.4421 35.5314 42.2681C34.503 42.1453 33.5645 41.8314 32.6293 41.3631C31.1287 42.3561 29.4298 42.8565 27.6356 42.7731C26.0831 42.689 24.6574 42.2484 23.3065 41.4807C21.0197 42.5918 18.4066 42.6214 16.1127 41.4872C14.752 42.2234 13.3124 42.6917 11.7304 42.7935C11.2713 43.9427 11.1695 45.1603 11.4119 46.3555C11.6391 47.4936 12.2827 48.4098 13.233 49.0711C15.9131 50.9369 19.9578 50.0772 22.7088 48.7355C25.0488 47.5941 26.862 45.7993 28.0461 43.4095L28.0467 43.4101ZM36.3648 53.1993C36.4778 52.9208 36.5763 52.6673 36.6032 52.3784C34.9482 51.983 33.4148 51.459 31.9161 50.6912C29.4357 52.0047 26.554 52.0139 24.0735 50.6847C22.3693 51.5273 20.585 52.0237 18.7245 52.3928C18.8013 52.9832 19.0535 53.4587 19.3287 53.9571C20.9948 56.6543 24.4301 59.2004 27.1621 60.7293C27.8497 61.1141 28.5701 61.0327 29.2111 60.5888C31.7224 58.8504 34.8898 55.9142 36.3661 53.1999L36.3648 53.1993Z" fill="#3F5633"/>
 <path d="M28.0229 43.3487C26.8382 45.7385 25.025 47.5334 22.6857 48.6748C19.9347 50.0164 15.8899 50.8761 13.2098 49.0103C12.2595 48.349 11.616 47.4329 11.3887 46.2948C11.1464 45.0995 11.2482 43.882 11.7072 42.7327C13.2886 42.6309 14.7288 42.1627 16.0896 41.4265C18.3842 42.5606 20.9966 42.5311 23.2833 41.4199C24.6349 42.187 26.06 42.6283 27.6125 42.7123C29.4073 42.7958 31.1056 42.2953 32.6062 41.3024C33.5414 41.7706 34.4792 42.0839 35.5083 42.2073C36.9583 42.3814 38.3683 42.1633 39.6923 41.5394C41.0274 42.336 42.4584 42.757 44.0037 42.7872C44.5507 44.4159 44.3301 46.1707 43.4671 47.6371C42.2719 49.6264 40.2847 50.2062 38.0498 50.0637C36.3745 49.9094 34.7944 49.4504 33.303 48.6767C30.9992 47.5445 29.2201 45.7517 28.0236 43.3494L28.0229 43.3487Z" fill="#FBF7ED"/>
@@ -171,12 +185,12 @@ h1 .pinhal { color: var(--amarelo); }
 </svg>
         <span>Central<em>Pinhal</em></span>
       </a>
-      <h1 id="titulo"><em>Obrigada</em> pelo interesse<br> na <span class="central">Central</span><em class="pinhal">Pinhal</em>!</h1>
-      <p class="fala">Assim que as vagas para a <b>CentralPinhal</b> abrirem, você fica sabendo antes de todo mundo. Fique de olho no seu e-mail e no WhatsApp: o convite vai chegar por lá.</p>
+      <h1 id="titulo" class="entra" style="--atraso: .62s"><em>Obrigada</em> pelo interesse<br> na <span class="central">Central</span><em class="pinhal">Pinhal</em>!</h1>
+      <p class="fala entra" style="--atraso: .74s">Assim que as vagas para a <b>CentralPinhal</b> abrirem, você fica sabendo antes de todo mundo. Fique de olho no seu e-mail e no WhatsApp: o convite vai chegar por lá.</p>
     </section>
   </main>
 
-  <footer class="rodape">
+  <footer class="rodape entra" style="--atraso: .9s">
     <svg class="rodape-curva" width="82" height="47" viewBox="0 0 82 47" aria-hidden="true" focusable="false"><path d="M0 46C49 46 22 0 82 0V47H0Z" fill="#FAF7ED"/><path d="M0 46.5C49 46.5 22 .5 82 .5" fill="none" stroke="#BEB084"/></svg>
     <div class="rodape-meio">
       <p class="rodape-links"><span>Termos de uso</span><span>Política de privacidade</span></p>
@@ -186,5 +200,54 @@ h1 .pinhal { color: var(--amarelo); }
     <svg class="rodape-curva" width="80" height="47" viewBox="0 0 80 47" aria-hidden="true" focusable="false"><path d="M0 0C54 0 37 46 80 46V47H0Z" fill="#FAF7ED"/><path d="M0 .5C54 .5 37 46.5 80 46.5" fill="none" stroke="#BEB084"/></svg>
   </footer>
 </div>
+
+<script>
+// A fala da Pinha aparece no balão letra por letra, como máquina de escrever. Depois de 1 minuto na página,
+// ela começa a soltar umas piadas: uma a cada 20 segundos, sem repetir até passar por todas.
+(function () {
+  const balao = document.querySelector(".balao");
+  const alvo = balao.querySelector(".digitando");
+  const calma = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const oi = "Oieee, eu sou a Pinha, a assistente virtual da CentralPinhal, e estou ansiosa para a gente organizar a sua vida!";
+  const piadas = [
+    "Enquanto a Central não abre, eu fico aqui treinando meu aceno. Ficou bom? kkkk",
+    "Já bebeu água hoje? Eu não, eu sou uma pinha. Mas você devia kkkk",
+    "Hoje eu acordei pinha. Amanhã, quem sabe, pinheiro kkkk",
+    "Se uma pinha cai na floresta e ninguém posta, ela existiu? kkkk",
+    "Ainda aqui? Pode ir viver a vida, que eu te aviso quando abrir kkkk",
+    "Fiquei de pé tanto tempo que criei raiz. Literalmente kkkk",
+    "Tive uma ideia genial de post… e esqueci. Volta, ideia! kkkk",
+    "Planejando a dominação do Pinterest. Etapa 1: ser fofa kkkk",
+    "Fechei 12 abas. Abri 13. Ciclo da vida kkkk",
+    "Se alguém perguntar, eu tava trabalhando, tá? kkkk",
+  ];
+  let relogio;
+  function digita(texto) {
+    clearTimeout(relogio);
+    if (calma) { alvo.textContent = texto; return; }
+    let i = 0;
+    alvo.textContent = "";
+    (function letra() {
+      i++;
+      alvo.textContent = texto.slice(0, i);
+      // pausa um pouco mais nas vírgulas e nos pontos, como quem fala
+      if (i < texto.length) relogio = setTimeout(letra, /[.,!?…]/.test(texto[i - 1]) ? 220 : 34);
+    })();
+  }
+  let fila = [];
+  function proximaPiada() {
+    if (!fila.length) fila = piadas.slice().sort(() => Math.random() - 0.5);
+    balao.classList.remove("de-novo"); void balao.offsetWidth; balao.classList.add("de-novo");
+    digita(fila.shift());
+  }
+  setTimeout(() => digita(oi), calma ? 0 : 1500);
+  setTimeout(() => { proximaPiada(); setInterval(proximaPiada, 20000); }, 60000);
+
+  // Quem pede menos movimento no sistema vê a Pinha parada (a imagem de capa do vídeo).
+  const video = document.getElementById("pinha-video");
+  if (calma) { video.removeAttribute("autoplay"); video.pause(); }
+  else video.play().catch(() => {});
+})();
+</script>
 </body>
 </html>
