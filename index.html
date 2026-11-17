@@ -298,15 +298,7 @@ legend { padding: 0; margin-bottom: 18px; }
 .abertura { display: none; }
 html.carregando { overflow: hidden; }
 html.carregando .abertura { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; }
-.ab-fundo {
-  position: absolute; inset: 0;
-  background:
-    linear-gradient(to right, rgba(190, 176, 132, .35) 1px, transparent 1px) 119px 35px / 84px 85.75px,
-    linear-gradient(to bottom, rgba(190, 176, 132, .35) 1px, transparent 1px) 119px 35px / 84px 85.75px,
-    url("paisagem.webp") 71% 50% / cover no-repeat,
-    var(--verde);
-}
-.ab-sombra { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; mix-blend-mode: darken; }
+.ab-fundo { position: absolute; inset: 0; background: url("paisagem.webp") 71% 50% / cover no-repeat, var(--verde); }
 .ab-tinta { position: absolute; left: 50%; top: 50%; width: 10px; height: 10px; z-index: 2; pointer-events: none;
   transform: translate(-50%, -50%) scale(0); will-change: transform; }
 .ab-tinta svg { display: block; width: 100%; height: 100%; fill: var(--verde); }
@@ -385,8 +377,8 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
 </head>
 <body>
 <div class="abertura" id="abertura" aria-hidden="true">
-  <!-- o fundo do loading (Figma): a paisagem da serra, a grade e a sombra de folhas -->
-  <div class="ab-fundo"><img class="ab-sombra" src="sombra-folhas.webp" alt="" width="960" height="724"></div>
+  <!-- o fundo do loading (Figma): só a paisagem da serra -->
+  <div class="ab-fundo"></div>
   <!-- a tinta da transição: uma camada própria que só cresce e gira (leve para o navegador) -->
   <div class="ab-tinta"><svg viewBox="-1.5 -1.5 3 3" aria-hidden="true" focusable="false"></svg></div>
   <svg class="abertura-logo" viewBox="0 0 56 68" aria-hidden="true" focusable="false">
