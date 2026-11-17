@@ -22,7 +22,7 @@
   --fundo: #F1EBDD;
   --cartao: #FAF7ED;
   --linha: #BEB084;
-  --grade: rgba(190, 176, 132, .15);
+  --grade: rgba(104, 138, 87, .35);  /* a grade verde-clara sobre a moldura verde (Figma) */
   --tinta: #3E2C0F;
   --verde: #3F5633;
   --amarelo: #D68732;
@@ -48,7 +48,7 @@ a { color: inherit; }
   display: flex; flex-direction: column;
   border: 1px solid var(--linha);
   border-radius: 80px / 85px;
-  background-color: var(--fundo);
+  background-color: var(--verde);    /* a moldura do obrigado é verde, como no Figma */
   background-image:
     linear-gradient(to right, var(--grade) 1px, transparent 1px),
     linear-gradient(to bottom, var(--grade) 1px, transparent 1px);
@@ -72,6 +72,13 @@ main { flex: 1; display: grid; place-items: center; padding-top: calc(var(--roda
   width: var(--roda); height: var(--roda);
   animation: brotar .8s cubic-bezier(.34, 1.56, .64, 1) .3s both;
 }
+/* o aro creme em volta do círculo (como o do bônus), pulsando devagar */
+.roda-aro {
+  position: absolute; inset: calc(var(--roda) * -.076); border-radius: 50%;
+  background: rgba(250, 247, 237, .5); border: 1px solid rgba(190, 176, 132, .5);
+  animation: aro 3s ease-in-out infinite;
+}
+@keyframes aro { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: .6; } }
 .roda-circulo {
   position: absolute; inset: 0; overflow: hidden;
   background: var(--cartao); border: 1px solid var(--linha); border-radius: 50%;
@@ -163,7 +170,7 @@ h1 .pinhal { color: var(--amarelo); }
 @keyframes entrar { from { opacity: 0; transform: translate3d(0, 14px, 0); } to { opacity: 1; transform: none; } }
 @keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
 @keyframes piscar { 50% { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .moldura, .pronto, .roda, .balao, .entra, .cursor, .pontinhos i { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .moldura, .pronto, .roda, .roda-aro, .balao, .entra, .cursor, .pontinhos i { animation: none; } }
 
 @media (max-width: 1080px) {
   .moldura { border-radius: 40px; padding-bottom: 0; }
@@ -186,6 +193,7 @@ h1 .pinhal { color: var(--amarelo); }
   <main>
     <section class="pronto" aria-labelledby="titulo">
       <div class="roda">
+        <div class="roda-aro" aria-hidden="true"></div>
         <div class="roda-circulo"><video id="pinha-video" src="../pinhas/pinha-oi.mp4" poster="../pinhas/pinha-oi.jpg" autoplay muted loop playsinline preload="auto" aria-label="A Pinha, a assistente da CentralPinhal, acenando"></video></div>
         <div class="balao pensando" aria-hidden="true"><p><span class="digitando"><span class="pontinhos"><i></i><i></i><i></i></span></span><span class="cursor"></span></p></div>
         <p class="so-leitor">A Pinha diz: Oieee, eu sou a Pinha, a assistente virtual da CentralPinhal, e estou ansiosa para a gente organizar a sua vida!</p>
