@@ -204,6 +204,10 @@ legend { padding: 0; margin-bottom: 18px; }
   font: 14px/1 "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
 }
 .pilula input:checked + span .emoji { display: none; }
+/* ao passar o mouse na opção, o emoji cresce com um pulinho */
+.emoji { transition: transform .25s cubic-bezier(.34, 1.56, .64, 1); }
+.pilula:hover .emoji, .pilula input:focus-visible + span .emoji { transform: scale(1.45) rotate(-8deg); }
+@media (prefers-reduced-motion: reduce) { .emoji { transition: none; } .pilula:hover .emoji { transform: none; } }
 .pilula input:checked + span::before {
   content: "✓"; flex: none; width: 16px; margin-right: 7px; text-align: center;
   font: 700 12px/1 var(--f-mono); color: var(--creme);
