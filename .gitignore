@@ -13,3 +13,5 @@
 !fontes/*.woff2
 !pinhas/
 !pinhas/*.png
+!obrigado/
+!obrigado/index.html

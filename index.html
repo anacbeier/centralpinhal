@@ -243,14 +243,6 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 .miudo + .miudo { margin-top: 8px; }
 .letras-miudas { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--linha); }
 
-/* depois de entrar na lista */
-.pronto { display: grid; gap: 14px; justify-items: start; }
-.pronto img { width: 120px; }
-.pronto h2 { margin: 0; }
-.pronto p { margin: 0; color: var(--tinta-suave); }
-.pronto .fala { font-size: 1.02rem; color: var(--tinta); }
-.pronto .assinatura { font-family: var(--f-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amarelo); }
-
 /* ---------- abertura: a pinha se monta de baixo para cima e a cortina sobe ---------- */
 .abertura { display: none; }
 html.carregando { overflow: hidden; }
@@ -424,14 +416,6 @@ html.carregando .abertura {
           <p class="miudo">Do que você precisa: um Mac com macOS 15 ou mais novo e uma conta do Claude a partir do plano Pro. O Claude Code monta a Central no seu Mac, seguindo o guia que vem junto.</p>
         </div>
       </div>
-
-      <div class="pronto" id="pronto" hidden tabindex="-1">
-        <img src="pinha.png" alt="" width="600" height="592">
-        <p class="sobretitulo">Você está na lista</p>
-        <h2 id="titulo-pronto">Anotado!</h2>
-        <p class="fala">Quando a CentralPinhal abrir, você fica sabendo antes de todo mundo. Agora vou voltar a olhar pro nada e pensar na vida kkkk</p>
-        <p class="assinatura">— Pinha</p>
-      </div>
     </aside>
   </div>
 </main>
@@ -443,8 +427,6 @@ const ENDERECO_DA_PLANILHA = "https://script.google.com/macros/s/AKfycbyM1xcRudD
 const form = document.getElementById("form-lista");
 const aviso = document.getElementById("aviso");
 const botao = document.getElementById("enviar");
-const caixaForm = document.getElementById("caixa-form");
-const pronto = document.getElementById("pronto");
 function rotulo(texto) { botao.querySelectorAll(".rolo-texto").forEach((t) => { t.textContent = texto; }); }
 
 // De onde a pessoa veio: as etiquetas utm do link (ex.: ?utm_source=instagram) ou o site anterior.
@@ -461,13 +443,12 @@ function mostraAviso(texto) {
   aviso.hidden = false;
 }
 
-function mostraPronto(nome) {
-  const primeiro = nome.split(/\s+/)[0];
-  document.getElementById("titulo-pronto").textContent = primeiro ? `Anotado, ${primeiro}!` : "Anotado!";
-  caixaForm.hidden = true;
-  pronto.hidden = false;
-  pronto.focus({ preventScroll: true });
-  document.getElementById("lista").scrollIntoView({ block: "start" });
+// Depois de entrar na lista, a pessoa vai para a página de obrigado (obrigado/), que tem link próprio
+// para os anúncios contarem o cadastro. O primeiro nome vai guardado só nesta aba, nunca no endereço.
+function vaiProObrigado(nome) {
+  try { sessionStorage.setItem("centralpinhal-nome", nome.split(/\s+/)[0]); } catch (e) {}
+  form.reset();
+  location.assign("obrigado/");
 }
 
 // O vídeo toca sem som, em loop, só enquanto está na tela. Quem pede menos movimento no sistema
@@ -506,7 +487,7 @@ form.addEventListener("submit", async (evento) => {
   try {
     // A planilha do Google não devolve resposta legível para outro site; se a rede respondeu, chegou.
     await fetch(ENDERECO_DA_PLANILHA, { method: "POST", mode: "no-cors", body: dados });
-    mostraPronto(nome);
+    vaiProObrigado(nome);
   } catch (erro) {
     mostraAviso("Não deu para enviar agora. Confira a sua internet e tente de novo.");
   } finally {
