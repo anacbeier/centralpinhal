@@ -301,7 +301,7 @@ html.carregando .abertura { position: fixed; inset: 0; z-index: 1000; display: g
 .ab-fundo { position: absolute; inset: 0; background: url("paisagem.webp") 71% 50% / cover no-repeat, var(--verde); }
 .ab-tinta { position: absolute; left: 50%; top: 50%; width: 10px; height: 10px; z-index: 2; pointer-events: none;
   transform: translate(-50%, -50%) scale(0); will-change: transform; }
-.ab-tinta svg { display: block; width: 100%; height: 100%; fill: var(--verde); }
+.ab-tinta svg { display: block; width: 100%; height: 100%; fill: var(--creme); } /* a tinta tem a cor do selo */
 .abertura-logo { position: relative; z-index: 3; width: clamp(150px, 13.6vw, 261px); height: auto; overflow: visible; }
 .ab-oval { transform-box: fill-box; transform-origin: 50% 50%; animation: ab-oval .7s cubic-bezier(.34, 1.56, .64, 1) .15s both; }
 .ab-peca { opacity: 0; /* furo na máscara: começa fechado */ transform-box: fill-box; transform-origin: 50% 50%; animation: ab-peca .55s cubic-bezier(.22, 1, .36, 1) both; }
@@ -320,8 +320,7 @@ html.carregando .abertura { position: fixed; inset: 0; z-index: 1000; display: g
 @keyframes ab-peca { from { opacity: 0; transform: translate3d(0, 30%, 0) scale(.6); } to { opacity: 1; transform: none; } }
 @keyframes ab-topo { 0% { opacity: 0; transform: translate3d(0, -30%, 0) scale(.7); } 70% { opacity: 1; transform: translate3d(0, 4%, 0) scale(1.05); } 100% { opacity: 1; transform: none; } }
 @keyframes ab-nome { from { opacity: 0; transform: translate3d(0, 14px, 0); } to { opacity: 1; transform: none; } }
-/* na saída, o selo e o nome somem rapidinho antes da tinta */
-.abertura.saindo .abertura-logo { opacity: 0; transform: scale(.85); transition: opacity .3s ease, transform .3s ease; }
+/* na saída, o nome some rapidinho; o selo fica e a tinta creme sai de trás dele */
 .abertura.saindo .abertura-nome { animation: ab-some .25s ease forwards; }
 @keyframes ab-some { to { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) {
@@ -452,14 +451,14 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
     // a camada já nasce do tamanho final (fica nítida) e começa encolhida; o raio da mancha é 1/3 do lado
     const lado = Math.ceil(longe * 2.6);
     Object.assign(camada.style, { left: cx + "px", top: cy + "px", width: lado + "px", height: lado + "px" });
-    const comeco = Math.min(.2, (logo.width * .5) / (lado / 3));
+    const comeco = (logo.width * .36) / (lado / 3); // começa escondida atrás do selo, no centro dele
     abertura.classList.add("saindo");
-    // 1) a tinta verde sai do selo e se espalha pela tela (só transform: roda na placa de vídeo, sem travar)
+    // 1) a tinta creme sai do centro do selo e se espalha pela tela (só transform: roda na placa de vídeo, sem travar)
     camada.animate([
       { transform: `translate(-50%, -50%) scale(${comeco}) rotate(0deg)` },
       { transform: "translate(-50%, -50%) scale(1.15) rotate(20deg)" },
     ], { duration: 1000, delay: 120, easing: "cubic-bezier(.3, .65, .2, 1)", fill: "forwards" });
-    // 2) a tela verde se dissolve e a página aparece (só opacidade)
+    // 2) a tela creme se dissolve e a página aparece (só opacidade)
     setTimeout(() => {
       comecaEntradas();
       const fade = abertura.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 600, easing: "ease", fill: "forwards" });
