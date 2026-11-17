@@ -131,14 +131,15 @@ h1 {
   padding: 43px 42px;
   scroll-margin-top: 20px;
 }
-.cartao h2 { margin: 0; font: 400 clamp(1.75rem, 1rem + 1vw, 2.125rem)/1.1 var(--f-titulo); }
+/* o título do cartão fica como no Figma: "Entre antes de todo" / "mundo R$ 75,00" com a nota ao lado do preço */
+.cartao h2 { margin: 0; font: 400 clamp(2.5rem, 1rem + 2.6vw, 3.75rem)/1 var(--f-titulo); }
 .preco {
   font-style: italic; color: var(--verde-preco); white-space: nowrap;
   text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.1em;
 }
 .preco-nota {
-  display: inline-block; vertical-align: baseline; width: 132px; margin-left: 12px;
-  font: 700 11px/13px var(--f-mono); text-transform: uppercase;
+  display: inline-block; vertical-align: baseline; width: 143px; margin-left: 14px;
+  font: 700 12px/14px var(--f-mono); text-transform: uppercase;
 }
 .preco-nota span { color: var(--amarelo); }
 .explica { margin: 20px 0 0; text-transform: uppercase; }
@@ -367,6 +368,7 @@ html.anima .video.visivel .selo { opacity: 1; transform: none; transition: opaci
   .palco { width: calc(100% - 32px); }
   .marca { gap: 14px; }
   .preco-nota { display: block; width: auto; margin: 10px 0 0; }
+  .so-computador { display: none; }
   .cartao { border-radius: 28px; padding: 26px 18px; }
   .bonus { border-radius: 28px; padding: 12px 18px 12px 12px; grid-template-columns: 48px minmax(0, 1fr); gap: 12px; }
   .bonus svg { width: 48px; height: 48px; }
@@ -483,7 +485,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
     </section>
 
     <aside class="cartao entra" style="--atraso: .2s" id="lista" aria-labelledby="titulo-lista">
-      <h2 id="titulo-lista">Entre antes de todo mundo <span class="preco">R$&nbsp;75,00</span><span class="preco-nota"><span>*pagamento único,</span> valor de lançamento</span></h2>
+      <h2 id="titulo-lista">Entre antes de todo<br class="so-computador"> mundo <span class="preco">R$&nbsp;75,00</span><span class="preco-nota"><span>*pagamento único,</span> valor de lançamento</span></h2>
       <p class="explica">Deixe seu contato e receba o convite assim que a CentralPinhal abrir.</p>
 
       <p class="rotulo bonus-rotulo">Para as 5 primeiras pessoas</p>
