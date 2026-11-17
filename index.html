@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>CentralPinhal · lista de espera</title>
-<meta name="description" content="Tarefas, hábitos, finanças, agenda, clientes e as suas redes num app para Mac, com a Pinha, a IA da Central. R$ 75 no lançamento, pagamento único. Entre na lista de espera.">
+<meta name="description" content="Tarefas, hábitos, finanças, agenda, clientes e as suas redes num app para Mac, com a Pinha, a IA da Central. Entre na lista de espera.">
 <meta property="og:title" content="CentralPinhal · lista de espera">
 <meta property="og:description" content="Mais tempo para focar no que você faz de melhor. Um app para Mac, com a Pinha, a IA da Central.">
 <meta name="theme-color" content="#FAF7ED">
@@ -133,18 +133,8 @@ h1 {
   padding: 43px 42px;
   scroll-margin-top: 20px;
 }
-/* o título do cartão fica como no Figma ("Entre antes de todo" / "mundo R$ 75,00" com a nota ao lado do preço),
-   no mesmo tamanho do título da esquerda */
+/* o título do cartão, no mesmo tamanho do título da esquerda */
 .cartao h2 { margin: 0; font: 400 var(--t-titulo)/1.067 var(--f-titulo); }
-.preco {
-  font-style: italic; color: var(--verde-preco); white-space: nowrap;
-  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.1em;
-}
-.preco-nota {
-  display: inline-block; vertical-align: baseline; width: 143px; margin-left: 14px;
-  font: 700 12px/14px var(--f-mono); text-transform: uppercase;
-}
-.preco-nota span { color: var(--amarelo); }
 .explica { margin: 20px 0 0; text-transform: uppercase; }
 
 .rotulo, label, legend {
@@ -197,25 +187,25 @@ legend { padding: 0; margin-bottom: 18px; }
 .pilula { position: relative; flex: 1 1 auto; }
 .pilulas--fixas .pilula { flex: 0 0 94px; }
 .pilula input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
-.pilula span {
+.pilula > span {
   display: flex; align-items: center; justify-content: center;
-  height: 41px; padding: 0 16px;
+  height: 41px; padding: 0 14px;
   border: 1px solid var(--linha); border-radius: 999px; background: var(--fundo);
   font: 700 10px/1 var(--f-mono); text-transform: uppercase; color: var(--tinta);
   position: relative; white-space: nowrap; cursor: pointer; user-select: none;
   transition: background-color .15s, border-color .15s, color .15s;
 }
-.pilula:hover span { border-color: var(--amarelo); }
+.pilula:hover > span { border-color: var(--amarelo); }
 .pilula input:checked + span { background: var(--verde); border-color: var(--verde); color: var(--creme); }
-/* cada opção tem um ícone antes do texto; ao escolher, o ✓ entra no lugar do ícone (a largura não muda) */
-.ico {
-  flex: none; width: 13px; height: 13px; margin-right: 7px; color: var(--telha); /* ícones em telha #A44919 */
-  fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+/* cada opção tem um emoji antes do texto (os do iOS nos aparelhos da Apple);
+   ao escolher, o ✓ entra no lugar do emoji (a largura não muda) */
+.emoji {
+  flex: none; width: 16px; margin-right: 7px; text-align: center;
+  font: 14px/1 "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
 }
-.ico--cheia { fill: currentColor; stroke: none; }
-.pilula input:checked + span .ico { display: none; }
+.pilula input:checked + span .emoji { display: none; }
 .pilula input:checked + span::before {
-  content: "✓"; flex: none; width: 13px; margin-right: 7px; text-align: center;
+  content: "✓"; flex: none; width: 16px; margin-right: 7px; text-align: center;
   font: 700 12px/1 var(--f-mono); color: var(--creme);
   animation: marcar .3s cubic-bezier(.34, 1.56, .64, 1);
 }
@@ -374,8 +364,6 @@ html.anima .video.visivel .selo { opacity: 1; transform: none; transition: opaci
   .moldura { border-radius: 28px; padding: 24px 0 32px; }
   .palco { width: calc(100% - 32px); }
   .marca { gap: 14px; }
-  .preco-nota { display: block; width: auto; margin: 10px 0 0; }
-  .so-computador { display: none; }
   .cartao { border-radius: 28px; padding: 26px 18px; }
   .bonus { border-radius: 28px; padding: 12px 18px 12px 12px; grid-template-columns: 48px minmax(0, 1fr); gap: 12px; }
   .bonus svg { width: 48px; height: 48px; }
@@ -492,8 +480,8 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
     </section>
 
     <aside class="cartao entra" style="--atraso: .2s" id="lista" aria-labelledby="titulo-lista">
-      <h2 id="titulo-lista">Entre antes de todo<br class="so-computador"> mundo <span class="preco">R$&nbsp;75,00</span><span class="preco-nota"><span>*pagamento único,</span> valor de lançamento</span></h2>
-      <p class="explica">Deixe seu contato e receba o convite assim que a CentralPinhal abrir.</p>
+      <h2 id="titulo-lista">Entre antes de todo mundo</h2>
+      <p class="explica">Deixe seu e-mail e receba o convite assim que a CentralPinhal abrir.</p>
 
       <p class="rotulo bonus-rotulo">Para as 5 primeiras pessoas</p>
       <div class="bonus">
@@ -511,38 +499,30 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
 
       <form id="form-lista" autocomplete="on">
         <div class="campo">
-          <label for="nome">Seu nome:</label>
-          <input type="text" id="nome" name="nome" autocomplete="name" required maxlength="120" placeholder="Coloque seu nome completo">
-        </div>
-        <div class="campo">
           <label for="email">E-mail:</label>
           <input type="email" id="email" name="email" autocomplete="email" required maxlength="160" placeholder="Seu melhor e-mail" inputmode="email">
-        </div>
-        <div class="campo">
-          <label for="whatsapp">WhatsApp <span class="opcional">(opcional):</span></label>
-          <input type="tel" id="whatsapp" name="whatsapp" autocomplete="tel" inputmode="tel" maxlength="30" placeholder="DDD + número">
         </div>
 
         <fieldset>
           <legend>Qual sistema você usa?</legend>
           <div class="pilulas pilulas--fixas">
-            <label class="pilula"><input type="radio" id="sis-apple" name="mac" value="Apple" required><span><svg class="ico ico--cheia" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.8-.8-3-.8-1.5 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.3 0 2.1-1.1 2.8-2.3.9-1.3 1.3-2.6 1.3-2.7 0 0-2.5-1-2.5-3.7zM14.2 5.8c.6-.8 1.1-1.8 1-2.8-.9 0-2 .6-2.7 1.4-.6.7-1.1 1.7-1 2.7 1 .1 2-.5 2.7-1.3z"/></svg>Apple</span></label>
-            <label class="pilula"><input type="radio" id="sis-windows" name="mac" value="Windows"><span><svg class="ico ico--cheia" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.6l7.4-1v7H3zM11.6 4.4L21 3v8.6h-9.4zM3 12.6h7.4v7L3 18.6zM11.6 12.6H21V21l-9.4-1.3z"/></svg>Windows</span></label>
+            <label class="pilula"><input type="radio" id="sis-apple" name="mac" value="Apple" required><span><span class="emoji" aria-hidden="true">🍎</span>Apple</span></label>
+            <label class="pilula"><input type="radio" id="sis-windows" name="mac" value="Windows"><span><span class="emoji" aria-hidden="true">🪟</span>Windows</span></label>
           </div>
         </fieldset>
 
         <fieldset>
           <legend class="legenda-dupla">O que você mais quer organizar?<br><span class="opcional">(escolha quantos quiser)</span></legend>
           <div class="pilulas">
-            <label class="pilula"><input type="checkbox" id="i-tarefas" name="interesse" value="Tarefas"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 12.5l3 3 5-6"/></svg>Tarefas</span></label>
-            <label class="pilula"><input type="checkbox" id="i-habitos" name="interesse" value="Hábitos"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 20v-4h-4"/></svg>Hábitos</span></label>
-            <label class="pilula"><input type="checkbox" id="i-ideias" name="interesse" value="Ideias e notas"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>Ideias e notas</span></label>
-            <label class="pilula"><input type="checkbox" id="i-agenda" name="interesse" value="Agenda"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18"/><path d="M8 3v4"/><path d="M16 3v4"/></svg>Agenda</span></label>
-            <label class="pilula"><input type="checkbox" id="i-financeiro" name="interesse" value="Financeiro"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M14.8 9.4c-.5-.8-1.5-1.3-2.8-1.3-1.6 0-2.7.8-2.7 1.9 0 1.2 1.1 1.6 2.7 1.9s2.8.8 2.8 2c0 1.1-1.1 2-2.8 2-1.3 0-2.3-.5-2.8-1.3"/><path d="M12 6.5v1.6M12 15.9v1.6"/></svg>Financeiro</span></label>
-            <label class="pilula"><input type="checkbox" id="i-clientes" name="interesse" value="Clientes"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.3c2.1.7 3.5 2.8 3.5 5.7"/></svg>Clientes</span></label>
-            <label class="pilula"><input type="checkbox" id="i-conteudos" name="interesse" value="Conteúdos"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Conteúdos</span></label>
-            <label class="pilula"><input type="checkbox" id="i-projetos" name="interesse" value="Projetos"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Projetos</span></label>
-            <label class="pilula"><input type="checkbox" id="i-demandas" name="interesse" value="Demandas clientes"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5h13l3.5 7v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6z"/></svg>Demandas clientes</span></label>
+            <label class="pilula"><input type="checkbox" id="i-tarefas" name="interesse" value="Tarefas"><span><span class="emoji" aria-hidden="true">✅</span>Tarefas</span></label>
+            <label class="pilula"><input type="checkbox" id="i-habitos" name="interesse" value="Hábitos"><span><span class="emoji" aria-hidden="true">🔁</span>Hábitos</span></label>
+            <label class="pilula"><input type="checkbox" id="i-ideias" name="interesse" value="Ideias e notas"><span><span class="emoji" aria-hidden="true">💡</span>Ideias e notas</span></label>
+            <label class="pilula"><input type="checkbox" id="i-agenda" name="interesse" value="Agenda"><span><span class="emoji" aria-hidden="true">📅</span>Agenda</span></label>
+            <label class="pilula"><input type="checkbox" id="i-financeiro" name="interesse" value="Financeiro"><span><span class="emoji" aria-hidden="true">💰</span>Financeiro</span></label>
+            <label class="pilula"><input type="checkbox" id="i-clientes" name="interesse" value="Clientes"><span><span class="emoji" aria-hidden="true">👥</span>Clientes</span></label>
+            <label class="pilula"><input type="checkbox" id="i-conteudos" name="interesse" value="Conteúdos"><span><span class="emoji" aria-hidden="true">📸</span>Conteúdos</span></label>
+            <label class="pilula"><input type="checkbox" id="i-projetos" name="interesse" value="Projetos"><span><span class="emoji" aria-hidden="true">🗂️</span>Projetos</span></label>
+            <label class="pilula"><input type="checkbox" id="i-demandas" name="interesse" value="Demandas clientes"><span><span class="emoji" aria-hidden="true">📥</span>Demandas clientes</span></label>
           </div>
         </fieldset>
 
@@ -556,7 +536,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
       </form>
 
       <div class="letras-miudas">
-        <p>Seus dados servem só para avisar sobre a CentralPinhal. Nada de spam, e você sai da lista quando quiser.</p>
+        <p>Seu e-mail serve só para avisar sobre a CentralPinhal. Nada de spam, e você sai da lista quando quiser.</p>
         <p><b>Do que você precisa:</b> um Mac com macOS 15 ou mais novo e uma conta do Claude a partir do plano Pro. O Claude Code monta a Central no seu Mac, seguindo o guia que vem junto.</p>
       </div>
     </aside>
@@ -597,9 +577,8 @@ function mostraAviso(texto) {
 }
 
 // Depois de entrar na lista, a pessoa vai para a página de obrigado (obrigado/), que tem link próprio
-// para os anúncios contarem o cadastro. O primeiro nome vai guardado só nesta aba, nunca no endereço.
-function vaiProObrigado(nome) {
-  try { sessionStorage.setItem("centralpinhal-nome", nome.split(/\s+/)[0]); } catch (e) {}
+// para os anúncios contarem o cadastro.
+function vaiProObrigado() {
   form.reset();
   location.assign("obrigado/");
 }
@@ -620,11 +599,12 @@ form.addEventListener("submit", async (evento) => {
   const d = new FormData(form);
   if (d.get("site")) return; // campo escondido: só robô preenche
 
-  const nome = String(d.get("nome") || "").trim();
+  // O formulário só pede o e-mail. A planilha (planilha.gs) só grava quando chega um nome,
+  // então vai um travessão no lugar dele.
   const dados = new URLSearchParams({
-    nome,
+    nome: "—",
     email: String(d.get("email") || "").trim(),
-    whatsapp: String(d.get("whatsapp") || "").trim(),
+    whatsapp: "",
     mac: String(d.get("mac") || ""),
     interesses: d.getAll("interesse").join(", "),
     origem: deOndeVeio(),
@@ -640,7 +620,7 @@ form.addEventListener("submit", async (evento) => {
   try {
     // A planilha do Google não devolve resposta legível para outro site; se a rede respondeu, chegou.
     await fetch(ENDERECO_DA_PLANILHA, { method: "POST", mode: "no-cors", body: dados });
-    vaiProObrigado(nome);
+    vaiProObrigado();
   } catch (erro) {
     mostraAviso("Não deu para enviar agora. Confira a sua internet e tente de novo.");
   } finally {
