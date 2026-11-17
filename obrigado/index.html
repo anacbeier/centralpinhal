@@ -26,7 +26,7 @@
   --amarelo: #D68732;
   --f-titulo: "IvyOra Text", "Iowan Old Style", Palatino, Georgia, serif;
   --f-mono: "Space Mono", ui-monospace, "SF Mono", Menlo, monospace;
-  --mono: clamp(13px, 0.42vw + 7px, 15px);
+  --mono: 12px;
   color-scheme: only light;
 }
 *, *::before, *::after { box-sizing: border-box; }
@@ -53,10 +53,10 @@ a { color: inherit; }
 }
 .topo { width: min(1388px, 100% - 96px); margin: 0 auto; padding-top: 29px; }
 .marca {
-  display: inline-flex; align-items: center; gap: 22px; text-decoration: none;
-  font: 400 clamp(2.2rem, 1.2rem + 1.6vw, 3rem)/1 var(--f-titulo);
+  display: inline-flex; align-items: center; gap: 14px; text-decoration: none;
+  font: 400 clamp(1.75rem, 1rem + 1vw, 2.125rem)/1 var(--f-titulo);
 }
-.marca svg { width: auto; height: clamp(52px, 3.55vw, 68px); flex: none; }
+.marca svg { width: auto; height: clamp(40px, 2.5vw, 48px); flex: none; }
 .marca em { font-style: italic; color: var(--amarelo); }
 
 main { flex: 1; display: grid; place-items: center; padding: 40px 20px 0; }
@@ -68,9 +68,9 @@ main { flex: 1; display: grid; place-items: center; padding: 40px 20px 0; }
 }
 .pronto .pinha { width: 128px; height: auto; transform-origin: 50% 100%; animation: pular .8s cubic-bezier(.34, 1.56, .64, 1) .25s both; }
 .rotulo { margin: 22px 0 0; font: 700 var(--mono)/20px var(--f-mono); text-transform: uppercase; color: var(--amarelo); }
-h1 { margin: 14px 0 0; font: 400 clamp(2.3rem, 0.6rem + 2.9vw, 3.75rem)/1 var(--f-titulo); overflow-wrap: anywhere; }
+h1 { margin: 14px 0 0; font: 400 clamp(2rem, 0.9rem + 1.9vw, 2.875rem)/1.05 var(--f-titulo); overflow-wrap: anywhere; }
 .fala { margin: 27px 0 0; text-transform: uppercase; }
-.assinatura { margin: 14px 0 0; font: 700 12px/20px var(--f-mono); text-transform: uppercase; color: var(--amarelo); }
+.assinatura { margin: 14px 0 0; font: 700 11px/18px var(--f-mono); text-transform: uppercase; color: var(--amarelo); }
 .voltar {
   margin: 27px 0 0; padding-top: 18px; border-top: 1px solid var(--linha);
   font: 400 10px/14px var(--f-mono); text-transform: uppercase;

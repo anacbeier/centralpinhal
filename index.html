@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>CentralPinhal · lista de espera</title>
-<meta name="description" content="Tarefas, hábitos, dinheiro, agenda e redes num app para Mac, com a Pinha, a IA que organiza por você. R$ 75 no lançamento, pagamento único. Entre na lista de espera.">
+<meta name="description" content="Tarefas, hábitos, finanças, agenda, clientes e as suas redes num app para Mac, com a Pinha, a IA da Central. R$ 75 no lançamento, pagamento único. Entre na lista de espera.">
 <meta property="og:title" content="CentralPinhal · lista de espera">
-<meta property="og:description" content="Sua vida e as suas redes num lugar só. A Pinha e a equipe dela fazem o resto. Um app para Mac, com IA.">
+<meta property="og:description" content="Toda a sua vida e as suas redes organizadas em um só lugar. Um app para Mac, com a Pinha, a IA da Central.">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="only light">
 <link rel="icon" type="image/png" href="logo.png">
@@ -36,7 +36,7 @@
 
   --f-titulo: "IvyOra Text", "Iowan Old Style", Palatino, Georgia, serif;
   --f-mono: "Space Mono", ui-monospace, "SF Mono", Menlo, monospace;
-  --mono: clamp(13px, 0.42vw + 7px, 15px); /* 15px na tela de 1920 */
+  --mono: 12px; /* menor que os 15px do Figma, a pedido da Ana (referência: oratry.com.br/studio/comprar) */
   color-scheme: only light;
 }
 
@@ -73,8 +73,8 @@ a { color: inherit; }
   margin-inline: auto;
   display: grid;
   grid-template-columns: minmax(0, 674fr) minmax(0, 679fr);
-  grid-template-areas: "texto cartao" "video cartao" "ganhos cartao";
-  grid-template-rows: auto auto 1fr;
+  grid-template-areas: "texto cartao" "video cartao" "ganhos cartao" "aulas cartao";
+  grid-template-rows: auto auto auto 1fr;
   column-gap: 35px;
   align-items: start;
 }
@@ -82,18 +82,18 @@ a { color: inherit; }
 /* ---------- coluna da esquerda ---------- */
 .texto { grid-area: texto; padding-top: 29px; min-width: 0; }
 .marca {
-  display: flex; align-items: center; gap: 22px;
-  font: 400 clamp(2.2rem, 1.2rem + 1.6vw, 3rem)/1 var(--f-titulo);
+  display: flex; align-items: center; gap: 14px;
+  font: 400 clamp(1.75rem, 1rem + 1vw, 2.125rem)/1 var(--f-titulo);
   color: var(--tinta);
 }
-.marca svg { width: auto; height: clamp(52px, 3.55vw, 68px); flex: none; }
+.marca svg { width: auto; height: clamp(40px, 2.5vw, 48px); flex: none; }
 .marca em, h1 em { font-style: italic; color: var(--amarelo); }
 h1 {
-  margin: 31px 0 0;
-  font: 400 clamp(2.3rem, 1.2rem + 2.6vw, 3.75rem)/1.067 var(--f-titulo);
+  margin: 26px 0 0;
+  font: 400 clamp(2rem, 0.9rem + 1.9vw, 2.875rem)/1.067 var(--f-titulo);
   text-wrap: balance;
 }
-.lead { margin: 45px 0 0; text-transform: uppercase; }
+.lead { margin: 24px 0 0; text-transform: uppercase; }
 .lead strong { font-weight: 700; }
 
 /* o vídeo num cartão, com outro cartão atrás e o selo da Pinha no canto */
@@ -115,7 +115,7 @@ h1 {
 .ganhos {
   grid-area: ganhos; list-style: none; margin: 32px 0 0; padding: 0; min-width: 0;
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(4, auto);
-  grid-auto-flow: column; gap: 25px 23px;
+  grid-auto-flow: column; gap: 22px 23px;
   text-transform: uppercase;
 }
 .ganhos li { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 11px; align-items: center; }
@@ -131,28 +131,41 @@ h1 {
   padding: 43px 42px;
   scroll-margin-top: 20px;
 }
-.cartao h2 { margin: 0; font: 400 clamp(2.3rem, 0.6rem + 2.9vw, 3.75rem)/1 var(--f-titulo); }
+.cartao h2 { margin: 0; font: 400 clamp(1.75rem, 1rem + 1vw, 2.125rem)/1.1 var(--f-titulo); }
 .preco {
   font-style: italic; color: var(--verde-preco); white-space: nowrap;
   text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.1em;
 }
 .preco-nota {
-  display: inline-block; vertical-align: baseline; width: 143px; margin-left: 14px;
-  font: 700 12px/14px var(--f-mono); text-transform: uppercase;
+  display: inline-block; vertical-align: baseline; width: 132px; margin-left: 12px;
+  font: 700 11px/13px var(--f-mono); text-transform: uppercase;
 }
 .preco-nota span { color: var(--amarelo); }
-.explica { margin: 27px 0 0; text-transform: uppercase; }
+.explica { margin: 20px 0 0; text-transform: uppercase; }
 
 .rotulo, label, legend {
   font: 700 var(--mono)/20px var(--f-mono); text-transform: uppercase; color: var(--amarelo);
 }
 .opcional { font-weight: 400; color: var(--tinta); }
-.bonus-rotulo { margin: 27px 0 0; }
+.bonus-rotulo { margin: 24px 0 0; }
+/* aulas e material de apoio que vêm com a Central (na coluna da esquerda, depois da lista) */
+.aulas-bloco { grid-area: aulas; margin: 40px 0 0; min-width: 0; }
+.aulas {
+  list-style: none; margin: 12px 0 0; padding: 16px 20px;
+  display: grid; gap: 10px;
+  background: var(--fundo); border: 1px solid var(--linha); border-radius: 24px;
+  text-transform: uppercase; line-height: 1.5;
+}
+.aulas li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: center; }
+.aulas li::before {
+  content: ""; width: 22px; height: 22px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='12' fill='%23D68732'/%3E%3Cpath d='M10 8.2v7.6l6-3.8z' fill='%23FAF7ED'/%3E%3C/svg%3E") center / contain no-repeat;
+}
 .bonus {
   margin: 12px 0 0; padding: 10px 28px 10px 16px;
   display: grid; grid-template-columns: 60px minmax(0, 1fr); gap: 14px; align-items: center;
   background: var(--verde); color: var(--creme); border-radius: 50px;
-  font: 400 12px/20px var(--f-mono); text-transform: uppercase;
+  font: 400 11px/18px var(--f-mono); text-transform: uppercase;
 }
 .bonus svg { width: 60px; height: 60px; }
 .bonus p { margin: 0; }
@@ -179,14 +192,27 @@ legend { padding: 0; margin-bottom: 18px; }
 .pilula input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
 .pilula span {
   display: flex; align-items: center; justify-content: center;
-  height: 41px; padding: 0 26px;
+  height: 41px; padding: 0 16px;
   border: 1px solid var(--linha); border-radius: 999px; background: var(--fundo);
   font: 700 10px/1 var(--f-mono); text-transform: uppercase; color: var(--tinta);
-  white-space: nowrap; cursor: pointer; user-select: none;
+  position: relative; white-space: nowrap; cursor: pointer; user-select: none;
   transition: background-color .15s, border-color .15s, color .15s;
 }
 .pilula:hover span { border-color: var(--amarelo); }
 .pilula input:checked + span { background: var(--verde); border-color: var(--verde); color: var(--creme); }
+/* cada opção tem um ícone antes do texto; ao escolher, o ✓ entra no lugar do ícone (a largura não muda) */
+.ico {
+  flex: none; width: 13px; height: 13px; margin-right: 7px;
+  fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+}
+.ico--cheia { fill: currentColor; stroke: none; }
+.pilula input:checked + span .ico { display: none; }
+.pilula input:checked + span::before {
+  content: "✓"; flex: none; width: 13px; margin-right: 7px; text-align: center;
+  font: 700 12px/1 var(--f-mono); color: var(--creme);
+  animation: marcar .3s cubic-bezier(.34, 1.56, .64, 1);
+}
+@keyframes marcar { from { transform: scale(0); opacity: 0; } to { transform: none; opacity: 1; } }
 .pilula input:focus-visible + span { outline: 2px solid var(--amarelo); outline-offset: 2px; }
 
 .armadilha { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
@@ -194,10 +220,10 @@ legend { padding: 0; margin-bottom: 18px; }
 /* o botão azul do Studio Tchê, com o aro claro, pulsando devagar */
 .botao {
   appearance: none; cursor: pointer;
-  width: 100%; min-height: 84px; padding: 8px 24px;
+  width: 100%; min-height: 72px; padding: 8px 24px;
   border: 9px solid rgba(70, 100, 251, .5); border-radius: 999px;
   background: var(--azul) padding-box; color: #F6F5EF;
-  font: 700 clamp(14px, 0.8vw + 5px, 20px)/1.25 var(--f-mono); text-transform: uppercase;
+  font: 700 clamp(13px, 0.4vw + 7px, 15px)/1.25 var(--f-mono); text-transform: uppercase;
   display: inline-flex; align-items: center; justify-content: center; text-align: center;
   position: relative;
   transition: background-color .18s;
@@ -290,13 +316,36 @@ html.carregando .abertura {
   .abertura.saindo { transform: none; opacity: 0; transition: opacity .3s; }
 }
 
+/* ---------- entradas suaves: cada parte sobe um pouco e aparece quando chega na tela ---------- */
+html.anima .entra { opacity: 0; transform: translate3d(0, 22px, 0); }
+html.anima .entra.visivel {
+  opacity: 1; transform: none;
+  transition: opacity .9s cubic-bezier(.22, 1, .36, 1) var(--atraso, 0s), transform 1s cubic-bezier(.22, 1, .36, 1) var(--atraso, 0s);
+}
+/* o selo entra girando um pouco, depois do vídeo */
+html.anima .selo { opacity: 0; transform: rotate(-30deg) scale(.7); }
+html.anima .video.visivel .selo { opacity: 1; transform: none; transition: opacity .7s ease .5s, transform 1.1s cubic-bezier(.34, 1.56, .64, 1) .5s; }
+
+/* a escrita em volta da Pinha gira devagar (o centro do giro é o centro do círculo) */
+.selo-anel { transform-origin: 52.09% 52.67%; animation: girar 40s linear infinite; }
+@keyframes girar { to { transform: rotate(360deg); } }
+
+/* o círculo claro em volta da pinha do bônus pulsa devagar */
+.bonus svg { overflow: visible; }
+.bonus svg circle:first-of-type { transform-box: fill-box; transform-origin: center; animation: respirar 2.4s ease-in-out infinite; }
+@keyframes respirar { 0%, 100% { transform: scale(1); opacity: .5; } 50% { transform: scale(1.14); opacity: .2; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .selo-anel, .bonus svg circle:first-of-type, .pilula input:checked + span::before { animation: none; }
+}
+
 /* ---------- tablet e celular: uma coluna ---------- */
 @media (max-width: 1080px) {
   .moldura { padding: 32px 0 40px; border-radius: 40px; }
   .palco {
     width: min(680px, 100% - 40px);
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "texto" "cartao" "video" "ganhos";
+    grid-template-areas: "texto" "cartao" "video" "ganhos" "aulas";
     grid-template-rows: auto;
   }
   .texto { padding-top: 0; }
@@ -321,14 +370,18 @@ html.carregando .abertura {
   .cartao { border-radius: 28px; padding: 26px 18px; }
   .bonus { border-radius: 28px; padding: 12px 18px 12px 12px; grid-template-columns: 48px minmax(0, 1fr); gap: 12px; }
   .bonus svg { width: 48px; height: 48px; }
-  .pilula span { padding: 0 16px; }
+  .pilula span { padding: 0 12px; }
   input[type="text"], input[type="email"], input[type="tel"] { font-size: 16px; } /* sem zoom no iPhone */
   input::placeholder { font-size: 11px; }
   .selo { left: -12px; bottom: -14px; width: 112px; height: 113px; }
   .ganhos { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; grid-auto-flow: row; gap: 18px; }
 }
 </style>
-<script>document.documentElement.classList.add("carregando");</script>
+<script>
+document.documentElement.classList.add("carregando");
+// As entradas suaves só acontecem para quem não pediu menos movimento no sistema.
+if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("anima");
+</script>
 </head>
 <body>
 <div class="abertura" id="abertura" aria-hidden="true">
@@ -352,8 +405,26 @@ html.carregando .abertura {
     saiu = true;
     setTimeout(() => {
       abertura.classList.add("saindo");
+      setTimeout(comecaEntradas, 350); // as partes da página entram enquanto a cortina sobe
       setTimeout(() => { document.documentElement.classList.remove("carregando"); abertura.remove(); }, 950);
     }, Math.max(0, minimo - (performance.now() - inicio)));
+  }
+  // Cada parte com a classe "entra" aparece quando chega na tela; as que chegam juntas entram uma depois da outra.
+  function comecaEntradas() {
+    const itens = document.querySelectorAll(".entra");
+    if (!document.documentElement.classList.contains("anima")) return;
+    if (!("IntersectionObserver" in window)) { itens.forEach((el) => el.classList.add("visivel")); return; }
+    const olho = new IntersectionObserver((vistos) => {
+      let ordem = 0;
+      vistos.forEach((v) => {
+        if (!v.isIntersecting) return;
+        const el = v.target;
+        if (!el.style.getPropertyValue("--atraso")) el.style.setProperty("--atraso", (ordem++ * 0.08) + "s");
+        el.classList.add("visivel");
+        olho.unobserve(el);
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+    itens.forEach((el) => olho.observe(el));
   }
   if (document.readyState === "complete") sair(); else addEventListener("load", sair, { once: true });
   setTimeout(sair, 6000); // se algo demorar demais, a página aparece mesmo assim
@@ -363,7 +434,7 @@ html.carregando .abertura {
 <div class="moldura">
   <main class="palco">
     <section class="texto" aria-labelledby="titulo">
-      <div class="marca">
+      <div class="marca entra" style="--atraso: .05s">
         <svg class="logo" aria-hidden="true" focusable="false" viewBox="0 0 56 68" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M38.5858 65.199C34.1772 67.5008 29.9013 68.3421 24.9338 67.8764C21.7402 67.577 18.689 66.6293 15.8822 65.0768C12.2945 63.0922 9.19278 60.376 6.6611 57.158C4.84 54.8437 3.43855 52.2904 2.34641 49.5604C1.12622 46.5099 0.390028 43.3714 0.129308 40.0923C-0.131412 36.8133 0.0137245 33.8797 0.460298 30.7721C1.34556 24.6179 3.34529 18.5609 6.62301 13.2789C8.77707 9.80745 11.5708 6.61576 14.945 4.3054C18.6128 1.79211 22.7528 0.182477 27.2449 0.017639C29.7798 -0.0749593 32.2517 0.191015 34.6626 0.95807C37.0734 1.72513 39.1973 2.80872 41.218 4.26206C45.1452 7.08598 48.2299 10.8589 50.4457 15.1486C53.2604 20.5968 54.8956 26.4837 55.3993 32.5958C55.7073 36.3365 55.5281 40.1029 54.7505 43.7792C54.2606 46.0955 53.5001 48.2699 52.5189 50.4102C51.3972 52.8578 49.9873 55.0736 48.285 57.1501C45.6233 60.3963 42.3095 63.2551 38.5865 65.199H38.5858ZM28.0224 17.0754C29.657 20.9678 33.0359 23.3754 37.2875 22.9755C38.4854 22.8625 39.5887 22.5236 40.5698 21.8623C41.0906 21.511 41.2994 20.9514 41.0387 20.3275C40.2566 18.4572 38.8019 16.8889 36.9802 15.9544C35.6266 15.2602 34.1608 15.0455 32.6642 15.2077L29.9959 15.496C29.9059 15.5059 29.7227 15.4513 29.6741 15.3903C29.4015 15.0494 30.6605 11.2693 30.8818 10.6133C31.1117 9.93223 31.331 9.28798 31.4774 8.58856C31.5779 8.1085 31.3159 7.63828 30.8542 7.48395C29.5986 7.06365 26.7878 7.21995 25.4231 7.43601C24.8307 7.52992 24.4846 8.09274 24.6206 8.66212C24.7966 9.39765 25.0113 10.082 25.2418 10.807C25.4421 11.4368 26.621 15.1368 26.3386 15.4014C26.2768 15.4592 26.1015 15.4953 25.9971 15.4822C25.19 15.3791 24.4419 15.2648 23.6289 15.2241C22.2577 15.1558 20.9245 15.3266 19.6643 15.8769C17.9771 16.6138 16.552 17.7899 15.454 19.2571C14.9115 19.9821 14.289 21.0453 15.144 21.75C16.8627 23.1652 19.7529 23.3511 21.8604 22.85C24.8373 22.1014 26.8988 19.9322 28.0224 17.0754ZM40.2638 32.0987C42.0671 32.1657 44.3769 31.8018 45.7304 30.7025C46.1395 30.3702 46.3208 29.8684 46.2091 29.3477C45.7888 27.39 43.8121 24.6816 42.0002 23.6729C40.2999 24.7355 38.444 25.3187 36.4344 25.3791C33.3452 25.4658 30.497 24.656 28.0677 22.6386C24.0801 25.7895 18.205 26.6196 13.8365 23.6821C12.2413 24.9942 10.1326 27.3026 9.56514 29.2708C9.19343 30.5882 10.6192 31.2587 11.6325 31.6127C12.6537 31.9693 13.6749 32.0691 14.7612 32.1085C20.2146 32.3069 25.4047 29.4941 28.0382 24.6573C30.4188 29.1126 35.2582 31.9135 40.2644 32.0987H40.2638ZM35.9596 34.038C37.3643 37.7432 40.5823 40.4214 44.4997 40.6933C45.8532 40.7294 48.0479 40.5764 48.1517 38.8314C48.2634 36.9558 47.2842 34.6468 45.9766 33.2348C43.7569 34.5319 41.1444 34.7814 38.6029 34.4911C36.1054 34.2009 34.0446 33.4108 31.9148 32.121C29.3011 33.464 26.6676 33.4318 24.1116 32.0737C22.9006 32.8579 21.666 33.4594 20.2987 33.9198C17.017 34.8806 12.7004 35.0073 9.65577 33.2322C8.43163 34.6671 7.34016 36.8672 7.45114 38.748C7.61204 41.0801 11.1662 40.8213 12.7549 40.4627C16.1606 39.6937 18.9156 37.3131 20.2606 34.0478C21.5057 37.2592 24.5976 40.0543 28.094 40.0457C31.7874 40.0365 34.698 37.4024 35.9583 34.0387L35.9596 34.038ZM28.0467 43.4101C29.2433 45.8124 31.0223 47.6053 33.3261 48.7375C34.8176 49.5111 36.3976 49.9702 38.0729 50.1245C40.3084 50.2677 42.2957 49.6871 43.4903 47.6979C44.3539 46.2308 44.5739 44.4766 44.0268 42.848C42.4815 42.8178 41.0505 42.3975 39.7154 41.6002C38.3921 42.2241 36.9815 42.4421 35.5314 42.2681C34.503 42.1453 33.5645 41.8314 32.6293 41.3631C31.1287 42.3561 29.4298 42.8565 27.6356 42.7731C26.0831 42.689 24.6574 42.2484 23.3065 41.4807C21.0197 42.5918 18.4066 42.6214 16.1127 41.4872C14.752 42.2234 13.3124 42.6917 11.7304 42.7935C11.2713 43.9427 11.1695 45.1603 11.4119 46.3555C11.6391 47.4936 12.2827 48.4098 13.233 49.0711C15.9131 50.9369 19.9578 50.0772 22.7088 48.7355C25.0488 47.5941 26.862 45.7993 28.0461 43.4095L28.0467 43.4101ZM36.3648 53.1993C36.4778 52.9208 36.5763 52.6673 36.6032 52.3784C34.9482 51.983 33.4148 51.459 31.9161 50.6912C29.4357 52.0047 26.554 52.0139 24.0735 50.6847C22.3693 51.5273 20.585 52.0237 18.7245 52.3928C18.8013 52.9832 19.0535 53.4587 19.3287 53.9571C20.9948 56.6543 24.4301 59.2004 27.1621 60.7293C27.8497 61.1141 28.5701 61.0327 29.2111 60.5888C31.7224 58.8504 34.8898 55.9142 36.3661 53.1999L36.3648 53.1993Z" fill="#3F5633"/>
 <path d="M28.0229 43.3487C26.8382 45.7385 25.025 47.5334 22.6857 48.6748C19.9347 50.0164 15.8899 50.8761 13.2098 49.0103C12.2595 48.349 11.616 47.4329 11.3887 46.2948C11.1464 45.0995 11.2482 43.882 11.7072 42.7327C13.2886 42.6309 14.7288 42.1627 16.0896 41.4265C18.3842 42.5606 20.9966 42.5311 23.2833 41.4199C24.6349 42.187 26.06 42.6283 27.6125 42.7123C29.4073 42.7958 31.1056 42.2953 32.6062 41.3024C33.5414 41.7706 34.4792 42.0839 35.5083 42.2073C36.9583 42.3814 38.3683 42.1633 39.6923 41.5394C41.0274 42.336 42.4584 42.757 44.0037 42.7872C44.5507 44.4159 44.3301 46.1707 43.4671 47.6371C42.2719 49.6264 40.2847 50.2062 38.0498 50.0637C36.3745 49.9094 34.7944 49.4504 33.303 48.6767C30.9992 47.5445 29.2201 45.7517 28.0236 43.3494L28.0229 43.3487Z" fill="#FBF7ED"/>
@@ -374,11 +445,11 @@ html.carregando .abertura {
 </svg>
         <span>Central<em>Pinhal</em></span>
       </div>
-      <h1 id="titulo">Sua vida e as suas redes num lugar só. <em>A Pinha e a equipe dela fazem o resto.</em></h1>
-      <p class="lead">Tarefas, hábitos, dinheiro, agenda, clientes e os posts das suas redes <strong>num app para o seu Mac</strong>. Você conversa com a Pinha, e a equipe dela lê as suas redes, pesquisa o seu nicho e monta a estratégia da semana.</p>
+      <h1 id="titulo" class="entra" style="--atraso: .15s">Toda a <em>sua vida e as suas redes</em> organizadas em um só lugar!</h1>
+      <p class="lead entra" style="--atraso: .25s"><strong>A central que eu uso todo dia:</strong> tarefas, hábitos, finanças, agenda, ideias, clientes, demandas, criação de conteúdo e estratégia para as redes sociais, e muitooo mais... Tudo <strong>num app para o seu Mac</strong>, com a Pinha, a IA da Central.</p>
     </section>
 
-    <figure class="video">
+    <figure class="video entra" style="--atraso: .35s">
       <video id="video-central" src="centralpinhal.mp4?v=5" poster="centralpinhal-capa.jpg?v=5" muted loop playsinline preload="metadata"
              aria-label="A CentralPinhal funcionando: a criação da conta, o Início, a Pinha, Tarefas, Hábitos, Segundo cérebro, Financeiro e Agenda"></video>
       <div class="selo" aria-hidden="true">
@@ -388,17 +459,26 @@ html.carregando .abertura {
     </figure>
 
     <ul class="ganhos">
-      <li>A Pinha trabalha pelo seu plano do Claude, sem chave nem custo à parte</li>
-      <li>Você paga uma vez só, e seus dados ficam no seu Mac</li>
-      <li>Nada vai para as suas redes sem o seu OK</li>
-      <li>Um perfil pessoal e outro da sua empresa, com o seu logo, as suas cores e as suas fontes</li>
-      <li>Todo domingo, uma estratégia para cada rede, com ideias prontas para aprovar</li>
-      <li>Nota de 0 a 10 para cada ideia de post, antes de você gastar tempo com ela</li>
-      <li>Um radar com as novidades do seu nicho, a cada 3 horas</li>
-      <li>Você escreve “gastei 45,90 no mercado”, e a Pinha lança no Financeiro</li>
+      <li class="entra">Use 2 perfis, o pessoal e o da sua empresa, cada um com o seu logo e as suas cores.</li>
+      <li class="entra">Organize suas tarefas e seus hábitos, com a contagem de dias seguidos de cada hábito.</li>
+      <li class="entra">Tenha clareza de tudo o que precisa ser feito na sua semana, com as tarefas e as demandas organizadas.</li>
+      <li class="entra">Sem ideias para criar conteúdo? Todo domingo, a Pinha monta uma estratégia para cada rede, com ideias de posts.</li>
+      <li class="entra">A IA escreve a copy e cria as imagens dos seus conteúdos. É só pedir para a Pinha, e ela faz.</li>
+      <li class="entra">Toda segunda, a Pinha lê a sua semana e conta o que funcionou.</li>
+      <li class="entra">Os posts, os agendados e os números das suas redes num painel só.</li>
+      <li class="entra">A IA usa o seu plano do Claude, e os seus dados ficam no seu Mac.</li>
     </ul>
 
-    <aside class="cartao" id="lista" aria-labelledby="titulo-lista">
+    <section class="aulas-bloco entra" aria-labelledby="titulo-aulas">
+      <p class="rotulo" id="titulo-aulas">Vem com aulas e material de apoio</p>
+      <ul class="aulas">
+        <li>Como instalar a Central no seu Mac</li>
+        <li>Como usar a Central no seu dia a dia</li>
+        <li>Como conectar as APIs da Meta (Instagram e Facebook), do Pinterest e do YouTube</li>
+      </ul>
+    </section>
+
+    <aside class="cartao entra" style="--atraso: .2s" id="lista" aria-labelledby="titulo-lista">
       <h2 id="titulo-lista">Entre antes de todo mundo <span class="preco">R$&nbsp;75,00</span><span class="preco-nota"><span>*pagamento único,</span> valor de lançamento</span></h2>
       <p class="explica">Deixe seu contato e receba o convite assim que a CentralPinhal abrir.</p>
 
@@ -433,23 +513,23 @@ html.carregando .abertura {
         <fieldset>
           <legend>Qual sistema você usa?</legend>
           <div class="pilulas pilulas--fixas">
-            <label class="pilula"><input type="radio" id="sis-apple" name="mac" value="Apple" required><span>Apple</span></label>
-            <label class="pilula"><input type="radio" id="sis-windows" name="mac" value="Windows"><span>Windows</span></label>
+            <label class="pilula"><input type="radio" id="sis-apple" name="mac" value="Apple" required><span><svg class="ico ico--cheia" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.8-.8-3-.8-1.5 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.3 0 2.1-1.1 2.8-2.3.9-1.3 1.3-2.6 1.3-2.7 0 0-2.5-1-2.5-3.7zM14.2 5.8c.6-.8 1.1-1.8 1-2.8-.9 0-2 .6-2.7 1.4-.6.7-1.1 1.7-1 2.7 1 .1 2-.5 2.7-1.3z"/></svg>Apple</span></label>
+            <label class="pilula"><input type="radio" id="sis-windows" name="mac" value="Windows"><span><svg class="ico ico--cheia" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.6l7.4-1v7H3zM11.6 4.4L21 3v8.6h-9.4zM3 12.6h7.4v7L3 18.6zM11.6 12.6H21V21l-9.4-1.3z"/></svg>Windows</span></label>
           </div>
         </fieldset>
 
         <fieldset>
           <legend class="legenda-dupla">O que você mais quer organizar?<br><span class="opcional">(escolha quantos quiser)</span></legend>
           <div class="pilulas">
-            <label class="pilula"><input type="checkbox" id="i-tarefas" name="interesse" value="Tarefas"><span>Tarefas</span></label>
-            <label class="pilula"><input type="checkbox" id="i-habitos" name="interesse" value="Hábitos"><span>Hábitos</span></label>
-            <label class="pilula"><input type="checkbox" id="i-ideias" name="interesse" value="Ideias e notas"><span>Ideias e notas</span></label>
-            <label class="pilula"><input type="checkbox" id="i-agenda" name="interesse" value="Agenda"><span>Agenda</span></label>
-            <label class="pilula"><input type="checkbox" id="i-financeiro" name="interesse" value="Financeiro"><span>Financeiro</span></label>
-            <label class="pilula"><input type="checkbox" id="i-clientes" name="interesse" value="Clientes"><span>Clientes</span></label>
-            <label class="pilula"><input type="checkbox" id="i-conteudos" name="interesse" value="Conteúdos"><span>Conteúdos</span></label>
-            <label class="pilula"><input type="checkbox" id="i-projetos" name="interesse" value="Projetos"><span>Projetos</span></label>
-            <label class="pilula"><input type="checkbox" id="i-demandas" name="interesse" value="Demandas clientes"><span>Demandas clientes</span></label>
+            <label class="pilula"><input type="checkbox" id="i-tarefas" name="interesse" value="Tarefas"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 12.5l3 3 5-6"/></svg>Tarefas</span></label>
+            <label class="pilula"><input type="checkbox" id="i-habitos" name="interesse" value="Hábitos"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 20v-4h-4"/></svg>Hábitos</span></label>
+            <label class="pilula"><input type="checkbox" id="i-ideias" name="interesse" value="Ideias e notas"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>Ideias e notas</span></label>
+            <label class="pilula"><input type="checkbox" id="i-agenda" name="interesse" value="Agenda"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18"/><path d="M8 3v4"/><path d="M16 3v4"/></svg>Agenda</span></label>
+            <label class="pilula"><input type="checkbox" id="i-financeiro" name="interesse" value="Financeiro"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M14.8 9.4c-.5-.8-1.5-1.3-2.8-1.3-1.6 0-2.7.8-2.7 1.9 0 1.2 1.1 1.6 2.7 1.9s2.8.8 2.8 2c0 1.1-1.1 2-2.8 2-1.3 0-2.3-.5-2.8-1.3"/><path d="M12 6.5v1.6M12 15.9v1.6"/></svg>Financeiro</span></label>
+            <label class="pilula"><input type="checkbox" id="i-clientes" name="interesse" value="Clientes"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.3c2.1.7 3.5 2.8 3.5 5.7"/></svg>Clientes</span></label>
+            <label class="pilula"><input type="checkbox" id="i-conteudos" name="interesse" value="Conteúdos"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Conteúdos</span></label>
+            <label class="pilula"><input type="checkbox" id="i-projetos" name="interesse" value="Projetos"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Projetos</span></label>
+            <label class="pilula"><input type="checkbox" id="i-demandas" name="interesse" value="Demandas clientes"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5h13l3.5 7v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6z"/></svg>Demandas clientes</span></label>
           </div>
         </fieldset>
 
