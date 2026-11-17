@@ -58,7 +58,7 @@ a { color: inherit; }
 .moldura {
   position: relative;
   margin: clamp(10px, 2.1vw, 40px) clamp(10px, 2.24vw, 43px);
-  padding: 32px 0 116px; /* menos espaço no topo, a pedido da Ana */
+  padding: 32px 0 64px; /* menos espaço no topo, a pedido da Ana */
   border: 1px solid var(--linha);
   border-radius: 80px / 85px;
   background-color: var(--fundo);
@@ -74,11 +74,22 @@ a { color: inherit; }
   margin-inline: auto;
   display: grid;
   grid-template-columns: minmax(0, 674fr) minmax(0, 679fr);
-  grid-template-areas: "texto cartao" "video cartao" "ganhos cartao" "aulas cartao";
-  grid-template-rows: auto auto auto 1fr;
+  /* seção 1: o título e o vídeo ficam centralizados na altura do cartão */
+  grid-template-areas: ". cartao" "texto cartao" "video cartao" ". cartao";
+  grid-template-rows: 1fr auto auto 1fr;
   column-gap: 35px;
   align-items: start;
 }
+/* seção 2: título, a lista com ✓ e as aulas; o rodapé fica no recorte de baixo desta moldura */
+.moldura--2 { padding: 64px 0 116px; }
+.palco--2 {
+  grid-template-areas: "titulo2 titulo2" "ganhos aulas";
+  grid-template-rows: auto auto;
+  row-gap: 40px;
+}
+.titulo-secao { grid-area: titulo2; margin: 0; font: 400 var(--t-titulo)/1.067 var(--f-titulo); text-wrap: balance; }
+.titulo-secao em { font-style: italic; color: var(--amarelo); }
+.palco--2 .ganhos, .palco--2 .aulas-bloco { margin-top: 0; }
 
 /* ---------- coluna da esquerda ---------- */
 .texto { grid-area: texto; padding-top: 29px; min-width: 0; }
@@ -287,16 +298,16 @@ html.carregando { overflow: hidden; }
 html.carregando .abertura {
   position: fixed; inset: 0; z-index: 1000;
   display: grid; place-items: center;
-  background-color: var(--fundo);
+  background-color: var(--verde); /* loading do Figma: fundo verde, grade verde-clara, pinha creme */
   background-image:
-    linear-gradient(to right, var(--grade) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grade) 1px, transparent 1px);
+    linear-gradient(to right, rgba(104, 138, 87, .35) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(104, 138, 87, .35) 1px, transparent 1px);
   background-size: 84px 85.75px;
   background-position: 119px 35px;
   will-change: transform;
 }
 .abertura svg { width: clamp(120px, 13.44vw, 258px); height: auto; overflow: visible; }
-.abertura path { fill: var(--verde); opacity: 0; transform-box: fill-box; transform-origin: 50% 50%; }
+.abertura path { fill: var(--creme); opacity: 0; transform-box: fill-box; transform-origin: 50% 50%; }
 .abertura .p-ponta { animation: ab-ponta .6s cubic-bezier(.22, 1, .36, 1) .35s both; }
 .abertura .p-fileira { animation: ab-escama .6s cubic-bezier(.22, 1, .36, 1) both; }
 .abertura .p-fileira--1 { animation-delay: .7s; }
@@ -346,17 +357,18 @@ html.anima .video.visivel .selo { opacity: 1; transform: none; transition: opaci
   .palco {
     width: min(680px, 100% - 40px);
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "texto" "cartao" "video" "ganhos" "aulas";
+    grid-template-areas: "texto" "cartao" "video";
     grid-template-rows: auto;
   }
+  .palco--2 { grid-template-areas: "titulo2" "ganhos" "aulas"; row-gap: 32px; }
+  .moldura--2 { padding-top: 40px; }
   .texto { padding-top: 0; }
   h1 { margin-top: 24px; }
   .lead { margin-top: 24px; }
   .cartao { margin-top: 32px; border-radius: 36px; padding: 32px 24px; }
   .video { margin-top: 40px; }
   .selo { left: -20px; }
-  .ganhos { margin-top: 32px; }
-  .moldura { padding-bottom: 0; }
+  .moldura--2 { padding-bottom: 0; }
   .rodape { position: static; transform: none; width: auto; height: auto; margin: 40px auto 0; }
   .rodape-curva { display: none; }
   .rodape-meio {
@@ -371,11 +383,12 @@ html.anima .video.visivel .selo { opacity: 1; transform: none; transition: opaci
   .cartao { border-radius: 28px; padding: 26px 18px; }
   .bonus { border-radius: 28px; padding: 12px 18px 12px 12px; grid-template-columns: 48px minmax(0, 1fr); gap: 12px; }
   .bonus svg { width: 48px; height: 48px; }
-  .pilula span { padding: 0 12px; }
+  .pilula > span { padding: 0 12px; }
   input[type="text"], input[type="email"], input[type="tel"] { font-size: 16px; } /* sem zoom no iPhone */
   input::placeholder { font-size: 11px; }
   .selo { left: -12px; bottom: -14px; width: 112px; height: 113px; }
   .ganhos { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; grid-auto-flow: row; gap: 18px; }
+  .moldura--2 { padding: 32px 0 0; }
 }
 </style>
 <script>
@@ -436,8 +449,9 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
 })();
 </script>
 
+<main>
 <div class="moldura">
-  <main class="palco">
+  <div class="palco">
     <section class="texto" aria-labelledby="titulo">
       <div class="marca entra" style="--atraso: .05s">
         <svg class="logo" aria-hidden="true" focusable="false" viewBox="0 0 56 68" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -462,26 +476,6 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
         <img class="selo-pinha" src="pinhas/selo.png" alt="" width="200" height="197">
       </div>
     </figure>
-
-    <ul class="ganhos">
-      <li class="entra">Use 2 perfis, o pessoal e o da sua empresa, cada um com o seu logo e as suas cores.</li>
-      <li class="entra">Organize suas tarefas e seus hábitos, com a contagem de dias seguidos de cada hábito.</li>
-      <li class="entra">Tenha clareza de tudo o que precisa ser feito na sua semana, com as tarefas e as demandas organizadas.</li>
-      <li class="entra">Sem ideias para criar conteúdo? Todo domingo, a Pinha monta uma estratégia para cada rede, com ideias de posts.</li>
-      <li class="entra">A IA escreve a copy e cria as imagens dos seus conteúdos. É só pedir para a Pinha, e ela faz.</li>
-      <li class="entra">Toda segunda, a Pinha lê a sua semana e conta o que funcionou.</li>
-      <li class="entra">Os posts, os agendados e os números das suas redes num painel só.</li>
-      <li class="entra">A IA usa o seu plano do Claude, e os seus dados ficam no seu Mac.</li>
-    </ul>
-
-    <section class="aulas-bloco entra" aria-labelledby="titulo-aulas">
-      <h2 class="aulas-titulo" id="titulo-aulas">Vem com <em>aulas e material de apoio</em></h2>
-      <ul class="aulas">
-        <li>Como instalar a Central no seu Mac</li>
-        <li>Como usar a Central no seu dia a dia</li>
-        <li>Como conectar as APIs da Meta (Instagram e Facebook), do Pinterest e do YouTube</li>
-      </ul>
-    </section>
 
     <aside class="cartao entra" style="--atraso: .2s" id="lista" aria-labelledby="titulo-lista">
       <h2 id="titulo-lista">Entre antes de todo mundo</h2>
@@ -544,7 +538,32 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
         <p><b>Do que você precisa:</b> um Mac com macOS 15 ou mais novo e uma conta do Claude a partir do plano Pro. O Claude Code monta a Central no seu Mac, seguindo o guia que vem junto.</p>
       </div>
     </aside>
-  </main>
+  </div>
+</div>
+
+<section class="moldura moldura--2" aria-labelledby="titulo-secao">
+  <div class="palco palco--2">
+    <h2 class="titulo-secao entra" id="titulo-secao">O que a Central faz <em>por você</em></h2>
+    <ul class="ganhos">
+      <li class="entra">Use 2 perfis, o pessoal e o da sua empresa, cada um com o seu logo e as suas cores.</li>
+      <li class="entra">Organize suas tarefas e seus hábitos, com a contagem de dias seguidos de cada hábito.</li>
+      <li class="entra">Tenha clareza de tudo o que precisa ser feito na sua semana, com as tarefas e as demandas organizadas.</li>
+      <li class="entra">Sem ideias para criar conteúdo? Todo domingo, a Pinha monta uma estratégia para cada rede, com ideias de posts.</li>
+      <li class="entra">A IA escreve a copy e cria as imagens dos seus conteúdos. É só pedir para a Pinha, e ela faz.</li>
+      <li class="entra">Toda segunda, a Pinha lê a sua semana e conta o que funcionou.</li>
+      <li class="entra">Os posts, os agendados e os números das suas redes num painel só.</li>
+      <li class="entra">A IA usa o seu plano do Claude, e os seus dados ficam no seu Mac.</li>
+    </ul>
+
+    <section class="aulas-bloco entra" aria-labelledby="titulo-aulas">
+      <h2 class="aulas-titulo" id="titulo-aulas">Vem com <em>aulas e material de apoio</em></h2>
+      <ul class="aulas">
+        <li>Como instalar a Central no seu Mac</li>
+        <li>Como usar a Central no seu dia a dia</li>
+        <li>Como conectar as APIs da Meta (Instagram e Facebook), do Pinterest e do YouTube</li>
+      </ul>
+    </section>
+  </div>
 
   <footer class="rodape">
     <svg class="rodape-curva" width="82" height="47" viewBox="0 0 82 47" aria-hidden="true" focusable="false"><path d="M0 46C49 46 22 0 82 0V47H0Z" fill="#FAF7ED"/><path d="M0 46.5C49 46.5 22 .5 82 .5" fill="none" stroke="#BEB084"/></svg>
@@ -555,7 +574,8 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
     </div>
     <svg class="rodape-curva" width="80" height="47" viewBox="0 0 80 47" aria-hidden="true" focusable="false"><path d="M0 0C54 0 37 46 80 46V47H0Z" fill="#FAF7ED"/><path d="M0 .5C54 .5 37 46.5 80 46.5" fill="none" stroke="#BEB084"/></svg>
   </footer>
-</div>
+</section>
+</main>
 
 <script>
 // Cole entre as aspas o endereço do App da Web da planilha (veja COMO-PUBLICAR.md, passo 1).
