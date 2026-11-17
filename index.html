@@ -7,221 +7,210 @@
 <meta name="description" content="Tarefas, hábitos, dinheiro, agenda e redes num app para Mac, com a Pinha, a IA que organiza por você. R$ 75 no lançamento, pagamento único. Entre na lista de espera.">
 <meta property="og:title" content="CentralPinhal · lista de espera">
 <meta property="og:description" content="Sua vida e as suas redes num lugar só. A Pinha e a equipe dela fazem o resto. Um app para Mac, com IA.">
-<meta name="theme-color" content="#FBF7ED">
+<meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="only light">
 <link rel="icon" type="image/png" href="logo.png">
-<link rel="preload" href="fontes/IvyOraText-Light-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fontes/SpaceMono-Bold-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fontes/IvyOraText-Regular-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fontes/SpaceMono-Regular-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-/* as fontes da identidade visual (as mesmas do site studiotche.com) */
-@font-face { font-family: "IvyOra Text"; font-style: normal; font-weight: 300; font-display: swap; src: url("fontes/IvyOraText-Light-latin.woff2") format("woff2"); }
-@font-face { font-family: "IvyOra Text"; font-style: italic; font-weight: 300; font-display: swap; src: url("fontes/IvyOraText-LightItalic-latin.woff2") format("woff2"); }
+/* Montada a partir do quadro "Página de Captura - CentralPinhal" do Figma (arquivo Studio Tchê, 2413-405).
+   Fontes: IvyOra Text Regular nos títulos e Space Mono no resto, como no Figma. */
+@font-face { font-family: "IvyOra Text"; font-style: normal; font-weight: 400; font-display: swap; src: url("fontes/IvyOraText-Regular-latin.woff2") format("woff2"); }
+@font-face { font-family: "IvyOra Text"; font-style: italic; font-weight: 400; font-display: swap; src: url("fontes/IvyOraText-RegularItalic-latin.woff2") format("woff2"); }
 @font-face { font-family: "Space Mono"; font-style: normal; font-weight: 400; font-display: swap; src: url("fontes/SpaceMono-Regular-latin.woff2") format("woff2"); }
 @font-face { font-family: "Space Mono"; font-style: normal; font-weight: 700; font-display: swap; src: url("fontes/SpaceMono-Bold-latin.woff2") format("woff2"); }
-/* Layout: duas colunas no alto (a conversa à esquerda, o cartão da lista à direita), depois o que tem
-   dentro, como chega no Mac e as perguntas numa coluna só. No celular tudo vira uma coluna. */
+
 :root {
-  --papel: #FBF7ED;        /* fundo da página */
-  --cartao: #F1EBDD;       /* cartões */
-  --linha: #E2D7C1;        /* bordas finas */
-  --tinta: #3E2C0F;        /* marrom: só nos textos */
-  --tinta-suave: #75664B;
-  --botao: #3F5633;        /* botões em verde */
-  --texto-botao: #FBF7ED;
-  --amarelo: #D68732;      /* detalhes */
-  --telha: #A44919;        /* detalhes */
-  --selecao: #F6E3C8;      /* fundo de uma opção escolhida */
+  --branco: #FFFFFF;        /* fora da moldura */
+  --fundo: #F1EBDD;         /* moldura e campos */
+  --cartao: #FAF7ED;        /* cartões */
+  --linha: #BEB084;         /* bordas finas */
+  --grade: rgba(190, 176, 132, .25); /* a grade da moldura */
+  --tinta: #3E2C0F;         /* marrom: só nos textos */
+  --verde: #3F5633;
+  --verde-preco: #54A32B;
+  --creme: #FAF7ED;
+  --amarelo: #D68732;
+  --telha: #A44919;
+  --azul: #4664FB;
 
-  --f-titulo: "IvyOra Text", "Iowan Old Style", "Palatino", Georgia, serif;
-  --f-texto: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --f-titulo: "IvyOra Text", "Iowan Old Style", Palatino, Georgia, serif;
   --f-mono: "Space Mono", ui-monospace, "SF Mono", Menlo, monospace;
-
-  --raio: 22px;
-  --raio-campo: 12px;
+  --mono: clamp(13px, 0.42vw + 7px, 15px); /* 15px na tela de 1920 */
   color-scheme: only light;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
-  background: var(--papel);
+  background: var(--branco);
   color: var(--tinta);
-  font: 16px/1.55 var(--f-texto);
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  font: 400 var(--mono)/1.667 var(--f-mono);
 }
-img { max-width: 100%; height: auto; display: block; }
+img, svg { display: block; }
 a { color: inherit; }
 :focus-visible { outline: 2px solid var(--amarelo); outline-offset: 3px; }
 
-.largura {
-  width: 100%;
-  max-width: 1080px;
-  margin-inline: auto;
-  padding-left: max(20px, env(safe-area-inset-left, 0px));
-  padding-right: max(20px, env(safe-area-inset-right, 0px));
+/* ---------- a moldura com a grade ---------- */
+.moldura {
+  position: relative;
+  margin: clamp(10px, 2.1vw, 40px) clamp(10px, 2.24vw, 43px);
+  padding: 66px 0 116px;
+  border: 1px solid var(--linha);
+  border-radius: 80px / 85px;
+  background-color: var(--fundo);
+  background-image:
+    linear-gradient(to right, var(--grade) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grade) 1px, transparent 1px);
+  background-size: 84px 85.75px;
+  background-position: 75px 80px;
 }
 
-/* ---------- marca ---------- */
-.topo { padding-block: 22px 0; }
-.marca {
-  display: inline-flex; align-items: center; gap: 10px;
-  text-decoration: none;
-  font-family: var(--f-titulo); font-weight: 300; font-size: 1.45rem; letter-spacing: -0.01em;
-}
-.marca img { width: 34px; height: 34px; }
-.marca em, h1 em { font-style: italic; color: var(--amarelo); }
-
-.sobretitulo {
-  margin: 0;
-  font-family: var(--f-mono); font-size: 0.72rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.12em;
-  color: var(--telha);
-}
-
-/* ---------- palco: conversa + cartão ---------- */
 .palco {
+  width: min(1388px, 100% - 96px);
+  margin-inline: auto;
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  grid-template-columns: minmax(0, 674fr) minmax(0, 679fr);
   grid-template-areas: "texto cartao" "video cartao" "ganhos cartao";
   grid-template-rows: auto auto 1fr;
-  column-gap: 56px; row-gap: 8px;
-  padding-block: 32px 48px;
-  min-height: calc(100svh - 70px);
-  align-content: center;
+  column-gap: 35px;
   align-items: start;
 }
-.texto { grid-area: texto; display: grid; gap: 18px; min-width: 0; }
+
+/* ---------- coluna da esquerda ---------- */
+.texto { grid-area: texto; padding-top: 29px; min-width: 0; }
+.marca {
+  display: flex; align-items: center; gap: 22px;
+  font: 400 clamp(2.2rem, 1.2rem + 1.6vw, 3rem)/1 var(--f-titulo);
+  color: var(--tinta);
+}
+.marca svg { width: auto; height: clamp(52px, 3.55vw, 68px); flex: none; }
+.marca em, h1 em { font-style: italic; color: var(--amarelo); }
 h1 {
-  margin: 0;
-  font-family: var(--f-titulo); font-weight: 300;
-  font-size: clamp(2.4rem, 1.4rem + 3.6vw, 4rem);
-  line-height: 1.02; letter-spacing: -0.025em;
+  margin: 31px 0 0;
+  font: 400 clamp(2.3rem, 1.2rem + 2.6vw, 3.75rem)/1.067 var(--f-titulo);
   text-wrap: balance;
 }
-h1 em { color: var(--telha); }
-.lead { margin: 0; font-size: 1.12rem; color: var(--tinta-suave); max-width: 34em; }
-.lead strong { color: var(--tinta); font-weight: 600; }
+.lead { margin: 45px 0 0; text-transform: uppercase; }
+.lead strong { font-weight: 700; }
 
-/* o vídeo da Central, dentro da seção principal */
-.video { grid-area: video; margin: 24px 0 0; position: relative; min-width: 0; }
-.video video {
-  width: 100%; height: auto; aspect-ratio: 16 / 10; display: block;
-  border-radius: var(--raio); border: 1px solid var(--linha); background: var(--cartao);
+/* o vídeo num cartão, com outro cartão atrás e o selo da Pinha no canto */
+.video { grid-area: video; position: relative; margin: 27px 0 0; padding: 20px 20px 0 0; min-width: 0; }
+.video::before {
+  content: ""; position: absolute; top: 0; right: 0; bottom: 20px; left: 20px;
+  background: var(--cartao); border: 1px solid var(--linha); border-radius: 30px;
 }
+.video video {
+  position: relative; display: block;
+  width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover;
+  background: var(--cartao); border: 1px solid var(--linha); border-radius: 20px;
+}
+.selo { position: absolute; left: -39px; bottom: -7px; width: 160px; height: 162px; pointer-events: none; }
+.selo img { position: absolute; }
+.selo-anel { inset: 0; width: 100%; height: 100%; }
+.selo-pinha { left: 25.2%; top: 24.8%; width: 57%; height: auto; }
 
 .ganhos {
-  grid-area: ganhos; list-style: none; margin: 26px 0 0; padding: 0;
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 24px;
-  align-self: stretch; align-content: space-between;
-  min-width: 0;
+  grid-area: ganhos; list-style: none; margin: 32px 0 0; padding: 0; min-width: 0;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(4, auto);
+  grid-auto-flow: column; gap: 25px 23px;
+  text-transform: uppercase;
 }
-.ganhos li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; color: var(--tinta-suave); font-size: 0.95rem; line-height: 1.4; }
+.ganhos li { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 11px; align-items: center; }
 .ganhos li::before {
-  content: "✓"; width: 22px; height: 22px; border-radius: 50%;
-  display: grid; place-items: center;
-  background: var(--selecao); color: var(--telha); font-size: 0.75rem; font-weight: 700;
+  content: ""; width: 32px; height: 32px;
+  background: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E %3Cpath d='M16 0C7.16364 0 0 7.16364 0 16C0 24.8364 7.16364 32 16 32C24.8364 32 32 24.8364 32 16C32 7.16364 24.8364 0 16 0ZM22.9353 13.2945C23.063 13.1486 23.1602 12.9785 23.2212 12.7944C23.2822 12.6103 23.3058 12.4159 23.2906 12.2225C23.2753 12.0292 23.2216 11.8408 23.1325 11.6686C23.0434 11.4963 22.9207 11.3436 22.7717 11.2194C22.6227 11.0952 22.4504 11.0021 22.2649 10.9455C22.0794 10.889 21.8844 10.8701 21.6915 10.8899C21.4985 10.9098 21.3115 10.9681 21.1414 11.0613C20.9714 11.1545 20.8216 11.2808 20.7011 11.4327L14.4465 18.9367L11.2102 15.6989C10.9359 15.434 10.5684 15.2873 10.1871 15.2907C9.80568 15.294 9.44086 15.4469 9.17117 15.7166C8.90149 15.9863 8.74852 16.3511 8.7452 16.7325C8.74189 17.1139 8.8885 17.4813 9.15345 17.7556L13.5171 22.1193C13.66 22.2621 13.8311 22.3736 14.0195 22.4466C14.2079 22.5197 14.4095 22.5527 14.6113 22.5435C14.8131 22.5343 15.0109 22.4832 15.1919 22.3934C15.3729 22.3036 15.5332 22.177 15.6625 22.0218L22.9353 13.2945Z' fill-rule='evenodd' clip-rule='evenodd' fill='%23D68732'/%3E %3C/svg%3E") center / contain no-repeat;
 }
 
 /* ---------- cartão da lista ---------- */
 .cartao {
-  grid-area: cartao;
-  background: var(--cartao);
-  border: 1px solid var(--linha);
-  border-radius: var(--raio);
-  padding: 30px 28px 26px;
-  min-width: 0;
-  position: sticky; top: calc(20px + env(safe-area-inset-top, 0px));
+  grid-area: cartao; min-width: 0;
+  background: var(--cartao); border: 1px solid var(--linha); border-radius: 50px;
+  padding: 43px 42px;
   scroll-margin-top: 20px;
 }
-.cartao h2 {
-  margin: 8px 0 6px;
-  font-family: var(--f-titulo); font-weight: 300; font-size: 2.1rem; line-height: 1.05; letter-spacing: -0.02em;
+.cartao h2 { margin: 0; font: 400 clamp(2.3rem, 0.6rem + 2.9vw, 3.75rem)/1 var(--f-titulo); }
+.preco {
+  font-style: italic; color: var(--verde-preco); white-space: nowrap;
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.1em;
 }
-.cartao .explica { margin: 0 0 22px; color: var(--tinta-suave); font-size: 0.97rem; }
-.preco { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin: 4px 0 10px; }
-.preco-valor { white-space: nowrap; font-family: var(--f-titulo); font-size: 2.6rem; line-height: 1; letter-spacing: -0.02em; }
-.preco-nota { font-size: 0.9rem; color: var(--tinta-suave); }
-.bonus {
-  position: relative; margin: 8px 0 24px; padding: 26px 18px 16px;
-  border: 1px solid var(--linha); border-radius: 16px; background: var(--papel);
-  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: baseline;
+.preco-nota {
+  display: inline-block; vertical-align: baseline; width: 143px; margin-left: 14px;
+  font: 700 12px/14px var(--f-mono); text-transform: uppercase;
 }
-.bonus-selo {
-  position: absolute; top: -13px; left: 14px;
-  padding: 7px 12px; border-radius: 999px;
-  background: #465BE1; color: #FBF7ED;
-  font: 700 0.78rem/1 var(--f-texto);
-  display: inline-flex; align-items: center; gap: 6px;
-}
-.bonus-selo img { width: 22px; height: 22px; margin: -5px 0 -5px -4px; }
-.bonus-titulo { margin: 0; font-weight: 700; font-size: 1rem; }
-.bonus-incluso { color: #465BE1; font-weight: 700; font-size: 0.92rem; }
-.bonus-texto { grid-column: 1 / -1; margin: 0; color: var(--tinta-suave); font-size: 0.92rem; line-height: 1.45; }
+.preco-nota span { color: var(--amarelo); }
+.explica { margin: 27px 0 0; text-transform: uppercase; }
 
-form { display: grid; gap: 16px; }
-.campo { display: grid; gap: 6px; }
-label, legend {
-  font-size: 0.86rem; font-weight: 600; color: var(--tinta);
+.rotulo, label, legend {
+  font: 700 var(--mono)/20px var(--f-mono); text-transform: uppercase; color: var(--amarelo);
 }
-legend { padding: 0; margin-bottom: 8px; }
-.opcional { font-weight: 400; color: var(--tinta-suave); }
+.opcional { font-weight: 400; color: var(--tinta); }
+.bonus-rotulo { margin: 27px 0 0; }
+.bonus {
+  margin: 12px 0 0; padding: 10px 28px 10px 16px;
+  display: grid; grid-template-columns: 60px minmax(0, 1fr); gap: 14px; align-items: center;
+  background: var(--verde); color: var(--creme); border-radius: 50px;
+  font: 400 12px/20px var(--f-mono); text-transform: uppercase;
+}
+.bonus svg { width: 60px; height: 60px; }
+.bonus p { margin: 0; }
+.bonus strong { display: block; font-weight: 700; }
+
+form { margin-top: 27px; display: grid; gap: 26px; }
+.campo { display: grid; gap: 12px; }
 input[type="text"], input[type="email"], input[type="tel"] {
-  width: 100%;
-  font: inherit; font-size: 1rem; color: var(--tinta);
-  background: var(--papel);
-  border: 1px solid var(--linha);
-  border-radius: var(--raio-campo);
-  padding: 12px 14px;
+  width: 100%; height: 41px; padding: 0 20px;
+  font: 400 13px var(--f-mono); color: var(--tinta);
+  background: var(--fundo); border: 1px solid var(--linha); border-radius: 999px;
   transition: border-color .15s;
 }
-input::placeholder { color: var(--tinta-suave); opacity: .75; }
-input:focus { outline: none; border-color: var(--amarelo); box-shadow: 0 0 0 3px color-mix(in srgb, var(--amarelo) 25%, transparent); }
+input::placeholder { color: var(--linha); opacity: 1; font-size: 10px; text-transform: uppercase; }
+input:focus { outline: none; border-color: var(--amarelo); box-shadow: 0 0 0 3px rgba(214, 135, 50, .22); }
 fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+legend { padding: 0; margin-bottom: 18px; }
+.legenda-dupla { margin-bottom: 15px; }
 
 /* opções em pílula (rádio e caixinhas) */
-.pilulas { display: flex; flex-wrap: wrap; gap: 8px; }
-.pilula { position: relative; }
+.pilulas { display: flex; flex-wrap: wrap; gap: 18px 12px; }
+.pilula { position: relative; flex: 1 1 auto; }
+.pilulas--fixas .pilula { flex: 0 0 94px; }
 .pilula input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
 .pilula span {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 8px 14px;
-  border: 1px solid var(--linha); border-radius: 999px;
-  background: var(--papel);
-  font-size: 0.9rem; line-height: 1.2;
-  cursor: pointer; user-select: none;
-  transition: background-color .15s, border-color .15s;
+  display: flex; align-items: center; justify-content: center;
+  height: 41px; padding: 0 26px;
+  border: 1px solid var(--linha); border-radius: 999px; background: var(--fundo);
+  font: 700 10px/1 var(--f-mono); text-transform: uppercase; color: var(--tinta);
+  white-space: nowrap; cursor: pointer; user-select: none;
+  transition: background-color .15s, border-color .15s, color .15s;
 }
-.pilula input:checked + span { background: var(--selecao); border-color: var(--amarelo); }
-.pilula input:checked + span::before { content: "✓"; color: var(--telha); font-weight: 700; font-size: 0.8rem; }
+.pilula:hover span { border-color: var(--amarelo); }
+.pilula input:checked + span { background: var(--verde); border-color: var(--verde); color: var(--creme); }
 .pilula input:focus-visible + span { outline: 2px solid var(--amarelo); outline-offset: 2px; }
 
 .armadilha { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 
+/* o botão azul do Studio Tchê, com o aro claro, pulsando devagar */
 .botao {
   appearance: none; cursor: pointer;
-  width: 100%; min-height: 3.5rem;
-  margin-top: 6px;
-  padding: 12px 24px;
-  border: 5px solid #AAB4FF; border-radius: 999px;
-  background: #465BE1; color: #FBF7ED;
-  font: 700 0.875rem/1.4 var(--f-mono); text-transform: uppercase;
-  display: inline-flex; align-items: center; justify-content: center;
+  width: 100%; min-height: 84px; padding: 8px 24px;
+  border: 9px solid rgba(70, 100, 251, .5); border-radius: 999px;
+  background: var(--azul) padding-box; color: #F6F5EF;
+  font: 700 clamp(14px, 0.8vw + 5px, 20px)/1.25 var(--f-mono); text-transform: uppercase;
+  display: inline-flex; align-items: center; justify-content: center; text-align: center;
   position: relative;
   transition: background-color .18s;
   animation: pulsar 2.4s ease-in-out infinite;
 }
 .botao::after {
-  content: ""; position: absolute; inset: -5px; border-radius: inherit;
-  border: 2px solid #465BE1; pointer-events: none;
+  content: ""; position: absolute; inset: -9px; border-radius: inherit;
+  border: 2px solid var(--azul); pointer-events: none;
   opacity: 0; animation: onda 2.4s ease-out infinite;
 }
 @keyframes pulsar { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
 @keyframes onda { 0% { opacity: .6; transform: scale(1); } 100% { opacity: 0; transform: scale(1.06, 1.45); } }
-.botao:hover { background: #3B4FCE; animation-play-state: paused; }
+.botao:hover { background-color: #3651E8; animation-play-state: paused; }
 .botao:active { transform: scale(.98); }
 .botao:focus-visible { outline: 3px solid var(--amarelo); outline-offset: 4px; }
 .botao:disabled { opacity: .6; cursor: progress; }
@@ -235,25 +224,52 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 .botao:hover .rolo-texto--copia { transform: translateY(0); }
 
 .aviso {
-  margin: 0; padding: 10px 14px;
-  border: 1px solid var(--telha); border-radius: var(--raio-campo);
-  color: var(--telha); font-size: 0.9rem;
+  margin: 0; padding: 10px 16px;
+  border: 1px solid var(--telha); border-radius: 20px;
+  color: var(--telha); font-size: 12px; line-height: 1.5;
 }
-.miudo { margin: 0; font-size: 0.8rem; line-height: 1.5; color: var(--tinta-suave); }
-.miudo + .miudo { margin-top: 8px; }
-.letras-miudas { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--linha); }
+.letras-miudas { margin-top: 27px; font: 400 10px/14px var(--f-mono); text-transform: uppercase; }
+.letras-miudas p { margin: 0; }
+.letras-miudas p + p { margin-top: 14px; }
+.letras-miudas b { font-weight: 700; color: var(--amarelo); }
 
-/* ---------- abertura: a pinha se monta de baixo para cima e a cortina sobe ---------- */
+/* ---------- rodapé no recorte de baixo da moldura ---------- */
+.rodape {
+  position: absolute; left: 50%; bottom: -1px; transform: translateX(-50%);
+  width: min(1092px, 100% - 160px); height: 47px;
+  display: flex;
+}
+.rodape-curva { flex: none; height: 47px; }
+.rodape-meio {
+  flex: 1; min-width: 0;
+  display: flex; align-items: center; justify-content: center; gap: 20px;
+  padding-top: 14px;
+  background: var(--branco); border-top: 1px solid var(--linha);
+  font: 400 10px/14px var(--f-mono); text-transform: uppercase; white-space: nowrap;
+}
+.rodape-meio p { margin: 0; }
+.rodape-meio a { text-decoration: none; }
+.rodape-meio a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.rodape-meio b { font-weight: 700; color: var(--amarelo); }
+.rodape-links { display: flex; gap: 20px; }
+.rodape-logo img { width: 73px; height: 24px; }
+
+/* ---------- abertura: a pinha se monta sobre a grade e a cortina sobe ---------- */
 .abertura { display: none; }
 html.carregando { overflow: hidden; }
 html.carregando .abertura {
   position: fixed; inset: 0; z-index: 1000;
   display: grid; place-items: center;
-  background: var(--papel);
+  background-color: var(--fundo);
+  background-image:
+    linear-gradient(to right, var(--grade) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grade) 1px, transparent 1px);
+  background-size: 84px 85.75px;
+  background-position: 119px 35px;
   will-change: transform;
 }
-.abertura svg { width: clamp(92px, 10vw, 124px); height: auto; overflow: visible; }
-.abertura path { fill: var(--botao); opacity: 0; transform-box: fill-box; transform-origin: 50% 50%; }
+.abertura svg { width: clamp(120px, 13.44vw, 258px); height: auto; overflow: visible; }
+.abertura path { fill: var(--verde); opacity: 0; transform-box: fill-box; transform-origin: 50% 50%; }
 .abertura .p-ponta { animation: ab-ponta .6s cubic-bezier(.22, 1, .36, 1) .35s both; }
 .abertura .p-fileira { animation: ab-escama .6s cubic-bezier(.22, 1, .36, 1) both; }
 .abertura .p-fileira--1 { animation-delay: .7s; }
@@ -274,21 +290,42 @@ html.carregando .abertura {
   .abertura.saindo { transform: none; opacity: 0; transition: opacity .3s; }
 }
 
-/* ---------- celular e tablet ---------- */
-@media (max-width: 880px) {
+/* ---------- tablet e celular: uma coluna ---------- */
+@media (max-width: 1080px) {
+  .moldura { padding: 32px 0 40px; border-radius: 40px; }
   .palco {
+    width: min(680px, 100% - 40px);
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: "texto" "cartao" "video" "ganhos";
     grid-template-rows: auto;
-    row-gap: 28px;
-    padding-block: 28px 48px;
   }
-  .cartao { position: static; padding: 24px 20px 22px; }
-  .ganhos { margin-top: 0; }
+  .texto { padding-top: 0; }
+  h1 { margin-top: 24px; }
+  .lead { margin-top: 24px; }
+  .cartao { margin-top: 32px; border-radius: 36px; padding: 32px 24px; }
+  .video { margin-top: 40px; }
+  .ganhos { margin-top: 32px; }
+  .moldura { padding-bottom: 0; }
+  .rodape { position: static; transform: none; width: auto; height: auto; margin: 40px auto 0; }
+  .rodape-curva { display: none; }
+  .rodape-meio {
+    flex-wrap: wrap; gap: 8px 16px; padding: 4px 20px 28px;
+    background: none; border: 0; white-space: normal; text-align: center;
+  }
 }
-@media (max-width: 420px) {
-  .ganhos { grid-template-columns: minmax(0, 1fr); }
-  .cartao h2 { font-size: 1.85rem; }
+@media (max-width: 600px) {
+  .moldura { border-radius: 28px; padding: 24px 0 32px; }
+  .palco { width: calc(100% - 32px); }
+  .marca { gap: 14px; }
+  .preco-nota { display: block; width: auto; margin: 10px 0 0; }
+  .cartao { border-radius: 28px; padding: 26px 18px; }
+  .bonus { border-radius: 28px; padding: 12px 18px 12px 12px; grid-template-columns: 48px minmax(0, 1fr); gap: 12px; }
+  .bonus svg { width: 48px; height: 48px; }
+  .pilula span { padding: 0 16px; }
+  input[type="text"], input[type="email"], input[type="tel"] { font-size: 16px; } /* sem zoom no iPhone */
+  input::placeholder { font-size: 11px; }
+  .selo { left: -12px; bottom: -14px; width: 112px; height: 113px; }
+  .ganhos { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; grid-auto-flow: row; gap: 18px; }
 }
 </style>
 <script>document.documentElement.classList.add("carregando");</script>
@@ -323,17 +360,20 @@ html.carregando .abertura {
 })();
 </script>
 
-<header class="topo largura">
-  <a class="marca" href="#lista" aria-label="CentralPinhal, ir para a lista de espera">
-    <img src="logo.png" alt="" width="34" height="34">
-    <span>Central<em>pinhal</em></span>
-  </a>
-</header>
-
-<main>
-  <div class="palco largura">
+<div class="moldura">
+  <main class="palco">
     <section class="texto" aria-labelledby="titulo">
-      <p class="sobretitulo">App para Mac · com IA</p>
+      <div class="marca">
+        <svg class="logo" aria-hidden="true" focusable="false" viewBox="0 0 56 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M38.5858 65.199C34.1772 67.5008 29.9013 68.3421 24.9338 67.8764C21.7402 67.577 18.689 66.6293 15.8822 65.0768C12.2945 63.0922 9.19278 60.376 6.6611 57.158C4.84 54.8437 3.43855 52.2904 2.34641 49.5604C1.12622 46.5099 0.390028 43.3714 0.129308 40.0923C-0.131412 36.8133 0.0137245 33.8797 0.460298 30.7721C1.34556 24.6179 3.34529 18.5609 6.62301 13.2789C8.77707 9.80745 11.5708 6.61576 14.945 4.3054C18.6128 1.79211 22.7528 0.182477 27.2449 0.017639C29.7798 -0.0749593 32.2517 0.191015 34.6626 0.95807C37.0734 1.72513 39.1973 2.80872 41.218 4.26206C45.1452 7.08598 48.2299 10.8589 50.4457 15.1486C53.2604 20.5968 54.8956 26.4837 55.3993 32.5958C55.7073 36.3365 55.5281 40.1029 54.7505 43.7792C54.2606 46.0955 53.5001 48.2699 52.5189 50.4102C51.3972 52.8578 49.9873 55.0736 48.285 57.1501C45.6233 60.3963 42.3095 63.2551 38.5865 65.199H38.5858ZM28.0224 17.0754C29.657 20.9678 33.0359 23.3754 37.2875 22.9755C38.4854 22.8625 39.5887 22.5236 40.5698 21.8623C41.0906 21.511 41.2994 20.9514 41.0387 20.3275C40.2566 18.4572 38.8019 16.8889 36.9802 15.9544C35.6266 15.2602 34.1608 15.0455 32.6642 15.2077L29.9959 15.496C29.9059 15.5059 29.7227 15.4513 29.6741 15.3903C29.4015 15.0494 30.6605 11.2693 30.8818 10.6133C31.1117 9.93223 31.331 9.28798 31.4774 8.58856C31.5779 8.1085 31.3159 7.63828 30.8542 7.48395C29.5986 7.06365 26.7878 7.21995 25.4231 7.43601C24.8307 7.52992 24.4846 8.09274 24.6206 8.66212C24.7966 9.39765 25.0113 10.082 25.2418 10.807C25.4421 11.4368 26.621 15.1368 26.3386 15.4014C26.2768 15.4592 26.1015 15.4953 25.9971 15.4822C25.19 15.3791 24.4419 15.2648 23.6289 15.2241C22.2577 15.1558 20.9245 15.3266 19.6643 15.8769C17.9771 16.6138 16.552 17.7899 15.454 19.2571C14.9115 19.9821 14.289 21.0453 15.144 21.75C16.8627 23.1652 19.7529 23.3511 21.8604 22.85C24.8373 22.1014 26.8988 19.9322 28.0224 17.0754ZM40.2638 32.0987C42.0671 32.1657 44.3769 31.8018 45.7304 30.7025C46.1395 30.3702 46.3208 29.8684 46.2091 29.3477C45.7888 27.39 43.8121 24.6816 42.0002 23.6729C40.2999 24.7355 38.444 25.3187 36.4344 25.3791C33.3452 25.4658 30.497 24.656 28.0677 22.6386C24.0801 25.7895 18.205 26.6196 13.8365 23.6821C12.2413 24.9942 10.1326 27.3026 9.56514 29.2708C9.19343 30.5882 10.6192 31.2587 11.6325 31.6127C12.6537 31.9693 13.6749 32.0691 14.7612 32.1085C20.2146 32.3069 25.4047 29.4941 28.0382 24.6573C30.4188 29.1126 35.2582 31.9135 40.2644 32.0987H40.2638ZM35.9596 34.038C37.3643 37.7432 40.5823 40.4214 44.4997 40.6933C45.8532 40.7294 48.0479 40.5764 48.1517 38.8314C48.2634 36.9558 47.2842 34.6468 45.9766 33.2348C43.7569 34.5319 41.1444 34.7814 38.6029 34.4911C36.1054 34.2009 34.0446 33.4108 31.9148 32.121C29.3011 33.464 26.6676 33.4318 24.1116 32.0737C22.9006 32.8579 21.666 33.4594 20.2987 33.9198C17.017 34.8806 12.7004 35.0073 9.65577 33.2322C8.43163 34.6671 7.34016 36.8672 7.45114 38.748C7.61204 41.0801 11.1662 40.8213 12.7549 40.4627C16.1606 39.6937 18.9156 37.3131 20.2606 34.0478C21.5057 37.2592 24.5976 40.0543 28.094 40.0457C31.7874 40.0365 34.698 37.4024 35.9583 34.0387L35.9596 34.038ZM28.0467 43.4101C29.2433 45.8124 31.0223 47.6053 33.3261 48.7375C34.8176 49.5111 36.3976 49.9702 38.0729 50.1245C40.3084 50.2677 42.2957 49.6871 43.4903 47.6979C44.3539 46.2308 44.5739 44.4766 44.0268 42.848C42.4815 42.8178 41.0505 42.3975 39.7154 41.6002C38.3921 42.2241 36.9815 42.4421 35.5314 42.2681C34.503 42.1453 33.5645 41.8314 32.6293 41.3631C31.1287 42.3561 29.4298 42.8565 27.6356 42.7731C26.0831 42.689 24.6574 42.2484 23.3065 41.4807C21.0197 42.5918 18.4066 42.6214 16.1127 41.4872C14.752 42.2234 13.3124 42.6917 11.7304 42.7935C11.2713 43.9427 11.1695 45.1603 11.4119 46.3555C11.6391 47.4936 12.2827 48.4098 13.233 49.0711C15.9131 50.9369 19.9578 50.0772 22.7088 48.7355C25.0488 47.5941 26.862 45.7993 28.0461 43.4095L28.0467 43.4101ZM36.3648 53.1993C36.4778 52.9208 36.5763 52.6673 36.6032 52.3784C34.9482 51.983 33.4148 51.459 31.9161 50.6912C29.4357 52.0047 26.554 52.0139 24.0735 50.6847C22.3693 51.5273 20.585 52.0237 18.7245 52.3928C18.8013 52.9832 19.0535 53.4587 19.3287 53.9571C20.9948 56.6543 24.4301 59.2004 27.1621 60.7293C27.8497 61.1141 28.5701 61.0327 29.2111 60.5888C31.7224 58.8504 34.8898 55.9142 36.3661 53.1999L36.3648 53.1993Z" fill="#3F5633"/>
+<path d="M28.0229 43.3487C26.8382 45.7385 25.025 47.5334 22.6857 48.6748C19.9347 50.0164 15.8899 50.8761 13.2098 49.0103C12.2595 48.349 11.616 47.4329 11.3887 46.2948C11.1464 45.0995 11.2482 43.882 11.7072 42.7327C13.2886 42.6309 14.7288 42.1627 16.0896 41.4265C18.3842 42.5606 20.9966 42.5311 23.2833 41.4199C24.6349 42.187 26.06 42.6283 27.6125 42.7123C29.4073 42.7958 31.1056 42.2953 32.6062 41.3024C33.5414 41.7706 34.4792 42.0839 35.5083 42.2073C36.9583 42.3814 38.3683 42.1633 39.6923 41.5394C41.0274 42.336 42.4584 42.757 44.0037 42.7872C44.5507 44.4159 44.3301 46.1707 43.4671 47.6371C42.2719 49.6264 40.2847 50.2062 38.0498 50.0637C36.3745 49.9094 34.7944 49.4504 33.303 48.6767C30.9992 47.5445 29.2201 45.7517 28.0236 43.3494L28.0229 43.3487Z" fill="#FBF7ED"/>
+<path d="M35.9364 33.9767C34.6762 37.3411 31.7656 39.9745 28.0721 39.9837C24.5751 39.9923 21.4832 37.1973 20.2387 33.9859C18.8937 37.2511 16.1388 39.6317 12.733 40.4008C11.1437 40.7593 7.59018 41.0181 7.42928 38.6861C7.3183 36.8052 8.40977 34.6052 9.63391 33.1702C12.6785 34.946 16.9951 34.8186 20.2768 33.8578C21.6435 33.3974 22.8788 32.7959 24.0898 32.0117C26.6451 33.3699 29.2785 33.402 31.893 32.059C34.0221 33.3488 36.0835 34.1389 38.5811 34.4292C41.1226 34.7194 43.7357 34.4699 45.9548 33.1728C47.2623 34.5848 48.2408 36.8945 48.1298 38.7695C48.0261 40.5144 45.8313 40.6674 44.4778 40.6313C40.5598 40.3594 37.3418 37.6806 35.9377 33.976L35.9364 33.9767Z" fill="#FBF7ED"/>
+<path d="M40.2404 32.037C35.2342 31.8518 30.3948 29.0509 28.0142 24.5956C25.38 29.4331 20.1906 32.2458 14.7372 32.0468C13.6509 32.0074 12.6297 31.9076 11.6085 31.551C10.5952 31.197 9.16944 30.5265 9.54114 29.2091C10.1092 27.2409 12.2173 24.9319 13.8125 23.6204C18.181 26.5586 24.0561 25.7278 28.0437 22.5769C30.473 24.5937 33.3212 25.4034 36.4104 25.3174C38.4206 25.2563 40.2759 24.6738 41.9762 23.6112C43.7881 24.6199 45.7648 27.3283 46.1851 29.286C46.2968 29.8067 46.1155 30.3085 45.7064 30.6408C44.3529 31.7401 42.0431 32.104 40.2398 32.037H40.2404Z" fill="#FBF7ED"/>
+<path d="M27.9978 17.014C26.8735 19.8707 24.812 22.0399 21.8357 22.7886C19.7289 23.2896 16.838 23.1038 15.1194 21.6885C14.2643 20.9839 14.8869 19.9206 15.4294 19.1956C16.5274 17.7291 17.9518 16.5523 19.6396 15.8154C20.8999 15.2651 22.233 15.0944 23.6043 15.1627C24.4167 15.2034 25.1653 15.3176 25.9724 15.4208C26.0762 15.4339 26.2515 15.3978 26.3139 15.34C26.5963 15.0753 25.4175 11.3753 25.2172 10.7455C24.9867 10.0198 24.7719 9.33553 24.5959 8.60066C24.46 8.03193 24.8061 7.46846 25.3985 7.37455C26.7631 7.15849 29.5739 7.00219 30.8296 7.42249C31.2913 7.57682 31.5533 8.04704 31.4528 8.5271C31.307 9.22652 31.0877 9.87076 30.8572 10.5518C30.6358 11.2079 29.3769 14.9873 29.6494 15.3288C29.6987 15.3905 29.8813 15.4444 29.9712 15.4345L32.6395 15.1462C34.1362 14.9847 35.6027 15.1994 36.9555 15.8929C38.7773 16.8268 40.2319 18.3957 41.0141 20.2661C41.2748 20.8893 41.066 21.4495 40.5452 21.8008C39.5634 22.4622 38.4607 22.8017 37.2629 22.914C33.0112 23.3139 29.6317 20.9064 27.9978 17.014Z" fill="#FBF7ED"/>
+<path d="M36.3411 53.1382C34.8654 55.8531 31.6974 58.7893 29.1861 60.527C28.5451 60.9703 27.8247 61.0524 27.1371 60.6675C24.4051 59.1387 20.9698 56.5925 19.3037 53.8954C19.0292 53.3976 18.7763 52.9214 18.6995 52.331C20.56 51.962 22.345 51.4655 24.0485 50.6229C26.5296 51.9521 29.4107 51.9429 31.8911 50.6295C33.3898 51.3978 34.9226 51.9212 36.5782 52.3166C36.5513 52.6056 36.4528 52.8591 36.3398 53.1375L36.3411 53.1382Z" fill="#FBF7ED"/>
+</svg>
+        <span>Central<em>Pinhal</em></span>
+      </div>
       <h1 id="titulo">Sua vida e as suas redes num lugar só. <em>A Pinha e a equipe dela fazem o resto.</em></h1>
       <p class="lead">Tarefas, hábitos, dinheiro, agenda, clientes e os posts das suas redes <strong>num app para o seu Mac</strong>. Você conversa com a Pinha, e a equipe dela lê as suas redes, pesquisa o seu nicho e monta a estratégia da semana.</p>
     </section>
@@ -341,6 +381,10 @@ html.carregando .abertura {
     <figure class="video">
       <video id="video-central" src="centralpinhal.mp4?v=5" poster="centralpinhal-capa.jpg?v=5" muted loop playsinline preload="metadata"
              aria-label="A CentralPinhal funcionando: a criação da conta, o Início, a Pinha, Tarefas, Hábitos, Segundo cérebro, Financeiro e Agenda"></video>
+      <div class="selo" aria-hidden="true">
+        <img class="selo-anel" src="selo.svg" alt="" width="160" height="162">
+        <img class="selo-pinha" src="pinhas/selo.png" alt="" width="200" height="197">
+      </div>
     </figure>
 
     <ul class="ganhos">
@@ -355,70 +399,86 @@ html.carregando .abertura {
     </ul>
 
     <aside class="cartao" id="lista" aria-labelledby="titulo-lista">
-      <div id="caixa-form">
-        <p class="sobretitulo">Lista de espera</p>
-        <h2 id="titulo-lista">Entre antes de todo mundo</h2>
-        <div class="preco"><span class="preco-valor">R$ 75</span><span class="preco-nota">pagamento único · valor de lançamento</span></div>
-        <p class="explica">Deixe seu contato e receba o convite assim que a CentralPinhal abrir.</p>
-        <div class="bonus">
-          <span class="bonus-selo"><img src="pinhas/animada.png" alt="" width="22" height="22">Para as 5 primeiras pessoas</span>
-          <p class="bonus-titulo">Atualizações por 3 meses</p>
-          <span class="bonus-incluso">Incluído</span>
-          <p class="bonus-texto">Toda novidade e correção da Central nesse período, mais suporte por e-mail.</p>
+      <h2 id="titulo-lista">Entre antes de todo mundo <span class="preco">R$&nbsp;75,00</span><span class="preco-nota"><span>*pagamento único,</span> valor de lançamento</span></h2>
+      <p class="explica">Deixe seu contato e receba o convite assim que a CentralPinhal abrir.</p>
+
+      <p class="rotulo bonus-rotulo">Para as 5 primeiras pessoas</p>
+      <div class="bonus">
+        <svg class="bonus-icone" aria-hidden="true" focusable="false" viewBox="0 0 61 61" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle opacity="0.5" cx="30.4998" cy="30.4998" r="30.4998" fill="#FAF7ED"/>
+<circle cx="30.9553" cy="30.9543" r="20.7994" fill="#FAF7ED"/>
+<path d="M30.6342 35.1471C29.9823 36.4621 28.9845 37.4498 27.6972 38.0779C26.1834 38.8162 23.9577 39.2892 22.4829 38.2625C21.9599 37.8986 21.6058 37.3945 21.4808 36.7682C21.3474 36.1105 21.4034 35.4405 21.656 34.8081C22.5262 34.7521 23.3187 34.4944 24.0675 34.0893C25.3302 34.7134 26.7678 34.6972 28.0261 34.0857C28.7698 34.5078 29.554 34.7506 30.4083 34.7969C31.396 34.8428 32.3305 34.5674 33.1563 34.021C33.6709 34.2787 34.1869 34.451 34.7532 34.519C35.5511 34.6148 36.327 34.4948 37.0556 34.1515C37.7903 34.5898 38.5777 34.8215 39.428 34.8381C39.7291 35.7343 39.6077 36.6999 39.1328 37.5069C38.4751 38.6015 37.3815 38.9206 36.1518 38.8422C35.2299 38.7573 34.3604 38.5047 33.5397 38.079C32.272 37.4559 31.293 36.4694 30.6346 35.1474L30.6342 35.1471Z" fill="#3E2C0F"/>
+<path d="M34.9885 29.9898C34.295 31.8412 32.6933 33.2903 30.6609 33.2954C28.7366 33.3001 27.0352 31.762 26.3504 29.9949C25.6103 31.7917 24.0943 33.1017 22.2201 33.5249C21.3456 33.7222 19.3902 33.8646 19.3016 32.5813C19.2406 31.5463 19.8412 30.3357 20.5148 29.5461C22.1902 30.5232 24.5655 30.4531 26.3713 29.9244C27.1234 29.6711 27.8031 29.3401 28.4695 28.9086C29.8757 29.6559 31.3248 29.6736 32.7635 28.9346C33.9351 29.6444 35.0694 30.0791 36.4438 30.2388C37.8423 30.3986 39.2802 30.2612 40.5014 29.5475C41.2209 30.3245 41.7593 31.5955 41.6982 32.6272C41.6412 33.5874 40.4334 33.6716 39.6886 33.6517C37.5326 33.5021 35.7618 32.028 34.9892 29.9895L34.9885 29.9898Z" fill="#3E2C0F"/>
+<path d="M37.3572 28.9225C34.6024 28.8206 31.9394 27.2793 30.6294 24.8277C29.1799 27.4896 26.3242 29.0374 23.3233 28.9279C22.7256 28.9063 22.1636 28.8513 21.6017 28.6551C21.0441 28.4603 20.2595 28.0913 20.4641 27.3664C20.7767 26.2834 21.9367 25.0127 22.8145 24.2911C25.2184 25.9079 28.4513 25.4507 30.6456 23.7168C31.9824 24.8266 33.5497 25.2722 35.2496 25.2249C36.3558 25.1913 37.3767 24.8707 38.3123 24.286C39.3094 24.8411 40.3971 26.3314 40.6284 27.4087C40.6899 27.6953 40.5901 27.9714 40.365 28.1542C39.6202 28.7592 38.3492 28.9594 37.3568 28.9225H37.3572Z" fill="#3E2C0F"/>
+<path d="M30.6205 20.6558C30.0018 22.2278 28.8675 23.4215 27.2297 23.8334C26.0704 24.1092 24.4796 24.0069 23.5338 23.2281C23.0633 22.8404 23.4059 22.2553 23.7044 21.8563C24.3086 21.0494 25.0925 20.4018 26.0212 19.9963C26.7147 19.6935 27.4483 19.5995 28.2029 19.6371C28.6499 19.6595 29.0619 19.7224 29.506 19.7791C29.5631 19.7863 29.6596 19.7665 29.6939 19.7347C29.8493 19.589 29.2007 17.553 29.0904 17.2064C28.9636 16.8071 28.8454 16.4305 28.7486 16.0262C28.6738 15.7132 28.8642 15.4031 29.1902 15.3515C29.9411 15.2326 31.4878 15.1466 32.1788 15.3778C32.4329 15.4628 32.5771 15.7215 32.5218 15.9857C32.4415 16.3706 32.3208 16.7251 32.194 17.0998C32.0722 17.4608 31.3794 19.5406 31.5294 19.7285C31.5565 19.7625 31.657 19.7921 31.7065 19.7867L33.1748 19.628C33.9984 19.5391 34.8053 19.6573 35.5498 20.0389C36.5522 20.5528 37.3527 21.4162 37.7831 22.4454C37.9266 22.7883 37.8117 23.0966 37.5251 23.2899C36.9848 23.6538 36.3781 23.8407 35.7189 23.9025C33.3793 24.1225 31.5196 22.7977 30.6205 20.6558Z" fill="#3E2C0F"/>
+<path d="M35.2111 40.5339C34.3991 42.0278 32.6558 43.6436 31.2739 44.5998C30.9212 44.8437 30.5248 44.8889 30.1464 44.6771C28.643 43.8358 26.7527 42.4347 25.8358 40.9506C25.6848 40.6766 25.5456 40.4146 25.5034 40.0897C26.5272 39.8866 27.5094 39.6134 28.4468 39.1498C29.8121 39.8812 31.3975 39.8762 32.7624 39.1534C33.5871 39.5762 34.4306 39.8642 35.3416 40.0818C35.3268 40.2408 35.2726 40.3803 35.2104 40.5335L35.2111 40.5339Z" fill="#3E2C0F"/>
+</svg>
+        <p><strong>Atualizações por 3 meses:</strong> toda novidade e correção da Central nesse período, mais suporte por e-mail.</p>
+      </div>
+
+      <form id="form-lista" autocomplete="on">
+        <div class="campo">
+          <label for="nome">Seu nome:</label>
+          <input type="text" id="nome" name="nome" autocomplete="name" required maxlength="120" placeholder="Coloque seu nome completo">
+        </div>
+        <div class="campo">
+          <label for="email">E-mail:</label>
+          <input type="email" id="email" name="email" autocomplete="email" required maxlength="160" placeholder="Seu melhor e-mail" inputmode="email">
+        </div>
+        <div class="campo">
+          <label for="whatsapp">WhatsApp <span class="opcional">(opcional):</span></label>
+          <input type="tel" id="whatsapp" name="whatsapp" autocomplete="tel" inputmode="tel" maxlength="30" placeholder="DDD + número">
         </div>
 
-        <form id="form-lista" autocomplete="on">
-          <div class="campo">
-            <label for="nome">Seu nome</label>
-            <input type="text" id="nome" name="nome" autocomplete="name" required maxlength="120" placeholder="Como você quer ser chamada(o)">
+        <fieldset>
+          <legend>Qual sistema você usa?</legend>
+          <div class="pilulas pilulas--fixas">
+            <label class="pilula"><input type="radio" id="sis-apple" name="mac" value="Apple" required><span>Apple</span></label>
+            <label class="pilula"><input type="radio" id="sis-windows" name="mac" value="Windows"><span>Windows</span></label>
           </div>
-          <div class="campo">
-            <label for="email">E-mail</label>
-            <input type="email" id="email" name="email" autocomplete="email" required maxlength="160" placeholder="voce@email.com" inputmode="email">
+        </fieldset>
+
+        <fieldset>
+          <legend class="legenda-dupla">O que você mais quer organizar?<br><span class="opcional">(escolha quantos quiser)</span></legend>
+          <div class="pilulas">
+            <label class="pilula"><input type="checkbox" id="i-tarefas" name="interesse" value="Tarefas"><span>Tarefas</span></label>
+            <label class="pilula"><input type="checkbox" id="i-habitos" name="interesse" value="Hábitos"><span>Hábitos</span></label>
+            <label class="pilula"><input type="checkbox" id="i-ideias" name="interesse" value="Ideias e notas"><span>Ideias e notas</span></label>
+            <label class="pilula"><input type="checkbox" id="i-agenda" name="interesse" value="Agenda"><span>Agenda</span></label>
+            <label class="pilula"><input type="checkbox" id="i-financeiro" name="interesse" value="Financeiro"><span>Financeiro</span></label>
+            <label class="pilula"><input type="checkbox" id="i-clientes" name="interesse" value="Clientes"><span>Clientes</span></label>
+            <label class="pilula"><input type="checkbox" id="i-conteudos" name="interesse" value="Conteúdos"><span>Conteúdos</span></label>
+            <label class="pilula"><input type="checkbox" id="i-projetos" name="interesse" value="Projetos"><span>Projetos</span></label>
+            <label class="pilula"><input type="checkbox" id="i-demandas" name="interesse" value="Demandas clientes"><span>Demandas clientes</span></label>
           </div>
-          <div class="campo">
-            <label for="whatsapp">WhatsApp <span class="opcional">(opcional)</span></label>
-            <input type="tel" id="whatsapp" name="whatsapp" autocomplete="tel" inputmode="tel" maxlength="30" placeholder="DDD + número">
-          </div>
+        </fieldset>
 
-          <fieldset>
-            <legend>Qual sistema você usa?</legend>
-            <div class="pilulas">
-              <label class="pilula"><input type="radio" id="sis-apple" name="mac" value="Apple" required><span>Apple</span></label>
-              <label class="pilula"><input type="radio" id="sis-windows" name="mac" value="Windows"><span>Windows</span></label>
-            </div>
-          </fieldset>
-
-          <fieldset>
-            <legend>O que você mais quer organizar? <span class="opcional">(escolha quantos quiser)</span></legend>
-            <div class="pilulas">
-              <label class="pilula"><input type="checkbox" id="i-tarefas" name="interesse" value="Tarefas"><span>Tarefas</span></label>
-              <label class="pilula"><input type="checkbox" id="i-habitos" name="interesse" value="Hábitos"><span>Hábitos</span></label>
-              <label class="pilula"><input type="checkbox" id="i-ideias" name="interesse" value="Ideias e notas"><span>Ideias e notas</span></label>
-              <label class="pilula"><input type="checkbox" id="i-financeiro" name="interesse" value="Financeiro"><span>Financeiro</span></label>
-              <label class="pilula"><input type="checkbox" id="i-agenda" name="interesse" value="Agenda"><span>Agenda</span></label>
-              <label class="pilula"><input type="checkbox" id="i-conteudo" name="interesse" value="Posts das redes"><span>Posts das redes</span></label>
-              <label class="pilula"><input type="checkbox" id="i-clientes" name="interesse" value="Clientes"><span>Clientes</span></label>
-            </div>
-          </fieldset>
-
-          <div class="armadilha" aria-hidden="true">
-            <label for="site">Deixe este campo vazio</label>
-            <input type="text" id="site" name="site" tabindex="-1" autocomplete="off">
-          </div>
-
-          <p class="aviso" id="aviso" role="alert" hidden></p>
-          <button class="botao" type="submit" id="enviar"><span class="rolo"><span class="rolo-texto">Quero entrar na lista</span><span class="rolo-texto rolo-texto--copia" aria-hidden="true">Quero entrar na lista</span></span></button>
-        </form>
-
-        <div class="letras-miudas">
-          <p class="miudo">Seus dados servem só para avisar sobre a CentralPinhal. Nada de spam, e você sai da lista quando quiser.</p>
-          <p class="miudo">Do que você precisa: um Mac com macOS 15 ou mais novo e uma conta do Claude a partir do plano Pro. O Claude Code monta a Central no seu Mac, seguindo o guia que vem junto.</p>
+        <div class="armadilha" aria-hidden="true">
+          <label for="site">Deixe este campo vazio</label>
+          <input type="text" id="site" name="site" tabindex="-1" autocomplete="off">
         </div>
+
+        <p class="aviso" id="aviso" role="alert" hidden></p>
+        <button class="botao" type="submit" id="enviar"><span class="rolo"><span class="rolo-texto">Quero entrar na lista de espera</span><span class="rolo-texto rolo-texto--copia" aria-hidden="true">Quero entrar na lista de espera</span></span></button>
+      </form>
+
+      <div class="letras-miudas">
+        <p>Seus dados servem só para avisar sobre a CentralPinhal. Nada de spam, e você sai da lista quando quiser.</p>
+        <p><b>Do que você precisa:</b> um Mac com macOS 15 ou mais novo e uma conta do Claude a partir do plano Pro. O Claude Code monta a Central no seu Mac, seguindo o guia que vem junto.</p>
       </div>
     </aside>
-  </div>
-</main>
+  </main>
+
+  <footer class="rodape">
+    <svg class="rodape-curva" width="82" height="47" viewBox="0 0 82 47" aria-hidden="true" focusable="false"><path d="M0 46C49 46 22 0 82 0V47H0Z" fill="#FFFFFF"/><path d="M0 46.5C49 46.5 22 .5 82 .5" fill="none" stroke="#BEB084"/></svg>
+    <div class="rodape-meio">
+      <p class="rodape-links"><span>Termos de uso</span><span>Política de privacidade</span></p>
+      <p>© 2026 <a href="https://anacristibeier.com.br" target="_blank" rel="noopener"><b>Ana Cristi Beier</b></a> | Página desenvolvida pelo <a href="https://studiotche.com" target="_blank" rel="noopener"><b>Studio Tchê®</b></a></p>
+      <a class="rodape-logo" href="https://studiotche.com" target="_blank" rel="noopener" aria-label="Studio Tchê"><img src="studiotche.svg" alt="" width="73" height="24"></a>
+    </div>
+    <svg class="rodape-curva" width="80" height="47" viewBox="0 0 80 47" aria-hidden="true" focusable="false"><path d="M0 0C54 0 37 46 80 46V47H0Z" fill="#FFFFFF"/><path d="M0 .5C54 .5 37 46.5 80 46.5" fill="none" stroke="#BEB084"/></svg>
+  </footer>
+</div>
 
 <script>
 // Cole entre as aspas o endereço do App da Web da planilha (veja COMO-PUBLICAR.md, passo 1).
@@ -492,7 +552,7 @@ form.addEventListener("submit", async (evento) => {
     mostraAviso("Não deu para enviar agora. Confira a sua internet e tente de novo.");
   } finally {
     botao.disabled = false;
-    rotulo("Quero entrar na lista");
+    rotulo("Quero entrar na lista de espera");
   }
 });
 </script>
