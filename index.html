@@ -299,9 +299,8 @@ legend { padding: 0; margin-bottom: 18px; }
 html.carregando { overflow: hidden; }
 html.carregando .abertura { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; }
 .ab-fundo { position: absolute; inset: 0; background: url("paisagem.webp?v=2") 81% 50% / cover no-repeat, var(--verde); }
-.ab-tinta { position: absolute; left: 50%; top: 50%; width: 10px; height: 10px; z-index: 2; pointer-events: none;
-  transform: translate(-50%, -50%) scale(0); opacity: 0; will-change: transform, opacity; }
-.ab-tinta canvas { display: block; width: 100%; height: 100%; } /* a tinta (cor do selo) é pintada uma vez neste canvas */
+.ab-tinta { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.ab-tinta canvas { display: block; width: 100%; height: 100%; } /* a tinta (cor do selo) é desenhada aqui, quadro a quadro */
 .abertura-logo { position: relative; z-index: 3; width: clamp(150px, 13.6vw, 261px); height: auto; overflow: visible; }
 .ab-oval { transform-box: fill-box; transform-origin: 50% 50%; animation: ab-oval .7s cubic-bezier(.34, 1.56, .64, 1) .15s both; }
 .ab-peca { opacity: 0; /* furo na máscara: começa fechado */ transform-box: fill-box; transform-origin: 50% 50%; animation: ab-peca .55s cubic-bezier(.22, 1, .36, 1) both; }
@@ -407,54 +406,58 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
   const minimo = calma ? 400 : 1950; // a tinta começa assim que a pinha termina de se montar no selo
   let saiu = false, acabou = false;
 
-  // forma de tinta com raio perto de 1: borda ondulada e gotinhas em volta
-  function mancha(semente) {
-    let a = semente;
-    const acaso = () => { a = (a * 9301 + 49297) % 233280; return a / 233280; };
-    const ondas = [3, 5, 8, 13, 21].map((k, i) => ({ k, amp: [.07, .05, .035, .02, .012][i], fase: acaso() * 6.28 }));
-    const N = 120, pts = [];
-    for (let i = 0; i < N; i++) {
-      const t = i / N * Math.PI * 2;
-      let r = 1;
-      ondas.forEach((o) => { r += o.amp * Math.sin(o.k * t + o.fase); });
-      pts.push([Math.cos(t) * r, Math.sin(t) * r]);
-    }
-    const gotas = [];
-    for (let i = 0; i < 14; i++) {
-      const t = acaso() * Math.PI * 2, dist = 1.06 + acaso() * .28;
-      gotas.push([Math.cos(t) * dist, Math.sin(t) * dist, .015 + acaso() * .05]);
-    }
-    return { pts, gotas };
-  }
-
-  // Pinta a tinta uma vez só, num canvas do tamanho final; na transição a placa de vídeo só amplia a imagem pronta.
+  // A tinta é o próprio selo: no primeiro instante as escamas se enchem de creme e o selo vira um oval liso;
+  // depois a borda dele começa a ondular, solta gotinhas, cresce e cobre a tela. É desenhada quadro a quadro
+  // num canvas com 60% da resolução da tela (pouco trabalho por quadro) e ampliado pela placa de vídeo.
+  const ESC = 0.6;
   let geo = null;
   function prepara() {
-    const camada = abertura.querySelector(".ab-tinta"), tela = camada.querySelector("canvas");
+    const tela = abertura.querySelector(".ab-tinta canvas");
     const logo = abertura.querySelector(".abertura-logo").getBoundingClientRect();
     const cx = logo.left + logo.width / 2, cy = logo.top + logo.height / 2;
-    const longe = Math.hypot(Math.max(cx, innerWidth - cx), Math.max(cy, innerHeight - cy));
-    const lado = Math.ceil(longe * 2.6);                 // o raio da mancha é 1/3 do lado
-    const px = Math.min(lado, 2600);                      // limite de pixels (a borda fica um tiquinho macia, como tinta)
-    tela.width = tela.height = px;
-    const g = tela.getContext("2d"), m = mancha(7), N = m.pts.length;
-    g.setTransform(px / 3, 0, 0, px / 3, px / 2, px / 2);
+    tela.width = Math.ceil(innerWidth * ESC); tela.height = Math.ceil(innerHeight * ESC);
+    let a = 7;
+    const acaso = () => { a = (a * 9301 + 49297) % 233280; return a / 233280; };
+    const ondas = [3, 5, 8, 13].map((k, i) => ({ k, amp: [.08, .055, .035, .02][i], fase: acaso() * 6.28, giro: (acaso() - .5) * 2 }));
+    const gotas = Array.from({ length: 12 }, () => ({ t: acaso() * Math.PI * 2, nasce: .12 + acaso() * .25, vel: .6 + acaso() * .9, r: .025 + acaso() * .05 }));
+    geo = { cx, cy, ax: logo.width / 2, ay: logo.height / 2,
+            longe: Math.hypot(Math.max(cx, innerWidth - cx), Math.max(cy, innerHeight - cy)),
+            ondas, gotas, w: innerWidth, h: innerHeight, g: tela.getContext("2d") };
+  }
+  setTimeout(prepara, 250);
+
+  // desenha a forma da tinta no momento p (0 a 1)
+  function desenha(p) {
+    const { cx, cy, ax, ay, longe, ondas, gotas, g } = geo;
+    const crescer = p < .3 ? .95 + .3 * (p / .3) : 1.25 + Math.pow((p - .3) / .7, 2.2) * (longe * 1.35 / ax); // começa um tiquinho menor que o selo, escondido atrás dele
+    const onda = Math.min(1, p / .3);                     // a borda começa lisa (igual ao selo) e vai ondulando
+    const redondo = Math.min(1, p / .6);                  // o oval do selo vai ficando redondo
+    const rx = ax * crescer, ry = (ay + (ax - ay) * redondo) * crescer;
+    g.setTransform(ESC, 0, 0, ESC, 0, 0);
+    g.clearRect(0, 0, geo.w, geo.h);
     g.fillStyle = "#FAF7ED";
+    const N = 96, pts = [];
+    for (let i = 0; i < N; i++) {
+      const t = i / N * Math.PI * 2;
+      let k = 1;
+      ondas.forEach((o) => { k += onda * o.amp * Math.sin(o.k * t + o.fase + p * o.giro * 3); });
+      pts.push([cx + Math.cos(t) * rx * k, cy + Math.sin(t) * ry * k]);
+    }
     g.beginPath();
-    g.moveTo(m.pts[0][0], m.pts[0][1]);
+    g.moveTo(pts[0][0], pts[0][1]);
     for (let i = 0; i < N; i++) {                         // curvas suaves (Catmull-Rom) entre os pontos
-      const p0 = m.pts[(i - 1 + N) % N], p1 = m.pts[i], p2 = m.pts[(i + 1) % N], p3 = m.pts[(i + 2) % N];
+      const p0 = pts[(i - 1 + N) % N], p1 = pts[i], p2 = pts[(i + 1) % N], p3 = pts[(i + 2) % N];
       g.bezierCurveTo(p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6,
                       p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6, p2[0], p2[1]);
     }
     g.fill();
-    m.gotas.forEach(([x, y, r]) => { g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill(); });
-    const c = (logo.width * .36) / (lado / 3);            // começa escondida atrás do selo, no centro dele
-    Object.assign(camada.style, { left: cx + "px", top: cy + "px", width: lado + "px", height: lado + "px",
-      transform: `translate(-50%, -50%) scale(${c}, ${c * 1.2})`, opacity: "0.001" });
-    geo = { c, w: innerWidth, h: innerHeight };
+    gotas.forEach((d) => {                                // gotinhas que se soltam da borda e são engolidas depois
+      if (p < d.nasce) return;
+      const q = p - d.nasce, longeDaBorda = 1.04 + q * d.vel;
+      const x = cx + Math.cos(d.t) * rx * longeDaBorda, y = cy + Math.sin(d.t) * ry * longeDaBorda;
+      g.beginPath(); g.arc(x, y, d.r * ax * Math.min(1, q * 6) * (1 + crescer * .15), 0, Math.PI * 2); g.fill();
+    });
   }
-  setTimeout(prepara, 250); // pinta enquanto a pinha se monta, para a placa de vídeo já ter a imagem pronta
 
   function some() {
     if (acabou) return;
@@ -466,27 +469,24 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
 
   function tinta() {
     if (!geo || geo.w !== innerWidth || geo.h !== innerHeight) prepara();
-    const camada = abertura.querySelector(".ab-tinta"), c = geo.c;
     abertura.classList.add("saindo");
-    camada.style.opacity = "1";
-    // 1) a tinta creme sai do centro do selo: nasce oval como ele, transborda devagar da borda (com as gotinhas)
-    //    e depois acelera e cobre a tela (só transform: a placa de vídeo amplia a imagem pronta)
-    camada.animate([
-      { transform: `translate(-50%, -50%) scale(${c}, ${c * 1.2}) rotate(0deg)`, easing: "cubic-bezier(.3, .7, .4, 1)" },
-      { transform: `translate(-50%, -50%) scale(${c * 1.55}, ${c * 1.7}) rotate(5deg)`, offset: .32, easing: "cubic-bezier(.6, 0, .3, 1)" },
-      { transform: "translate(-50%, -50%) scale(1.15) rotate(20deg)" },
-    ], { duration: 1300, delay: 150, fill: "forwards" });
-    // o selo dá uma pulsadinha, como se espremesse a tinta para fora
-    abertura.querySelector(".abertura-logo").animate([
-      { transform: "scale(1)" }, { transform: "scale(1.07)", offset: .4 }, { transform: "scale(1)" },
-    ], { duration: 450, easing: "ease-in-out" });
-    // 2) a tela creme se dissolve e a página aparece (só opacidade)
-    setTimeout(() => {
-      comecaEntradas();
-      const fade = abertura.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 600, easing: "ease", fill: "forwards" });
-      fade.onfinish = some;
-    }, 1250);
-    setTimeout(some, 2800); // segurança, se a animação não rodar
+    desenha(0);                                           // o oval liso fica pronto bem atrás do selo
+    // o selo some num instante e o oval creme por trás vira a tinta (as escamas vazadas se enchem de creme)
+    abertura.querySelector(".abertura-logo").animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, fill: "forwards" });
+    const DURA = 1350, t0 = performance.now() + 120;
+    let dissolvendo = false;
+    (function quadro(agora) {
+      const p = Math.min(1, Math.max(0, (agora - t0) / DURA));
+      desenha(p);
+      if (p > .82 && !dissolvendo) {                      // a tela creme se dissolve e a página aparece (só opacidade)
+        dissolvendo = true;
+        comecaEntradas();
+        const fade = abertura.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 550, easing: "ease", fill: "forwards" });
+        fade.onfinish = some;
+      }
+      if (p < 1 && !acabou) requestAnimationFrame(quadro);
+    })(performance.now());
+    setTimeout(some, 2900); // segurança, se a animação não rodar
   }
 
   function sair() {
