@@ -354,14 +354,27 @@ h1 .pinhal { color: var(--amarelo); }
     const passos = Math.min(5, Math.max(1, Math.round(dist / 18)));
     for (let i = 1; i <= passos; i++) {
       const t = i / passos;
-      gotas.push({
+      const gota = {
         x: (ultimo ? ultimo.x + (x - ultimo.x) * t : x) + (Math.random() - .5) * 16,
         y: (ultimo ? ultimo.y + (y - ultimo.y) * t : y) + (Math.random() - .5) * 16,
         r: 30 + Math.random() * 28 + Math.min(dist, 90) * .35,
-        rot: Math.random() * 6.28, forma: formas[(Math.random() * formas.length) | 0], vida: 1,
-      });
+        rot: Math.random() * 6.28, forma: formas[(Math.random() * formas.length) | 0], vida: 1, espalha: .45,
+      };
+      gotas.push(gota);
+      // pingos: às vezes a pincelada espirra uns pinguinhos em volta, como tinta de verdade
+      if (Math.random() < .55) {
+        const qtos = 1 + ((Math.random() * 3) | 0);
+        for (let k = 0; k < qtos; k++) {
+          const ang = Math.random() * 6.28, longe = gota.r * (1.15 + Math.random() * .9);
+          gotas.push({
+            x: gota.x + Math.cos(ang) * longe, y: gota.y + Math.sin(ang) * longe,
+            r: gota.r * (.05 + Math.random() * .12), rot: Math.random() * 6.28,
+            forma: formas[(Math.random() * formas.length) | 0], vida: .9 + Math.random() * .1, espalha: .15,
+          });
+        }
+      }
     }
-    if (gotas.length > 70) gotas.splice(0, gotas.length - 70);
+    if (gotas.length > 140) gotas.splice(0, gotas.length - 140);
     ultimo = { x, y };
     if (!rodando) { rodando = true; requestAnimationFrame(quadro); }
   });
@@ -376,7 +389,7 @@ h1 .pinhal { color: var(--amarelo); }
       const d = gotas[i];
       d.vida -= .012;                                  // some em uns 1,4 s
       if (d.vida <= 0) { gotas.splice(i, 1); continue; }
-      const cresce = d.r * (1 + (1 - d.vida) * .45);    // a tinta se espalha enquanto seca
+      const cresce = d.r * (1 + (1 - d.vida) * d.espalha); // a tinta se espalha enquanto seca (os pingos, bem menos)
       g.globalAlpha = Math.min(1, d.vida * 1.8);
       g.save(); g.translate(d.x, d.y); g.rotate(d.rot); g.scale(cresce, cresce); g.fill(d.forma); g.restore();
     }
