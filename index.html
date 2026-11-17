@@ -36,6 +36,7 @@
 
   --f-titulo: "IvyOra Text", "Iowan Old Style", Palatino, Georgia, serif;
   --f-mono: "Space Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --t-titulo: clamp(2rem, 0.9rem + 1.9vw, 2.875rem); /* o mesmo tamanho nos dois títulos (o da esquerda e o do cartão) */
   --mono: 12px; /* menor que os 15px do Figma, a pedido da Ana (referência: oratry.com.br/studio/comprar) */
   color-scheme: only light;
 }
@@ -69,7 +70,7 @@ a { color: inherit; }
 }
 
 .palco {
-  width: min(1388px, 100% - 96px);
+  width: min(1388px, 100% - 220px); /* sobra espaço do lado para o selo da Pinha */
   margin-inline: auto;
   display: grid;
   grid-template-columns: minmax(0, 674fr) minmax(0, 679fr);
@@ -90,7 +91,7 @@ a { color: inherit; }
 .marca em, h1 em { font-style: italic; color: var(--amarelo); }
 h1 {
   margin: 26px 0 0;
-  font: 400 clamp(2rem, 0.9rem + 1.9vw, 2.875rem)/1.067 var(--f-titulo);
+  font: 400 var(--t-titulo)/1.067 var(--f-titulo);
   text-wrap: balance;
 }
 .lead { margin: 24px 0 0; text-transform: uppercase; }
@@ -107,7 +108,8 @@ h1 {
   width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover;
   background: var(--cartao); border: 1px solid var(--linha); border-radius: 20px;
 }
-.selo { position: absolute; left: -39px; bottom: -7px; width: 160px; height: 162px; pointer-events: none; }
+/* o selo fica mais para fora do vídeo, só encostando na borda dele */
+.selo { position: absolute; left: -97px; bottom: -7px; width: 140px; height: 142px; pointer-events: none; }
 .selo img { position: absolute; }
 .selo-anel { inset: 0; width: 100%; height: 100%; }
 .selo-pinha { left: 25.2%; top: 24.8%; width: 57%; height: auto; }
@@ -131,8 +133,9 @@ h1 {
   padding: 43px 42px;
   scroll-margin-top: 20px;
 }
-/* o título do cartão fica como no Figma: "Entre antes de todo" / "mundo R$ 75,00" com a nota ao lado do preço */
-.cartao h2 { margin: 0; font: 400 clamp(2.5rem, 1rem + 2.6vw, 3.75rem)/1 var(--f-titulo); }
+/* o título do cartão fica como no Figma ("Entre antes de todo" / "mundo R$ 75,00" com a nota ao lado do preço),
+   no mesmo tamanho do título da esquerda */
+.cartao h2 { margin: 0; font: 400 var(--t-titulo)/1.067 var(--f-titulo); }
 .preco {
   font-style: italic; color: var(--verde-preco); white-space: nowrap;
   text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.1em;
@@ -354,6 +357,7 @@ html.anima .video.visivel .selo { opacity: 1; transform: none; transition: opaci
   .lead { margin-top: 24px; }
   .cartao { margin-top: 32px; border-radius: 36px; padding: 32px 24px; }
   .video { margin-top: 40px; }
+  .selo { left: -20px; }
   .ganhos { margin-top: 32px; }
   .moldura { padding-bottom: 0; }
   .rodape { position: static; transform: none; width: auto; height: auto; margin: 40px auto 0; }
