@@ -319,13 +319,17 @@ h1 .pinhal { color: var(--amarelo); }
   const aquarela = new Image();
   aquarela.src = "../varanda.webp";
   function medir() {
-    const r = moldura.getBoundingClientRect();
-    W = r.width; H = r.height;
+    W = moldura.clientWidth; H = moldura.clientHeight;   // a mesma área do fundo da moldura (sem a borda)
     tela.width = Math.ceil(W * ESC); tela.height = Math.ceil(H * ESC);
-    if (aquarela.naturalWidth) {                         // "cover" na mesma posição do Figma (77% 50%)
-      const s = Math.max(W / aquarela.naturalWidth, H / aquarela.naturalHeight);
-      const dw = aquarela.naturalWidth * s, dh = aquarela.naturalHeight * s;
-      capa = { dx: (W - dw) * .77, dy: (H - dh) * .5, dw, dh };
+    if (aquarela.naturalWidth) {
+      // onde a foto está: o mesmo cálculo do CSS (cover, 74% 73%)
+      const iw = aquarela.naturalWidth, ih = aquarela.naturalHeight;
+      const SP = Math.max(W / iw, H / ih);
+      const PL = (W - iw * SP) * .74, PT = (H - ih * SP) * .73;
+      // a aquarela vai no mesmo lugar em relação à foto que no Figma, para os elementos coincidirem:
+      // foto x -445, y 15, 2494 de largura; aquarela x -454, y 27, 2478×1395
+      const k = SP / (2494 / iw);
+      capa = { dx: PL + (-454 + 445) * k, dy: PT + (27 - 15) * k, dw: 2478 * k, dh: 1395 * k };
     }
   }
   aquarela.onload = medir;
@@ -349,7 +353,7 @@ h1 .pinhal { color: var(--amarelo); }
   moldura.addEventListener("pointermove", (e) => {
     if (!capa) return;
     const r = moldura.getBoundingClientRect();
-    const x = e.clientX - r.left, y = e.clientY - r.top;
+    const x = e.clientX - r.left - moldura.clientLeft, y = e.clientY - r.top - moldura.clientTop;
     const dist = ultimo ? Math.hypot(x - ultimo.x, y - ultimo.y) : 0;
     const passos = Math.min(5, Math.max(1, Math.round(dist / 18)));
     for (let i = 1; i <= passos; i++) {
