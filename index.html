@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="preload" href="fontes/IvyOraText-Regular-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fontes/SpaceMono-Regular-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="paisagem.webp?v=2" as="image" type="image/webp">
+<link rel="preload" href="casa.webp" as="image" type="image/webp">
 <style>
 /* Montada a partir do quadro "Página de Captura - CentralPinhal" do Figma (arquivo Studio Tchê, 2413-405).
    Fontes: IvyOra Text Regular nos títulos e Space Mono no resto, como no Figma. */
@@ -298,7 +298,10 @@ legend { padding: 0; margin-bottom: 18px; }
 .abertura { display: none; }
 html.carregando { overflow: hidden; }
 html.carregando .abertura { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; }
-.ab-fundo { position: absolute; inset: 0; background: url("paisagem.webp?v=2") 81% 50% / cover no-repeat, var(--verde); }
+/* o fundo do loading: a foto da casa de pedra (Figma: x -607 de 2668 → 81%, y -13 → 25%) */
+.ab-fundo { position: absolute; inset: 0; background: url("casa.webp") 81% 25% / cover no-repeat, var(--verde); }
+/* a tinta do mouse revela a aquarela por trás da foto (fica atrás do selo e da tinta da saída) */
+.ab-revela { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
 .ab-tinta { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
 .ab-tinta canvas { display: block; width: 100%; height: 100%; } /* a tinta (cor do selo) é desenhada aqui, quadro a quadro */
 .abertura-logo { position: relative; z-index: 3; width: clamp(150px, 13.6vw, 261px); height: auto; overflow: visible; }
@@ -375,8 +378,9 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
 </head>
 <body>
 <div class="abertura" id="abertura" aria-hidden="true">
-  <!-- o fundo do loading (Figma): só a paisagem da serra em aquarela -->
+  <!-- o fundo do loading (Figma): a foto da casa de pedra; a aquarela aparece com a tinta do mouse -->
   <div class="ab-fundo"></div>
+  <canvas class="ab-revela" aria-hidden="true"></canvas>
   <!-- a tinta da transição: uma camada própria que só cresce e gira (leve para o navegador) -->
   <div class="ab-tinta"><canvas aria-hidden="true"></canvas></div>
   <svg class="abertura-logo" viewBox="0 0 56 68" aria-hidden="true" focusable="false">
@@ -523,6 +527,95 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
   }
   if (document.readyState === "complete") sair(); else addEventListener("load", sair, { once: true });
   setTimeout(sair, 6000); // se algo demorar demais, a página aparece mesmo assim
+})();
+</script>
+<script>
+// Tinta do mouse no loading (como no obrigado): por onde o mouse passa, gotas e pingos de tinta revelam a aquarela
+// que fica "por trás" da foto. Fica atrás do selo, então a entrada dele e a transição continuam iguais.
+// Leve: canvas com metade da resolução, que só desenha enquanto há gotas. Só em computador com mouse.
+(function () {
+  const abertura = document.getElementById("abertura");
+  if (!abertura || matchMedia("(prefers-reduced-motion: reduce)").matches || !matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+  const tela = abertura.querySelector(".ab-revela"), g = tela.getContext("2d"), ESC = .5;
+  let W = 0, H = 0, capa = null;
+  const aquarela = new Image();
+  aquarela.src = "paisagem.webp?v=2";
+  function medir() {
+    W = innerWidth; H = innerHeight;
+    tela.width = Math.ceil(W * ESC); tela.height = Math.ceil(H * ESC);
+    if (!aquarela.naturalWidth) return;
+    // onde a foto está: o mesmo cálculo do CSS (cover, 81% 25%)
+    const iw = aquarela.naturalWidth, ih = aquarela.naturalHeight;
+    const SP = Math.max(W / iw, H / ih), PL = (W - iw * SP) * .81, PT = (H - ih * SP) * .25;
+    // a aquarela no mesmo lugar em relação à foto que no Figma (foto x -607, y -13, 2668 de largura;
+    // aquarela x -529, y 0, 2574×1449), para os elementos coincidirem
+    const k = SP / (2668 / iw);
+    capa = { dx: PL + (-529 + 607) * k, dy: PT + (0 + 13) * k, dw: 2574 * k, dh: 1449 * k };
+  }
+  aquarela.onload = medir;
+  addEventListener("resize", medir);
+  const formas = Array.from({ length: 6 }, (_, n) => {
+    const f = new Path2D(), N = 40, fase = n * 1.7;
+    for (let i = 0; i <= N; i++) {
+      const t = i / N * Math.PI * 2;
+      const r = 1 + .12 * Math.sin(3 * t + fase) + .07 * Math.sin(5 * t + fase * 2) + .04 * Math.sin(9 * t + fase * 3);
+      i ? f.lineTo(Math.cos(t) * r, Math.sin(t) * r) : f.moveTo(Math.cos(t) * r, Math.sin(t) * r);
+    }
+    f.closePath();
+    return f;
+  });
+  const gotas = [];
+  let ultimo = null, rodando = false;
+  abertura.addEventListener("pointermove", (e) => {
+    if (!capa || abertura.classList.contains("saindo")) return;
+    const x = e.clientX, y = e.clientY;
+    const dist = ultimo ? Math.hypot(x - ultimo.x, y - ultimo.y) : 0;
+    const passos = Math.min(5, Math.max(1, Math.round(dist / 18)));
+    for (let i = 1; i <= passos; i++) {
+      const t = i / passos;
+      const gota = {
+        x: (ultimo ? ultimo.x + (x - ultimo.x) * t : x) + (Math.random() - .5) * 16,
+        y: (ultimo ? ultimo.y + (y - ultimo.y) * t : y) + (Math.random() - .5) * 16,
+        r: 30 + Math.random() * 28 + Math.min(dist, 90) * .35,
+        rot: Math.random() * 6.28, forma: formas[(Math.random() * formas.length) | 0], vida: 1, espalha: .45,
+      };
+      gotas.push(gota);
+      if (Math.random() < .55) {                          // pingos espirrados em volta da pincelada
+        const qtos = 1 + ((Math.random() * 3) | 0);
+        for (let k = 0; k < qtos; k++) {
+          const ang = Math.random() * 6.28, longe = gota.r * (1.15 + Math.random() * .9);
+          gotas.push({ x: gota.x + Math.cos(ang) * longe, y: gota.y + Math.sin(ang) * longe,
+            r: gota.r * (.05 + Math.random() * .12), rot: Math.random() * 6.28,
+            forma: formas[(Math.random() * formas.length) | 0], vida: .9 + Math.random() * .1, espalha: .15 });
+        }
+      }
+    }
+    if (gotas.length > 140) gotas.splice(0, gotas.length - 140);
+    ultimo = { x, y };
+    if (!rodando) { rodando = true; requestAnimationFrame(quadro); }
+  });
+  abertura.addEventListener("pointerleave", () => { ultimo = null; });
+  function quadro() {
+    if (!abertura.isConnected) return;                    // o loading já saiu
+    g.setTransform(ESC, 0, 0, ESC, 0, 0);
+    g.globalCompositeOperation = "source-over";
+    g.clearRect(0, 0, W, H);
+    g.fillStyle = "#000";
+    for (let i = gotas.length - 1; i >= 0; i--) {
+      const d = gotas[i];
+      d.vida -= .012;
+      if (d.vida <= 0) { gotas.splice(i, 1); continue; }
+      const cresce = d.r * (1 + (1 - d.vida) * d.espalha);
+      g.globalAlpha = Math.min(1, d.vida * 1.8);
+      g.save(); g.translate(d.x, d.y); g.rotate(d.rot); g.scale(cresce, cresce); g.fill(d.forma); g.restore();
+    }
+    g.globalAlpha = 1;
+    g.globalCompositeOperation = "source-in";
+    g.drawImage(aquarela, capa.dx, capa.dy, capa.dw, capa.dh);
+    g.globalCompositeOperation = "source-over";
+    if (gotas.length) requestAnimationFrame(quadro); else { g.clearRect(0, 0, W, H); rodando = false; }
+  }
+  medir();
 })();
 </script>
 
