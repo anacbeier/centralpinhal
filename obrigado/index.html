@@ -218,13 +218,27 @@ h1 .pinhal { color: var(--amarelo); }
 </div>
 
 <script>
-// A fala da Pinha aparece no balão letra por letra, como máquina de escrever. Depois de 1 minuto na página,
-// ela começa a soltar umas piadas: uma a cada 20 segundos, sem repetir até passar por todas.
+// A Pinha fala no balão: primeiro se apresenta, depois conta o que ela faz para facilitar a vida
+// (os benefícios da Central, todos conferidos no app). Depois de 1 minuto na página, ela intercala umas piadas.
+// Cada fala aparece com os pontinhos, é escrita letra por letra, fica 6 s e o balão volta para ela.
 (function () {
   const balao = document.querySelector(".balao");
   const alvo = balao.querySelector(".digitando");
   const calma = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const inicio = Date.now();
   const oi = "Oieee, eu sou a Pinha, a assistente virtual da CentralPinhal, e estou ansiosa para a gente organizar a sua vida!";
+  const beneficios = [
+    "Você me escreve “gastei 45,90 no mercado” e eu já lanço no Financeiro. Sem planilha!",
+    "Te lembro do compromisso na hora certa e da conta no dia de pagar. Esquecer? Nunca mais.",
+    "Conto os dias seguidos de cada hábito. E sim, eu comemoro junto kkkk",
+    "Toda segunda eu leio a sua semana e conto o que funcionou. Tipo uma amiga sincera kkkk",
+    "Todo domingo eu monto a estratégia de cada rede, com ideias de posts para você aprovar.",
+    "Dou nota de 0 a 10 para as suas ideias de post antes de você gastar tempo com elas.",
+    "Fico de olho nas novidades do seu nicho a cada 3 horas e te aviso das mais quentes.",
+    "Escrevo a legenda e, se você quiser, crio a imagem do post também.",
+    "Nada vai para as suas redes sem o seu OK. Eu sugiro, você decide.",
+    "Seus dados ficam no seu Mac, e eu trabalho pelo seu plano do Claude.",
+  ];
   const piadas = [
     "Enquanto a Central não abre, eu fico aqui treinando meu aceno. Ficou bom? kkkk",
     "Já bebeu água hoje? Eu não, eu sou uma pinha. Mas você devia kkkk",
@@ -238,12 +252,13 @@ h1 .pinhal { color: var(--amarelo); }
     "Se alguém perguntar, eu tava trabalhando, tá? kkkk",
   ];
   const pontinhos = '<span class="pontinhos"><i></i><i></i><i></i></span>';
-  let relogio;
-  // Como uma fala: primeiro os três pontinhos, depois o texto letra por letra.
+  const embaralha = (lista) => lista.slice().sort(() => Math.random() - 0.5);
+  let relogio, filaB = beneficios.slice(), filaP = [], vezDaPiada = false;
+
+  // Como uma fala: o balão sai da Pinha com os três pontinhos, e o texto vem logo depois.
   function fala(texto) {
     clearTimeout(relogio);
-    if (calma) { balao.classList.remove("pensando"); alvo.textContent = texto; return; }
-    balao.classList.add("pensando");
+    balao.classList.remove("some", "volta"); void balao.offsetWidth; balao.classList.add("volta", "pensando");
     alvo.innerHTML = pontinhos;
     relogio = setTimeout(() => digita(texto), 900);
   }
@@ -259,19 +274,24 @@ h1 .pinhal { color: var(--amarelo); }
       else relogio = setTimeout(esconde, 6000); // a fala fica uns segundos e o balão volta para a Pinha
     })();
   }
-  function esconde() { balao.classList.remove("volta"); balao.classList.add("some"); }
-  let fila = [];
-  function proximaPiada() {
-    if (!fila.length) fila = piadas.slice().sort(() => Math.random() - 0.5);
-    const piada = fila.shift();
-    if (calma) { fala(piada); return; }
-    // o balão sai de novo da Pinha com a fala nova
-    balao.classList.remove("some", "volta"); void balao.offsetWidth; balao.classList.add("volta");
-    fala(piada);
+  function esconde() {
+    balao.classList.remove("volta"); balao.classList.add("some");
+    relogio = setTimeout(proxima, 2500);
   }
-  // o balão começa a aparecer em 1,15 s (no CSS), já com os pontinhos; o texto vem logo depois
-  if (calma) fala(oi); else relogio = setTimeout(() => digita(oi), 2100);
-  setTimeout(() => { proximaPiada(); setInterval(proximaPiada, 20000); }, 60000);
+  // Primeiro os benefícios, em ordem; depois de 1 minuto, uma piada e um benefício, alternando.
+  function proxima() {
+    vezDaPiada = Date.now() - inicio >= 60000 ? !vezDaPiada : false;
+    if (vezDaPiada) {
+      if (!filaP.length) filaP = embaralha(piadas);
+      fala(filaP.shift());
+    } else {
+      if (!filaB.length) filaB = embaralha(beneficios);
+      fala(filaB.shift());
+    }
+  }
+
+  if (calma) { balao.classList.remove("pensando"); alvo.textContent = oi; }
+  else relogio = setTimeout(() => digita(oi), 2100); // o balão começa a aparecer em 1,15 s (no CSS), já com os pontinhos
 
   // Quem pede menos movimento no sistema vê a Pinha parada (a imagem de capa do vídeo).
   const video = document.getElementById("pinha-video");
