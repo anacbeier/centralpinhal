@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="preload" href="fontes/IvyOraText-Regular-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fontes/SpaceMono-Regular-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="paisagem.webp" as="image" type="image/webp">
+<link rel="preload" href="paisagem.webp?v=2" as="image" type="image/webp">
 <style>
 /* Montada a partir do quadro "Página de Captura - CentralPinhal" do Figma (arquivo Studio Tchê, 2413-405).
    Fontes: IvyOra Text Regular nos títulos e Space Mono no resto, como no Figma. */
@@ -298,7 +298,7 @@ legend { padding: 0; margin-bottom: 18px; }
 .abertura { display: none; }
 html.carregando { overflow: hidden; }
 html.carregando .abertura { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; }
-.ab-fundo { position: absolute; inset: 0; background: url("paisagem.webp") 71% 50% / cover no-repeat, var(--verde); }
+.ab-fundo { position: absolute; inset: 0; background: url("paisagem.webp?v=2") 81% 50% / cover no-repeat, var(--verde); }
 .ab-tinta { position: absolute; left: 50%; top: 50%; width: 10px; height: 10px; z-index: 2; pointer-events: none;
   transform: translate(-50%, -50%) scale(0); opacity: 0; will-change: transform, opacity; }
 .ab-tinta canvas { display: block; width: 100%; height: 100%; } /* a tinta (cor do selo) é pintada uma vez neste canvas */
@@ -376,7 +376,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
 </head>
 <body>
 <div class="abertura" id="abertura" aria-hidden="true">
-  <!-- o fundo do loading (Figma): só a paisagem da serra -->
+  <!-- o fundo do loading (Figma): só a paisagem da serra em aquarela -->
   <div class="ab-fundo"></div>
   <!-- a tinta da transição: uma camada própria que só cresce e gira (leve para o navegador) -->
   <div class="ab-tinta"><canvas aria-hidden="true"></canvas></div>
