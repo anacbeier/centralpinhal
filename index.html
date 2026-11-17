@@ -397,14 +397,14 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
   <p class="abertura-nome">Central<em>Pinhal</em></p>
 </div>
 <script>
-// Abertura: a pinha se monta dentro do selo e o nome aparece; depois de uns 2,8 s, a tinta verde sai do selo,
+// Abertura: a pinha se monta dentro do selo e o nome aparece; logo em seguida (uns 2 s), a tinta creme sai do selo,
 // se espalha pela tela e se abre no meio, mostrando a página. A tinta é uma forma orgânica desenhada uma vez
 // e só ampliada na animação (leve, sem filtros).
 (function () {
   const abertura = document.getElementById("abertura");
   const inicio = performance.now();
   const calma = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const minimo = calma ? 400 : 2800;
+  const minimo = calma ? 400 : 1950; // a tinta começa assim que a pinha termina de se montar no selo
   let saiu = false, acabou = false;
 
   // forma de tinta com raio perto de 1: borda ondulada e gotinhas em volta
