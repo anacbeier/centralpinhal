@@ -298,7 +298,10 @@ legend { padding: 0; margin-bottom: 18px; }
 html.carregando { overflow: hidden; }
 html.carregando .abertura { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; }
 .ab-fundo { position: absolute; inset: 0; width: 100%; height: 100%; }
-.abertura-logo { position: relative; width: clamp(150px, 13.6vw, 261px); height: auto; overflow: visible; }
+.ab-tinta { position: absolute; left: 50%; top: 50%; width: 10px; height: 10px; z-index: 2; pointer-events: none;
+  transform: translate(-50%, -50%) scale(0); will-change: transform; }
+.ab-tinta svg { display: block; width: 100%; height: 100%; fill: var(--verde); }
+.abertura-logo { position: relative; z-index: 3; width: clamp(150px, 13.6vw, 261px); height: auto; overflow: visible; }
 .ab-oval { transform-box: fill-box; transform-origin: 50% 50%; animation: ab-oval .7s cubic-bezier(.34, 1.56, .64, 1) .15s both; }
 .ab-peca { opacity: 0; transform-box: fill-box; transform-origin: 50% 50%; animation: ab-peca .55s cubic-bezier(.22, 1, .36, 1) both; }
 .ab-ponta { animation-delay: .6s; }
@@ -373,24 +376,19 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
 </head>
 <body>
 <div class="abertura" id="abertura" aria-hidden="true">
-  <!-- o fundo do loading (creme, sombra de folhas e grade) e a tinta da transição -->
+  <!-- o fundo do loading: creme, sombra de folhas e grade -->
   <svg class="ab-fundo" width="100%" height="100%" aria-hidden="true" focusable="false">
     <defs>
       <pattern id="ab-grade" width="84" height="85.75" x="119" y="35" patternUnits="userSpaceOnUse">
         <path d="M0 .5H84M.5 0V85.75" fill="none" stroke="rgba(190, 176, 132, .35)" stroke-width="1"/>
       </pattern>
-      <mask id="ab-mascara" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
-        <rect width="100%" height="100%" fill="#fff"/>
-        <g id="ab-furo" transform="scale(0)" fill="#000"></g>
-      </mask>
     </defs>
-    <g mask="url(#ab-mascara)">
-      <rect width="100%" height="100%" fill="#F1EBDD"/>
-      <image href="sombra.jpg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice"/>
-      <rect width="100%" height="100%" fill="url(#ab-grade)"/>
-      <g id="ab-tinta" transform="scale(0)" fill="#3F5633"></g>
-    </g>
+    <rect width="100%" height="100%" fill="#F1EBDD"/>
+    <image href="sombra.jpg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice"/>
+    <rect width="100%" height="100%" fill="url(#ab-grade)"/>
   </svg>
+  <!-- a tinta da transição: uma camada própria que só cresce e gira (leve para o navegador) -->
+  <div class="ab-tinta"><svg viewBox="-1.5 -1.5 3 3" aria-hidden="true" focusable="false"></svg></div>
   <svg class="abertura-logo" viewBox="0 0 56 68" aria-hidden="true" focusable="false">
     <path class="ab-oval" d="M38.5858 65.199C34.1772 67.5008 29.9013 68.3421 24.9338 67.8764C21.7402 67.577 18.689 66.6293 15.8822 65.0768C12.2945 63.0922 9.19278 60.376 6.6611 57.158C4.84 54.8437 3.43855 52.2904 2.34641 49.5604C1.12622 46.5099 0.390028 43.3714 0.129308 40.0923C-0.131412 36.8133 0.0137245 33.8797 0.460298 30.7721C1.34556 24.6179 3.34529 18.5609 6.62301 13.2789C8.77707 9.80745 11.5708 6.61576 14.945 4.3054C18.6128 1.79211 22.7528 0.182477 27.2449 0.017639C29.7798 -0.0749593 32.2517 0.191015 34.6626 0.95807C37.0734 1.72513 39.1973 2.80872 41.218 4.26206C45.1452 7.08598 48.2299 10.8589 50.4457 15.1486C53.2604 20.5968 54.8956 26.4837 55.3993 32.5958C55.7073 36.3365 55.5281 40.1029 54.7505 43.7792C54.2606 46.0955 53.5001 48.2699 52.5189 50.4102C51.3972 52.8578 49.9873 55.0736 48.285 57.1501C45.6233 60.3963 42.3095 63.2551 38.5865 65.199H38.5858Z" fill="#3F5633"/>
     <path class="ab-peca ab-ponta" d="M36.3411 53.1382C34.8654 55.8531 31.6974 58.7893 29.1861 60.527C28.5451 60.9703 27.8247 61.0524 27.1371 60.6675C24.4051 59.1387 20.9698 56.5925 19.3037 53.8954C19.0292 53.3976 18.7763 52.9214 18.6995 52.331C20.56 51.962 22.345 51.4655 24.0485 50.6229C26.5296 51.9521 29.4107 51.9429 31.8911 50.6295C33.3898 51.3978 34.9226 51.9212 36.5782 52.3166C36.5513 52.6056 36.4528 52.8591 36.3398 53.1375L36.3411 53.1382Z" fill="#FBF7ED"/>
@@ -444,29 +442,32 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
     acabou = true;
     document.documentElement.classList.remove("carregando");
     abertura.remove();
+    dispatchEvent(new Event("abertura-fim"));
   }
 
   function tinta() {
-    const tintaEl = abertura.querySelector("#ab-tinta"), furo = abertura.querySelector("#ab-furo");
-    tintaEl.innerHTML = mancha(7);
-    furo.innerHTML = mancha(23);
+    const camada = abertura.querySelector(".ab-tinta");
+    camada.querySelector("svg").innerHTML = mancha(7);
     const logo = abertura.querySelector(".abertura-logo").getBoundingClientRect();
     const cx = logo.left + logo.width / 2, cy = logo.top + logo.height / 2;
-    const diag = Math.hypot(Math.max(cx, innerWidth - cx), Math.max(cy, innerHeight - cy));
-    const DURA = 1500, t0 = performance.now();
-    const limita = (x) => Math.min(1, Math.max(0, x));
-    const sai = (x) => 1 - Math.pow(1 - x, 3);                       // começa rápido e desacelera
-    const vaiVem = (x) => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+    const longe = Math.hypot(Math.max(cx, innerWidth - cx), Math.max(cy, innerHeight - cy));
+    // a camada já nasce do tamanho final (fica nítida) e começa encolhida; o raio da mancha é 1/3 do lado
+    const lado = Math.ceil(longe * 2.6);
+    Object.assign(camada.style, { left: cx + "px", top: cy + "px", width: lado + "px", height: lado + "px" });
+    const comeco = Math.min(.2, (logo.width * .5) / (lado / 3));
     abertura.classList.add("saindo");
-    setTimeout(comecaEntradas, 650);                                   // as partes da página entram quando a tinta abre
-    setTimeout(some, DURA + 900);                                      // segurança, se a animação não rodar
-    (function quadro(agora) {
-      const p = (agora - t0) / DURA;
-      const a = sai(limita((p - .12) / .5)), b = vaiVem(limita((p - .38) / .62));
-      tintaEl.setAttribute("transform", `translate(${cx} ${cy}) rotate(${(a * 25).toFixed(2)}) scale(${(logo.width * .45 + a * diag * 1.25).toFixed(1)})`);
-      furo.setAttribute("transform", `translate(${cx} ${cy}) rotate(${(-b * 18).toFixed(2)}) scale(${(b * diag * 1.35).toFixed(1)})`);
-      if (p < 1) requestAnimationFrame(quadro); else some();
-    })(t0);
+    // 1) a tinta verde sai do selo e se espalha pela tela (só transform: roda na placa de vídeo, sem travar)
+    camada.animate([
+      { transform: `translate(-50%, -50%) scale(${comeco}) rotate(0deg)` },
+      { transform: "translate(-50%, -50%) scale(1.15) rotate(20deg)" },
+    ], { duration: 1000, delay: 120, easing: "cubic-bezier(.3, .65, .2, 1)", fill: "forwards" });
+    // 2) a tela verde se dissolve e a página aparece (só opacidade)
+    setTimeout(() => {
+      comecaEntradas();
+      const fade = abertura.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 600, easing: "ease", fill: "forwards" });
+      fade.onfinish = some;
+    }, 900);
+    setTimeout(some, 2400); // segurança, se a animação não rodar
   }
 
   function sair() {
@@ -526,7 +527,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
     </section>
 
     <figure class="video entra" style="--atraso: .35s">
-      <video id="video-central" src="centralpinhal.mp4?v=7" poster="centralpinhal-capa.jpg?v=7" muted loop playsinline preload="metadata"
+      <video id="video-central" src="centralpinhal.mp4?v=7" poster="centralpinhal-capa.jpg?v=7" muted loop playsinline preload="none"
              aria-label="A CentralPinhal funcionando: a criação da conta, o Início, a Pinha, Tarefas, Hábitos, Segundo cérebro, Financeiro e Agenda"></video>
       <div class="selo" aria-hidden="true">
         <img class="selo-anel" src="selo.svg" alt="" width="160" height="162">
@@ -669,9 +670,11 @@ function vaiProObrigado() {
 (function () {
   const video = document.getElementById("video-central");
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) { video.controls = true; return; }
-  new IntersectionObserver((itens) => {
+  // espera o loading sair, para o vídeo não disputar com a transição
+  const olhar = () => new IntersectionObserver((itens) => {
     if (itens[0].isIntersecting) video.play().catch(() => {}); else video.pause();
   }, { threshold: 0.3 }).observe(video);
+  if (document.getElementById("abertura")) addEventListener("abertura-fim", olhar, { once: true }); else olhar();
 })();
 
 form.addEventListener("submit", async (evento) => {
