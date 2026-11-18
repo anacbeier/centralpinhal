@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>CentralPinhal · lista de espera</title>
-<meta name="description" content="Tarefas, hábitos, finanças, agenda, clientes e as suas redes num app para Mac, com a Pinha, a IA da Central. Entre na lista de espera.">
+<meta name="description" content="Tarefas, hábitos, finanças, agenda, clientes e as suas redes num app para Mac, com a Pinha, a IA da Central. R$ 47 para as 5 primeiras pessoas, pagamento único. Entre na lista de espera.">
 <meta property="og:title" content="CentralPinhal · lista de espera">
 <meta property="og:description" content="Mais tempo para focar no que você faz de melhor. Um app para Mac, com a Pinha, a IA da Central.">
 <meta name="theme-color" content="#FAF7ED">
@@ -145,8 +145,18 @@ h1 {
   padding: 43px 42px;
   scroll-margin-top: 20px;
 }
-/* o título do cartão, no mesmo tamanho do título da esquerda */
+/* o título do cartão, no mesmo tamanho do título da esquerda, com o preço das primeiras pessoas como no Figma
+   ("Entre antes de todo" / "mundo R$ 47,00" e a nota ao lado do preço) */
 .cartao h2 { margin: 0; font: 400 var(--t-titulo)/1.067 var(--f-titulo); }
+.preco {
+  font-style: italic; color: var(--verde-preco); white-space: nowrap;
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.1em;
+}
+.preco-nota {
+  display: inline-block; vertical-align: baseline; width: 150px; margin-left: 14px;
+  font: 700 12px/14px var(--f-mono); text-transform: uppercase;
+}
+.preco-nota span { color: var(--amarelo); }
 .explica { margin: 20px 0 0; text-transform: uppercase; }
 
 .rotulo, label, legend {
@@ -359,6 +369,8 @@ html.carregando .abertura { position: fixed; inset: 0; z-index: 1000; display: g
   .moldura { border-radius: 28px; padding: 24px 0 32px; }
   .palco { width: calc(100% - 32px); }
   .marca { gap: 14px; }
+  .preco-nota { display: block; width: auto; margin: 10px 0 0; }
+  .so-computador { display: none; }
   .cartao { border-radius: 28px; padding: 26px 18px; }
   .bonus { border-radius: 28px; padding: 12px 18px 12px 12px; grid-template-columns: 48px minmax(0, 1fr); gap: 12px; }
   .bonus svg { width: 48px; height: 48px; }
@@ -648,7 +660,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
     </figure>
 
     <aside class="cartao entra" style="--atraso: .2s" id="lista" aria-labelledby="titulo-lista">
-      <h2 id="titulo-lista">Entre antes de todo mundo</h2>
+      <h2 id="titulo-lista">Entre antes de todo<br class="so-computador"> mundo <span class="preco">R$&nbsp;47,00</span><span class="preco-nota"><span>*pagamento único,</span> valor das 5 primeiras pessoas</span></h2>
       <p class="explica">Deixe seu e-mail e receba o convite assim que a CentralPinhal abrir.</p>
 
       <p class="rotulo bonus-rotulo">Para as 5 primeiras pessoas</p>
