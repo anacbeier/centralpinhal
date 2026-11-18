@@ -17,8 +17,8 @@
 <style>
 /* Montada a partir do quadro "Página de Captura - CentralPinhal" do Figma (arquivo Studio Tchê, 2413-405),
    na versão de 18/11/2026 (fim do dia): título no centro, o iPad com o vídeo da Central sobre o fundo creme com grade
-   e o cartão do formulário logo abaixo, com o iPad encostando por cima dele. A paisagem (escondida no quadro) voltou
-   atrás do iPad a pedido dela, no lugar da camada do Figma: x 41, y 655, 1836 × 1120, com a tinta do mouse.
+   e o cartão do formulário logo abaixo, com o iPad encostando por cima dele. Atrás, a paisagem (x 41, y 655, 1836 × 1120),
+   com a foto em x -540, y -448, 2808 de largura; a aquarela da tinta do mouse acompanha a foto para coincidir.
    No computador, as medidas seguem o quadro de 1920 px (--s = 1 px do Figma). */
 @font-face { font-family: "IvyOra Text"; font-style: normal; font-weight: 400; font-display: swap; src: url("fontes/IvyOraText-Regular-latin.woff2") format("woff2"); }
 @font-face { font-family: "IvyOra Text"; font-style: italic; font-weight: 400; font-display: swap; src: url("fontes/IvyOraText-RegularItalic-latin.woff2") format("woff2"); }
@@ -81,9 +81,10 @@ h1 {
 .paisagem {
   position: absolute; z-index: 1; overflow: hidden;
   left: calc(42 * var(--s)); right: calc(42 * var(--s)); top: calc(280 * var(--s)); height: calc(1120 * var(--s));
-  border-radius: calc(60 * var(--s));
-  /* a foto da casa de pedra, enquadrada como no Figma */
-  background: url("casa.webp") 79% 58% / 142% auto no-repeat, var(--verde);
+  border-radius: calc(83 * var(--s));
+  /* a foto da casa de pedra, enquadrada como no Figma: 2808 px de largura em x -540, y -448
+     (55,56% e 97,39% dão esses deslocamentos em 1920 e mantêm o enquadramento em telas mais largas) */
+  background: url("casa.webp") 55.56% 97.39% / max(calc(2808 * var(--s)), 100%) auto no-repeat, var(--verde);
 }
 /* a tinta do mouse revela a aquarela por trás da foto, como no obrigado */
 .revela { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
@@ -118,7 +119,7 @@ h1 {
 .cartao {
   position: relative; z-index: 2;
   width: calc(1532 * var(--s)); margin: calc(-97 * var(--s)) auto calc(20 * var(--s));
-  padding: calc(132 * var(--s)) calc(127 * var(--s)) calc(136 * var(--s));
+  padding: calc(180 * var(--s)) calc(127 * var(--s)) calc(136 * var(--s));
   background: var(--creme); border: 1px solid var(--linha); border-radius: calc(54 * var(--s));
   scroll-margin-top: 20px;
 }
@@ -586,7 +587,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
 <path d="M27.9978 17.014C26.8735 19.8707 24.812 22.0399 21.8357 22.7886C19.7289 23.2896 16.838 23.1038 15.1194 21.6885C14.2643 20.9839 14.8869 19.9206 15.4294 19.1956C16.5274 17.7291 17.9518 16.5523 19.6396 15.8154C20.8999 15.2651 22.233 15.0944 23.6043 15.1627C24.4167 15.2034 25.1653 15.3176 25.9724 15.4208C26.0762 15.4339 26.2515 15.3978 26.3139 15.34C26.5963 15.0753 25.4175 11.3753 25.2172 10.7455C24.9867 10.0198 24.7719 9.33553 24.5959 8.60066C24.46 8.03193 24.8061 7.46846 25.3985 7.37455C26.7631 7.15849 29.5739 7.00219 30.8296 7.42249C31.2913 7.57682 31.5533 8.04704 31.4528 8.5271C31.307 9.22652 31.0877 9.87076 30.8572 10.5518C30.6358 11.2079 29.3769 14.9873 29.6494 15.3288C29.6987 15.3905 29.8813 15.4444 29.9712 15.4345L32.6395 15.1462C34.1362 14.9847 35.6027 15.1994 36.9555 15.8929C38.7773 16.8268 40.2319 18.3957 41.0141 20.2661C41.2748 20.8893 41.066 21.4495 40.5452 21.8008C39.5634 22.4622 38.4607 22.8017 37.2629 22.914C33.0112 23.3139 29.6317 20.9064 27.9978 17.014Z" fill="#FBF7ED"/>
 <path d="M36.3411 53.1382C34.8654 55.8531 31.6974 58.7893 29.1861 60.527C28.5451 60.9703 27.8247 61.0524 27.1371 60.6675C24.4051 59.1387 20.9698 56.5925 19.3037 53.8954C19.0292 53.3976 18.7763 52.9214 18.6995 52.331C20.56 51.962 22.345 51.4655 24.0485 50.6229C26.5296 51.9521 29.4107 51.9429 31.8911 50.6295C33.3898 51.3978 34.9226 51.9212 36.5782 52.3166C36.5513 52.6056 36.4528 52.8591 36.3398 53.1375L36.3411 53.1382Z" fill="#FBF7ED"/>
 </svg>
-      <h2 id="titulo-lista">Quem organiza agora <em>é a Pinha.</em></h2>
+      <h2 id="titulo-lista">A <em>Central</em> organiza a sua vida para você.</h2>
       <div class="bonus">
         <p><strong>Os 10 primeiros usuários recebem:</strong></p>
         <p>Novidades e correções da Central e suporte por e-mail, por 3 meses.</p>
@@ -717,7 +718,7 @@ form.addEventListener("submit", async (evento) => {
   const cena = document.querySelector(".cena"), ipad = cena.querySelector(".ipad");
   const cartao = document.querySelector(".cartao"), sobe = cartao.querySelector(".cartao-conteudo");
   const pode = matchMedia("(min-width: 1081px) and (prefers-reduced-motion: no-preference)");
-  const SOBE = 200, FOLGA = 40;                           // em px do Figma (1920)
+  const SOBE = 200, FOLGA = 83;                           // em px do Figma (1920); 83 = o vão do quadro entre o iPad e o texto
   let m = null, fila = false;
   const noTopo = (el) => { let y = 0; for (; el; el = el.offsetParent) y += el.offsetTop; return y; };
   function medir() {
@@ -765,14 +766,16 @@ form.addEventListener("submit", async (evento) => {
     W = paisagem.clientWidth; H = paisagem.clientHeight;
     tela.width = Math.ceil(W * ESC); tela.height = Math.ceil(H * ESC);
     if (!aquarela.naturalWidth) return;
-    // onde a foto está: o mesmo cálculo do CSS (142% da largura, posição 79% 58%)
+    // onde a foto está: o mesmo cálculo do CSS (2808 px do Figma ou a largura toda, posição 55,56% 97,39%)
     const iw = aquarela.naturalWidth, ih = aquarela.naturalHeight;   // a foto e a aquarela têm o mesmo tamanho de arquivo
-    const fw = W * 1.42, fh = fw * ih / iw;
-    const PL = (W - fw) * .79, PT = (H - fh) * .58;
-    // a aquarela no mesmo lugar em relação à foto que no Figma (foto x -607, y -13, 2668 de largura;
-    // aquarela x -529, y 0, 2574×1449), para os elementos coincidirem
+    const s = Math.min(innerWidth, 1920) / 1920;
+    const fw = Math.max(2808 * s, W), fh = fw * ih / iw;
+    const PL = (W - fw) * .5556, PT = (H - fh) * .9739;
+    // a aquarela acompanha a foto como no quadro antigo (foto 2668 de largura; aquarela 78 px à direita, 13 abaixo,
+    // 2574 × 1449), porque assim a casa, as araucárias e a fumaça coincidem. No quadro de 18/11 a aquarela ficou
+    // escondida embaixo da foto num lugar que não coincide (x -667, y -333,5, 2862 de largura).
     const k = fw / 2668;
-    capa = { dx: PL + (-529 + 607) * k, dy: PT + (0 + 13) * k, dw: 2574 * k, dh: 1449 * k };
+    capa = { dx: PL + 78 * k, dy: PT + 13 * k, dw: 2574 * k, dh: 1449 * k };
   }
   aquarela.onload = medir;
   let espera;
