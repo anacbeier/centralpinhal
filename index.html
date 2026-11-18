@@ -16,7 +16,8 @@
 
 <style>
 /* Montada a partir do quadro "Página de Captura - CentralPinhal" do Figma (arquivo Studio Tchê, 2413-405),
-   na versão de 18/11/2026: título no centro, o iPad com o vídeo da Central sobre a paisagem e o cartão do formulário.
+   na versão de 18/11/2026 (fim do dia): título no centro, o iPad com o vídeo da Central sobre o fundo creme com grade
+   e o cartão do formulário logo abaixo, com o iPad encostando por cima dele. A paisagem saiu do quadro.
    No computador, as medidas seguem o quadro de 1920 px (--s = 1 px do Figma). */
 @font-face { font-family: "IvyOra Text"; font-style: normal; font-weight: 400; font-display: swap; src: url("fontes/IvyOraText-Regular-latin.woff2") format("woff2"); }
 @font-face { font-family: "IvyOra Text"; font-style: italic; font-weight: 400; font-display: swap; src: url("fontes/IvyOraText-RegularItalic-latin.woff2") format("woff2"); }
@@ -59,35 +60,25 @@ a { color: inherit; }
 em { font-style: italic; color: var(--amarelo); }
 
 /* ---------- topo: logo, título e o texto, no centro ---------- */
-.topo { padding: calc(64 * var(--s)) 24px 0; text-align: center; }
+.topo { padding: calc(41 * var(--s)) 24px 0; text-align: center; }
 .marca {
   display: inline-flex; align-items: center; gap: 12px;
   font: 400 max(26px, calc(34 * var(--s)))/1 var(--f-titulo);
 }
-.marca svg { width: auto; height: max(34px, calc(42 * var(--s))); }
+.marca svg { width: auto; height: max(34px, calc(41 * var(--s))); }
 h1 {
-  margin: calc(26 * var(--s)) auto 0;
+  margin: calc(4 * var(--s)) auto 0;
   font: 400 clamp(2.4rem, calc(70 * var(--s)), 4.375rem)/1.02 var(--f-titulo);
   text-wrap: balance;
 }
-.lead { max-width: 64ch; margin: calc(30 * var(--s)) auto 0; font-size: 13px; line-height: 1.75; text-transform: uppercase; text-wrap: balance; }
+.lead { max-width: 64ch; margin: calc(36 * var(--s)) auto 0; font-size: 13px; line-height: 1.75; text-transform: uppercase; text-wrap: balance; }
 .lead strong { font-weight: 700; color: var(--amarelo); }
 
-/* ---------- a cena: a paisagem, o iPad com o vídeo e o selo da Pinha ---------- */
-.cena { position: relative; margin-top: calc(40 * var(--s)); height: calc(1649 * var(--s)); }
-.paisagem {
-  position: absolute; z-index: 1; overflow: hidden;
-  left: calc(42 * var(--s)); right: calc(42 * var(--s)); top: calc(228 * var(--s)); height: calc(1421 * var(--s));
-  border-radius: calc(60 * var(--s));
-  /* a foto da casa de pedra, enquadrada como no Figma. A paisagem é 300 px mais alta que no Figma
-     para o iPad ter caminho ao descer; a foto cresce o mínimo para cobrir essa altura. */
-  background: url("casa.webp") 79% 100% / max(142%, calc(2884 * var(--s))) auto no-repeat, var(--verde);
-}
-/* a tinta do mouse revela a aquarela por trás da foto, como no obrigado */
-.revela { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+/* ---------- a cena: o iPad com o vídeo e o selo da Pinha ---------- */
+.cena { position: relative; margin-top: calc(36 * var(--s)); height: calc(899 * var(--s)); }
 .ipad {
   position: absolute; z-index: 3; left: 50%; top: 0;
-  width: calc(1242 * var(--s)); margin-left: calc(-621 * var(--s)); aspect-ratio: 2320 / 1674;
+  width: calc(1246 * var(--s)); margin-left: calc(-623 * var(--s)); aspect-ratio: 2320 / 1674;
   will-change: transform;
 }
 /* a imagem tem a sombra inteira em volta do iPad; a caixa .ipad é só o corpo e a caneta */
@@ -101,21 +92,21 @@ h1 {
   object-fit: cover; border-radius: 1.64% / 2.56%; background: var(--creme);
 }
 /* o selo fica dentro do iPad, com o centro em cima da borda esquerda (como no Figma), e desce junto com ele */
-.selo { position: absolute; z-index: 2; left: -7.97%; top: 55.79%; width: 16.1%; aspect-ratio: 200 / 202; pointer-events: none; }
+.selo { position: absolute; z-index: 2; left: -9.36%; top: 54.63%; width: 18.98%; aspect-ratio: 200 / 202; pointer-events: none; }
 .selo img { position: absolute; }
 .selo-anel { inset: 0; width: 100%; height: 100%; }
 .selo-pinha { left: 25.2%; top: 24.8%; width: 57%; height: auto; }
 
-/* ---------- o cartão do formulário, por cima da paisagem (o iPad passa por cima dele ao rolar) ---------- */
+/* ---------- o cartão do formulário, logo abaixo do iPad (o iPad fica por cima da borda de cima do cartão) ---------- */
 .cartao {
   position: relative; z-index: 2;
-  width: calc(1532 * var(--s)); margin: calc(-349 * var(--s)) auto calc(36 * var(--s));
-  padding: calc(138 * var(--s)) calc(127 * var(--s)) calc(136 * var(--s));
+  width: calc(1532 * var(--s)); margin: calc(-97 * var(--s)) auto calc(20 * var(--s));
+  padding: calc(132 * var(--s)) calc(127 * var(--s)) calc(136 * var(--s));
   background: var(--creme); border: 1px solid var(--linha); border-radius: calc(54 * var(--s));
   scroll-margin-top: 20px;
 }
 .cartao-conteudo {
-  display: grid; grid-template-columns: minmax(0, 584fr) minmax(0, 592fr); column-gap: calc(102 * var(--s));
+  display: grid; grid-template-columns: minmax(0, 584fr) minmax(0, 592fr); column-gap: calc(103 * var(--s));
   align-items: start; will-change: transform;
 }
 .cartao-logo { width: auto; height: max(30px, calc(36 * var(--s))); }
@@ -268,11 +259,10 @@ html.carregando .abertura { position: fixed; inset: 0; z-index: 1000; display: g
   .topo { padding: 40px 20px 0; }
   h1 { font-size: clamp(2.1rem, 6.4vw, 3.4rem); }
   .lead { font-size: 12px; }
-  .cena { height: auto; margin-top: 32px; padding-bottom: 96px; }
+  .cena { height: auto; margin-top: 32px; }
   .ipad { position: relative; left: auto; margin: 0 auto; width: min(94vw, 760px); }
-  .paisagem { left: 12px; right: 12px; top: 26%; height: auto; bottom: 0; border-radius: 28px; background-position: 79% 58%, 0 0; background-size: 142% auto, auto; }
-  .selo { left: -2%; top: 80%; width: clamp(96px, 22vw, 150px); }
-  .cartao { width: auto; margin: -56px 12px 24px; padding: 36px 22px 32px; border-radius: 28px; }
+  .selo { left: -2%; top: 50%; width: clamp(84px, 24vw, 140px); }
+  .cartao { width: auto; margin: -24px 12px 24px; padding: 48px 22px 32px; border-radius: 28px; }
   .cartao-conteudo { grid-template-columns: minmax(0, 1fr); row-gap: 8px; }
   .cartao h2 { margin-top: 16px; }
   .bonus { margin-top: 22px; padding: 22px 22px; }
@@ -553,9 +543,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
 </header>
 
 <section class="cena" aria-label="A CentralPinhal num iPad">
-  <!-- a paisagem (foto da casa de pedra); a tinta do mouse revela a aquarela por trás -->
-  <div class="paisagem"><canvas class="revela" aria-hidden="true"></canvas></div>
-  <!-- o iPad com o vídeo da Central na tela; ao rolar, ele desce e passa por cima do cartão -->
+  <!-- o iPad com o vídeo da Central na tela e o selo da Pinha na borda; a parte de baixo fica por cima do cartão -->
   <div class="ipad entra" style="--atraso: .3s">
     <video id="video-central" src="central-ipad.mp4?v=1" poster="central-ipad-capa.jpg?v=1" muted loop playsinline preload="none"
            aria-label="A CentralPinhal funcionando, aba por aba: Início, Tarefas, Hábitos, Segundo cérebro, Financeiro, Agenda e Conteúdo"></video>
@@ -701,8 +689,9 @@ form.addEventListener("submit", async (evento) => {
 </script>
 
 <script>
-// Ao rolar (no computador): o iPad desce junto com a tela por cima da paisagem, inteiro e no meio da tela,
-// até pousar logo acima do texto do cartão; aí ele para e o texto do cartão sobe até o lugar.
+// Ao rolar (no computador): se houver caminho entre o iPad e o texto do cartão, o iPad desce junto com a tela,
+// inteiro e no meio dela, até pousar logo acima do texto; depois o texto do cartão sobe até o lugar.
+// No quadro de 18/11 (fim do dia) o iPad já nasce encostado no cartão, então só o texto sobe.
 // Só mexe com translate, uma vez por quadro. Quem pediu menos movimento vê tudo parado.
 (function () {
   const cena = document.querySelector(".cena"), ipad = cena.querySelector(".ipad");
@@ -715,23 +704,19 @@ form.addEventListener("submit", async (evento) => {
     // offsetTop não conta o translate nem a entrada suave: são as posições paradas
     const s = Math.min(innerWidth, 1920) / 1920, alto = ipad.offsetHeight;
     const comeca = noTopo(ipad);                            // onde o iPad está com a página no topo
-    const pousa = noTopo(sobe) - FOLGA * s - alto;          // onde ele para: logo acima do texto do cartão
+    const texto = noTopo(sobe), fundo = noTopo(cartao) + cartao.offsetHeight;
+    const pousa = texto - FOLGA * s - alto;                 // onde ele para: logo acima do texto do cartão
     const fica = Math.max(0, (innerHeight - alto) / 2);     // enquanto desce, fica no meio da tela
-    const inicio = Math.max(0, comeca - fica), curso = Math.max(0, pousa - comeca);
-    // o fim da rolagem medido com o texto no lugar (o texto ainda abaixado aumentaria a página)
-    const antes = sobe.style.translate;
-    sobe.style.translate = "";
-    const fim = Math.max(1, document.documentElement.scrollHeight - innerHeight);
-    sobe.style.translate = antes;
-    m = { s, inicio, curso, fim };
+    m = { s, texto, fundo, inicio: Math.max(0, comeca - fica), curso: Math.max(0, pousa - comeca) };
   }
   function atualiza() {
     fila = false;
     if (!pode.matches) { ipad.style.translate = ""; sobe.style.translate = ""; return; }
     if (!m) medir();
-    const y = scrollY, solta = m.inicio + m.curso;
+    const y = scrollY;
     ipad.style.translate = "0 " + Math.min(m.curso, Math.max(0, y - m.inicio)).toFixed(1) + "px";
-    const p = m.fim > solta ? Math.min(1, Math.max(0, (y - solta) / (m.fim - solta))) : 1;
+    // o texto sobe enquanto entra na tela e já está no lugar quando o fim do cartão (com o rodapé) aparece
+    const p = Math.min(1, Math.max(0, (y + innerHeight - m.texto) / Math.max(1, m.fundo - m.texto)));
     const e = p * p * (3 - 2 * p);                          // começa e termina macio
     sobe.style.translate = "0 " + ((1 - e) * SOBE * m.s).toFixed(1) + "px";
   }
@@ -743,98 +728,6 @@ form.addEventListener("submit", async (evento) => {
   if (document.fonts) document.fonts.ready.then(remede);
   if (pode.addEventListener) pode.addEventListener("change", remede);
   atualiza();
-})();
-</script>
-<script>
-// Tinta do mouse na paisagem (como no obrigado): por onde o mouse passa, gotas e pingos de tinta revelam a aquarela
-// que fica "por trás" da foto. Leve: canvas com metade da resolução, que só desenha enquanto há gotas.
-// Só em computador com mouse.
-(function () {
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches || !matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-  const cena = document.querySelector(".cena"), paisagem = cena.querySelector(".paisagem");
-  const tela = paisagem.querySelector(".revela"), g = tela.getContext("2d"), ESC = .5;
-  let W = 0, H = 0, capa = null;
-  const aquarela = new Image();
-  aquarela.src = "paisagem.webp?v=2";
-  function medir() {
-    W = paisagem.clientWidth; H = paisagem.clientHeight;
-    tela.width = Math.ceil(W * ESC); tela.height = Math.ceil(H * ESC);
-    if (!aquarela.naturalWidth) return;
-    // onde a foto está: o mesmo cálculo do CSS (no computador: 142% da largura ou 2884 px, posição 79% 100%)
-    const iw = aquarela.naturalWidth, ih = aquarela.naturalHeight;   // a foto e a aquarela têm o mesmo tamanho de arquivo
-    const largo = matchMedia("(min-width: 1081px)").matches, s = Math.min(innerWidth, 1920) / 1920;
-    const fw = largo ? Math.max(W * 1.42, 2884 * s) : W * 1.42, fh = fw * ih / iw;
-    const PL = (W - fw) * .79, PT = (H - fh) * (largo ? 1 : .58);
-    // a aquarela no mesmo lugar em relação à foto que no Figma (foto x -607, y -13, 2668 de largura;
-    // aquarela x -529, y 0, 2574×1449), para os elementos coincidirem
-    const k = fw / 2668;
-    capa = { dx: PL + (-529 + 607) * k, dy: PT + (0 + 13) * k, dw: 2574 * k, dh: 1449 * k };
-  }
-  aquarela.onload = medir;
-  let espera;
-  addEventListener("resize", () => { clearTimeout(espera); espera = setTimeout(medir, 120); });
-  const formas = Array.from({ length: 6 }, (_, n) => {
-    const f = new Path2D(), N = 40, fase = n * 1.7;
-    for (let i = 0; i <= N; i++) {
-      const t = i / N * Math.PI * 2;
-      const r = 1 + .12 * Math.sin(3 * t + fase) + .07 * Math.sin(5 * t + fase * 2) + .04 * Math.sin(9 * t + fase * 3);
-      i ? f.lineTo(Math.cos(t) * r, Math.sin(t) * r) : f.moveTo(Math.cos(t) * r, Math.sin(t) * r);
-    }
-    f.closePath();
-    return f;
-  });
-  const gotas = [];
-  let ultimo = null, rodando = false;
-  cena.addEventListener("pointermove", (e) => {
-    if (!capa) return;
-    const r = paisagem.getBoundingClientRect();
-    const x = e.clientX - r.left, y = e.clientY - r.top;
-    const dist = ultimo ? Math.hypot(x - ultimo.x, y - ultimo.y) : 0;
-    const passos = Math.min(5, Math.max(1, Math.round(dist / 18)));
-    for (let i = 1; i <= passos; i++) {
-      const t = i / passos;
-      const gota = {
-        x: (ultimo ? ultimo.x + (x - ultimo.x) * t : x) + (Math.random() - .5) * 16,
-        y: (ultimo ? ultimo.y + (y - ultimo.y) * t : y) + (Math.random() - .5) * 16,
-        r: 30 + Math.random() * 28 + Math.min(dist, 90) * .35,
-        rot: Math.random() * 6.28, forma: formas[(Math.random() * formas.length) | 0], vida: 1, espalha: .45,
-      };
-      gotas.push(gota);
-      if (Math.random() < .55) {                          // pingos espirrados em volta da pincelada
-        const qtos = 1 + ((Math.random() * 3) | 0);
-        for (let k = 0; k < qtos; k++) {
-          const ang = Math.random() * 6.28, longe = gota.r * (1.15 + Math.random() * .9);
-          gotas.push({ x: gota.x + Math.cos(ang) * longe, y: gota.y + Math.sin(ang) * longe,
-            r: gota.r * (.05 + Math.random() * .12), rot: Math.random() * 6.28,
-            forma: formas[(Math.random() * formas.length) | 0], vida: .9 + Math.random() * .1, espalha: .15 });
-        }
-      }
-    }
-    if (gotas.length > 140) gotas.splice(0, gotas.length - 140);
-    ultimo = { x, y };
-    if (!rodando) { rodando = true; requestAnimationFrame(quadro); }
-  });
-  cena.addEventListener("pointerleave", () => { ultimo = null; });
-  function quadro() {
-    g.setTransform(ESC, 0, 0, ESC, 0, 0);
-    g.globalCompositeOperation = "source-over";
-    g.clearRect(0, 0, W, H);
-    g.fillStyle = "#000";
-    for (let i = gotas.length - 1; i >= 0; i--) {
-      const d = gotas[i];
-      d.vida -= .012;                                     // some em uns 1,4 s
-      if (d.vida <= 0) { gotas.splice(i, 1); continue; }
-      const cresce = d.r * (1 + (1 - d.vida) * d.espalha);
-      g.globalAlpha = Math.min(1, d.vida * 1.8);
-      g.save(); g.translate(d.x, d.y); g.rotate(d.rot); g.scale(cresce, cresce); g.fill(d.forma); g.restore();
-    }
-    g.globalAlpha = 1;
-    g.globalCompositeOperation = "source-in";             // só onde tem tinta, aparece a aquarela
-    g.drawImage(aquarela, capa.dx, capa.dy, capa.dw, capa.dh);
-    g.globalCompositeOperation = "source-over";
-    if (gotas.length) requestAnimationFrame(quadro); else { g.clearRect(0, 0, W, H); rodando = false; }
-  }
-  medir();
 })();
 </script>
 </body>
