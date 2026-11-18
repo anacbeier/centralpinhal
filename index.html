@@ -16,7 +16,7 @@
 
 <style>
 /* Montada a partir do quadro "Página de Captura - CentralPinhal" do Figma (arquivo Studio Tchê, 2413-405),
-   na versão de 18/11/2026 (noite): a fita vermelha no alto, título no centro, o iPad com o vídeo da Central sobre o
+   na versão de 18/11/2026 (noite, com as linhas tracejadas): a fita vermelha no alto, título no centro, o iPad com o vídeo da Central sobre o
    fundo creme com grade e o cartão do formulário logo abaixo, com o iPad encostando por cima dele. Atrás, a paisagem
    (x 41, y 557, 1836 × 1218), com a foto em x -663, y -373 dela, 2928 de largura; a aquarela da tinta do mouse fica
    exatamente em cima da foto (as duas imagens têm o mesmo enquadramento).
@@ -46,6 +46,7 @@
 [hidden] { display: none !important; }
 html { -webkit-text-size-adjust: 100%; }
 body {
+  position: relative; /* as linhas tracejadas ocupam a página inteira */
   margin: 0; overflow-x: hidden;
   color: var(--tinta);
   font: 400 var(--mono)/1.667 var(--f-mono);
@@ -56,20 +57,38 @@ body {
   background-size: 84px 85.75px;
   background-position: 75px 80px;
 }
+/* no computador a grade segue o quadro do Figma: colunas de 96 com uma linha no meio da página e
+   linhas a cada 85,75 a partir de y 73,4 (onde passa o tracejado do logo), tudo junto com a escala */
+@media (min-width: 1081px) {
+  body {
+    background-size: calc(96 * var(--s)) calc(85.75 * var(--s));
+    background-position: calc(50% + 48 * var(--s)) calc(73.4 * var(--s));
+  }
+}
+/* as quatro linhas tracejadas do quadro (x 96 e 1824, y 73,4 e 502), por trás de tudo: a de cima passa
+   pelo meio do logo, a de baixo por trás do iPad */
+.tracejados { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.tracejados i { position: absolute; display: block; }
+.tr-v { top: 0; bottom: 0; width: 2px; background: repeating-linear-gradient(to bottom, var(--linha) 0 10px, transparent 10px 20px); }
+.tr-h { left: 0; right: 0; height: 2px; background: repeating-linear-gradient(to right, var(--linha) 0 10px, transparent 10px 20px); }
+.tr-esq { left: calc(50% - 864 * var(--s) - 1px); }
+.tr-dir { left: calc(50% + 864 * var(--s) - 1px); }
+.tr-cima { top: calc(73.4 * var(--s) - 1px); }
+.tr-baixo { top: calc(502 * var(--s) - 1px); }
 img, svg, video { display: block; }
 a { color: inherit; }
 :focus-visible { outline: 2px solid var(--amarelo); outline-offset: 3px; }
 em { font-style: italic; color: var(--amarelo); }
 
 /* ---------- topo: logo, título e o texto, no centro ---------- */
-.topo { padding: calc(41 * var(--s)) 24px 0; text-align: center; }
+.topo { padding: calc(53 * var(--s)) 24px 0; text-align: center; }
 .marca {
   display: inline-flex; align-items: center; gap: 12px;
   font: 400 max(26px, calc(34 * var(--s)))/1 var(--f-titulo);
 }
 .marca svg { width: auto; height: max(34px, calc(41 * var(--s))); }
 h1 {
-  margin: calc(4 * var(--s)) auto 0;
+  margin: calc(-8 * var(--s)) auto 0;
   font: 400 clamp(2.4rem, calc(70 * var(--s)), 4.375rem)/1.02 var(--f-titulo);
   text-wrap: balance;
 }
@@ -82,21 +101,8 @@ h1 {
   width: calc(129 * var(--s)); height: auto; pointer-events: none;
   transform-origin: 50% 0; /* presa pelo alto, como pendurada no livro */
 }
-/* ao abrir, ela desce balançando de um lado para o outro, como uma pena caindo, e para devagar.
-   Cada ida e volta desacelera nas pontas (ease-in-out por trecho), como um pêndulo. Os ângulos foram
-   escolhidos para a ponta de cima nunca aparecer descolada do alto da página. */
-.anima .fita.entra { opacity: 0; transform: none; translate: 0 -70%; rotate: 14deg; transition: none; }
-.anima .fita.entra.visivel { opacity: 1; translate: none; rotate: none; animation: fita-cai 3.2s ease-in-out var(--atraso, 0s) both; }
-@keyframes fita-cai {
-  0%   { opacity: 0; translate: 0 -70%; rotate: 14deg; }
-  16%  { opacity: 1; translate: 0 -32%; rotate: -11deg; }
-  33%  { translate: 0 -8%; rotate: 7.5deg; }
-  50%  { translate: 0 0; rotate: -4.5deg; }
-  65%  { rotate: 2.6deg; }
-  79%  { rotate: -1.3deg; }
-  91%  { rotate: .5deg; }
-  100% { opacity: 1; translate: 0 0; rotate: 0deg; }
-}
+/* ao abrir, ela só aparece, sem sair do lugar */
+.anima .fita.entra { transform: none; }
 
 /* ---------- a cena: a paisagem, o iPad com o vídeo e o selo da Pinha ---------- */
 .cena { position: relative; margin-top: calc(36 * var(--s)); height: calc(899 * var(--s)); }
@@ -142,7 +148,7 @@ h1 {
 .cartao {
   position: relative; z-index: 2;
   width: calc(1532 * var(--s)); margin: calc(-97 * var(--s)) auto calc(20 * var(--s));
-  padding: calc(206 * var(--s)) calc(127 * var(--s)) calc(97 * var(--s));
+  padding: calc(168 * var(--s)) calc(127 * var(--s)) calc(136 * var(--s));
   background: var(--creme); border: 1px solid var(--linha); border-radius: calc(54 * var(--s));
   scroll-margin-top: 20px;
 }
@@ -150,8 +156,10 @@ h1 {
   display: grid; grid-template-columns: minmax(0, 584fr) minmax(0, 592fr); column-gap: calc(103 * var(--s));
   will-change: transform;
 }
-/* à esquerda: a pinha, o título e a caixa dos bônus, que termina na mesma altura do botão (como no quadro) */
+/* à esquerda: a pinha, o título e a caixa dos bônus; à direita, o formulário encostado embaixo,
+   terminando na mesma altura da caixa (como no quadro) */
 .cartao-texto { display: flex; flex-direction: column; }
+.cartao-form { align-self: end; }
 .cartao-logo { align-self: flex-start; width: auto; height: max(32px, calc(45 * var(--s))); }
 .cartao h2 { margin: calc(29 * var(--s)) 0 calc(18 * var(--s)); font: 400 clamp(2.1rem, calc(62 * var(--s)), 3.875rem)/1.06 var(--f-titulo); }
 .bonus {
@@ -170,7 +178,7 @@ h1 {
 .explica b { font-weight: 700; color: var(--amarelo); }
 .explica .verde { color: var(--verde); }
 .rotulo, label, legend { font: 700 var(--mono)/20px var(--f-mono); text-transform: uppercase; color: var(--amarelo); }
-form { margin-top: calc(46 * var(--s)); display: grid; gap: calc(46 * var(--s)); }
+form { margin-top: calc(28 * var(--s)); display: grid; gap: calc(28 * var(--s)); }
 .campo { display: grid; gap: 12px; }
 input[type="text"], input[type="email"] {
   width: 100%; height: 42px; padding: 0 20px;
@@ -302,6 +310,7 @@ html.carregando .abertura { position: fixed; inset: 0; z-index: 1000; display: g
 
 /* ---------- tablet e celular: uma coluna ---------- */
 @media (max-width: 1080px) {
+  .tracejados { display: none; }
   .topo { padding: 40px 20px 0; }
   h1 { font-size: clamp(2.1rem, 6.4vw, 3.4rem); }
   .lead { font-size: 12px; }
@@ -573,6 +582,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
 })();
 </script>
 
+<div class="tracejados" aria-hidden="true"><i class="tr-v tr-esq"></i><i class="tr-v tr-dir"></i><i class="tr-h tr-cima"></i><i class="tr-h tr-baixo"></i></div>
 <main>
 <img class="fita entra" style="--atraso: .35s" src="fita.webp" alt="" width="258" height="329">
 <header class="topo">
@@ -751,7 +761,7 @@ form.addEventListener("submit", async (evento) => {
   const cena = document.querySelector(".cena"), ipad = cena.querySelector(".ipad");
   const cartao = document.querySelector(".cartao"), sobe = cartao.querySelector(".cartao-conteudo");
   const pode = matchMedia("(min-width: 1081px) and (prefers-reduced-motion: no-preference)");
-  const SOBE = 200, FOLGA = 109;                          // em px do Figma (1920); 109 = o vão do quadro entre o iPad e o texto
+  const SOBE = 200, FOLGA = 71;                           // em px do Figma (1920); 71 = o vão do quadro entre o iPad e o texto
   let m = null, fila = false;
   const noTopo = (el) => { let y = 0; for (; el; el = el.offsetParent) y += el.offsetTop; return y; };
   function medir() {
