@@ -16,9 +16,10 @@
 
 <style>
 /* Montada a partir do quadro "Página de Captura - CentralPinhal" do Figma (arquivo Studio Tchê, 2413-405),
-   na versão de 18/11/2026 (fim do dia): título no centro, o iPad com o vídeo da Central sobre o fundo creme com grade
-   e o cartão do formulário logo abaixo, com o iPad encostando por cima dele. Atrás, a paisagem (x 41, y 655, 1836 × 1120),
-   com a foto em x -540, y -448, 2808 de largura; a aquarela da tinta do mouse acompanha a foto para coincidir.
+   na versão de 18/11/2026 (noite): a fita vermelha no alto, título no centro, o iPad com o vídeo da Central sobre o
+   fundo creme com grade e o cartão do formulário logo abaixo, com o iPad encostando por cima dele. Atrás, a paisagem
+   (x 41, y 557, 1836 × 1218), com a foto em x -663, y -373 dela, 2928 de largura; a aquarela da tinta do mouse fica
+   exatamente em cima da foto (as duas imagens têm o mesmo enquadramento).
    No computador, as medidas seguem o quadro de 1920 px (--s = 1 px do Figma). */
 @font-face { font-family: "IvyOra Text"; font-style: normal; font-weight: 400; font-display: swap; src: url("fontes/IvyOraText-Regular-latin.woff2") format("woff2"); }
 @font-face { font-family: "IvyOra Text"; font-style: italic; font-weight: 400; font-display: swap; src: url("fontes/IvyOraText-RegularItalic-latin.woff2") format("woff2"); }
@@ -75,16 +76,25 @@ h1 {
 .lead { max-width: 64ch; margin: calc(36 * var(--s)) auto 0; font-size: 13px; line-height: 1.75; text-transform: uppercase; text-wrap: balance; }
 .lead strong { font-weight: 700; color: var(--amarelo); }
 
+/* a fita vermelha de livro pendurada no alto da página (Figma: x 334, y -5, 129 de largura), presa ao quadro de 1920 no meio */
+.fita {
+  position: absolute; z-index: 4; top: calc(-5 * var(--s)); left: calc(50% - 626 * var(--s));
+  width: calc(129 * var(--s)); height: auto; pointer-events: none;
+}
+/* ao abrir, ela desce um pouco, como uma fita que cai do livro */
+.anima .fita.entra { transform: translate3d(0, -45%, 0); transition-duration: .8s, 1.1s; }
+.anima .fita.entra.visivel { transform: none; }
+
 /* ---------- a cena: a paisagem, o iPad com o vídeo e o selo da Pinha ---------- */
 .cena { position: relative; margin-top: calc(36 * var(--s)); height: calc(899 * var(--s)); }
-/* a paisagem começa 280 px abaixo do topo do iPad e desce por trás do cartão (que fica por cima dela) */
+/* a paisagem começa 182 px abaixo do topo do iPad e desce por trás do cartão (que fica por cima dela) */
 .paisagem {
   position: absolute; z-index: 1; overflow: hidden;
-  left: calc(42 * var(--s)); right: calc(42 * var(--s)); top: calc(280 * var(--s)); height: calc(1120 * var(--s));
+  left: calc(42 * var(--s)); right: calc(42 * var(--s)); top: calc(182 * var(--s)); height: calc(1218 * var(--s));
   border-radius: calc(83 * var(--s));
-  /* a foto da casa de pedra, enquadrada como no Figma: 2808 px de largura em x -540, y -448
-     (55,56% e 97,39% dão esses deslocamentos em 1920 e mantêm o enquadramento em telas mais largas) */
-  background: url("casa.webp") 55.56% 97.39% / max(calc(2808 * var(--s)), 100%) auto no-repeat, var(--verde);
+  /* a foto da casa de pedra, enquadrada como no Figma: 2928 px de largura em x -663, y -373
+     (60,71% e 86,74% dão esses deslocamentos em 1920 e mantêm o enquadramento em telas mais largas) */
+  background: url("casa.webp") 60.71% 86.74% / max(calc(2928 * var(--s)), 100%) auto no-repeat, var(--verde);
 }
 /* a tinta do mouse revela a aquarela por trás da foto, como no obrigado */
 .revela { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
@@ -119,30 +129,35 @@ h1 {
 .cartao {
   position: relative; z-index: 2;
   width: calc(1532 * var(--s)); margin: calc(-97 * var(--s)) auto calc(20 * var(--s));
-  padding: calc(180 * var(--s)) calc(127 * var(--s)) calc(136 * var(--s));
+  padding: calc(206 * var(--s)) calc(127 * var(--s)) calc(97 * var(--s));
   background: var(--creme); border: 1px solid var(--linha); border-radius: calc(54 * var(--s));
   scroll-margin-top: 20px;
 }
 .cartao-conteudo {
   display: grid; grid-template-columns: minmax(0, 584fr) minmax(0, 592fr); column-gap: calc(103 * var(--s));
-  align-items: start; will-change: transform;
+  will-change: transform;
 }
-.cartao-logo { width: auto; height: max(30px, calc(36 * var(--s))); }
-.cartao h2 { margin: calc(22 * var(--s)) 0 0; font: 400 clamp(2.1rem, calc(62 * var(--s)), 3.875rem)/1.06 var(--f-titulo); }
+/* à esquerda: a pinha, o título e a caixa dos bônus, que termina na mesma altura do botão (como no quadro) */
+.cartao-texto { display: flex; flex-direction: column; }
+.cartao-logo { align-self: flex-start; width: auto; height: max(32px, calc(45 * var(--s))); }
+.cartao h2 { margin: calc(29 * var(--s)) 0 calc(18 * var(--s)); font: 400 clamp(2.1rem, calc(62 * var(--s)), 3.875rem)/1.06 var(--f-titulo); }
 .bonus {
-  margin: calc(30 * var(--s)) 0 0; padding: calc(34 * var(--s)) calc(60 * var(--s));
-  border: 1.5px dashed var(--linha); border-radius: 22px; background: var(--fundo);
-  text-transform: uppercase; line-height: 1.75;
+  margin: auto 0 0; padding: max(16px, calc(23 * var(--s))) max(18px, calc(29 * var(--s)));
+  border: 1.5px dashed var(--linha); border-radius: 20px; background: var(--fundo);
+  text-transform: uppercase; line-height: 20px;
 }
-.bonus p { margin: 0; max-width: 440px; }
-.bonus p + p { margin-top: 14px; }
+.bonus ul { margin: 0; padding: 0; list-style: none; }
+.bonus li { display: grid; grid-template-columns: 18px minmax(0, 1fr); column-gap: 12px; align-items: start; }
+.bonus li + li { margin-top: 20px; }
+.bonus svg { width: 18px; height: 18px; margin-top: 1px; fill: var(--amarelo); }
+.bonus b { font-weight: 700; }
 .bonus strong { font-weight: 700; color: var(--amarelo); }
 
-.explica { margin: calc(76 * var(--s)) 0 0; text-transform: uppercase; }
+.explica { margin: 0; text-transform: uppercase; }
 .explica b { font-weight: 700; color: var(--amarelo); }
 .explica .verde { color: var(--verde); }
 .rotulo, label, legend { font: 700 var(--mono)/20px var(--f-mono); text-transform: uppercase; color: var(--amarelo); }
-form { margin-top: calc(30 * var(--s)); display: grid; gap: calc(30 * var(--s)); }
+form { margin-top: calc(46 * var(--s)); display: grid; gap: calc(46 * var(--s)); }
 .campo { display: grid; gap: 12px; }
 input[type="text"], input[type="email"] {
   width: 100%; height: 42px; padding: 0 20px;
@@ -183,7 +198,7 @@ legend { padding: 0; margin-bottom: 14px; }
 /* o botão azul do Studio Tchê, com o aro claro, pulsando devagar */
 .botao {
   appearance: none; cursor: pointer;
-  width: 100%; min-height: 80px; padding: 8px 24px; margin-top: calc(4 * var(--s));
+  width: 100%; min-height: 84px; padding: 8px 24px;
   border: 9px solid rgba(70, 100, 251, .5); border-radius: 999px;
   background: var(--azul) padding-box; color: #F6F5EF;
   font: 700 clamp(13px, 0.4vw + 7px, 15px)/1.25 var(--f-mono); text-transform: uppercase;
@@ -278,13 +293,14 @@ html.carregando .abertura { position: fixed; inset: 0; z-index: 1000; display: g
   h1 { font-size: clamp(2.1rem, 6.4vw, 3.4rem); }
   .lead { font-size: 12px; }
   .cena { height: auto; margin-top: 32px; padding-bottom: 96px; }
-  .paisagem { left: 12px; right: 12px; top: 26%; height: auto; bottom: 0; border-radius: 28px; }
+  .paisagem { left: 12px; right: 12px; top: 26%; height: auto; bottom: 0; border-radius: 28px; background-size: cover; }
+  .fita { left: 14px; top: -3px; width: 40px; }
   .ipad { position: relative; left: auto; margin: 0 auto; width: min(94vw, 760px); }
   .selo { left: -2%; top: 50%; width: clamp(84px, 24vw, 140px); }
   .cartao { width: auto; margin: -56px 12px 24px; padding: 36px 22px 32px; border-radius: 28px; }
   .cartao-conteudo { grid-template-columns: minmax(0, 1fr); row-gap: 8px; }
-  .cartao h2 { margin-top: 16px; }
-  .bonus { margin-top: 22px; padding: 22px 22px; }
+  .cartao h2 { margin: 16px 0 0; }
+  .bonus { margin-top: 22px; padding: 20px 18px; }
   .explica { margin-top: 30px; }
   form { margin-top: 22px; gap: 24px; }
   .pilulas { gap: 12px; }
@@ -545,6 +561,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
 </script>
 
 <main>
+<img class="fita entra" style="--atraso: .35s" src="fita.webp" alt="" width="258" height="329">
 <header class="topo">
   <div class="marca entra" style="--atraso: .05s">
         <svg class="logo" aria-hidden="true" focusable="false" viewBox="0 0 56 68" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -587,10 +604,13 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
 <path d="M27.9978 17.014C26.8735 19.8707 24.812 22.0399 21.8357 22.7886C19.7289 23.2896 16.838 23.1038 15.1194 21.6885C14.2643 20.9839 14.8869 19.9206 15.4294 19.1956C16.5274 17.7291 17.9518 16.5523 19.6396 15.8154C20.8999 15.2651 22.233 15.0944 23.6043 15.1627C24.4167 15.2034 25.1653 15.3176 25.9724 15.4208C26.0762 15.4339 26.2515 15.3978 26.3139 15.34C26.5963 15.0753 25.4175 11.3753 25.2172 10.7455C24.9867 10.0198 24.7719 9.33553 24.5959 8.60066C24.46 8.03193 24.8061 7.46846 25.3985 7.37455C26.7631 7.15849 29.5739 7.00219 30.8296 7.42249C31.2913 7.57682 31.5533 8.04704 31.4528 8.5271C31.307 9.22652 31.0877 9.87076 30.8572 10.5518C30.6358 11.2079 29.3769 14.9873 29.6494 15.3288C29.6987 15.3905 29.8813 15.4444 29.9712 15.4345L32.6395 15.1462C34.1362 14.9847 35.6027 15.1994 36.9555 15.8929C38.7773 16.8268 40.2319 18.3957 41.0141 20.2661C41.2748 20.8893 41.066 21.4495 40.5452 21.8008C39.5634 22.4622 38.4607 22.8017 37.2629 22.914C33.0112 23.3139 29.6317 20.9064 27.9978 17.014Z" fill="#FBF7ED"/>
 <path d="M36.3411 53.1382C34.8654 55.8531 31.6974 58.7893 29.1861 60.527C28.5451 60.9703 27.8247 61.0524 27.1371 60.6675C24.4051 59.1387 20.9698 56.5925 19.3037 53.8954C19.0292 53.3976 18.7763 52.9214 18.6995 52.331C20.56 51.962 22.345 51.4655 24.0485 50.6229C26.5296 51.9521 29.4107 51.9429 31.8911 50.6295C33.3898 51.3978 34.9226 51.9212 36.5782 52.3166C36.5513 52.6056 36.4528 52.8591 36.3398 53.1375L36.3411 53.1382Z" fill="#FBF7ED"/>
 </svg>
-      <h2 id="titulo-lista">A <em>Central</em> organiza a sua vida para você.</h2>
+      <h2 id="titulo-lista">Os <em>10 primeiros<br> usuários</em> recebem:</h2>
       <div class="bonus">
-        <p><strong>Os 10 primeiros usuários recebem:</strong></p>
-        <p>Novidades e correções da Central e suporte por e-mail, por 3 meses.</p>
+        <ul>
+          <li><svg aria-hidden="true" focusable="false" viewBox="0 0 22 22"><path fill-rule="evenodd" d="M11 0C4.925 0 0 4.925 0 11s4.925 11 11 11 11-4.925 11-11S17.075 0 11 0Zm4.768 9.14a1 1 0 1 0-1.536-1.28l-4.3 5.159-2.225-2.226a1 1 0 0 0-1.414 1.414l3 3a1 1 0 0 0 1.475-.067l5-6Z"/></svg><span><strong>Novidades</strong> e <strong>correções</strong> da Central (por 3 meses).</span></li>
+          <li><svg aria-hidden="true" focusable="false" viewBox="0 0 22 22"><path fill-rule="evenodd" d="M11 0C4.925 0 0 4.925 0 11s4.925 11 11 11 11-4.925 11-11S17.075 0 11 0Zm4.768 9.14a1 1 0 1 0-1.536-1.28l-4.3 5.159-2.225-2.226a1 1 0 0 0-1.414 1.414l3 3a1 1 0 0 0 1.475-.067l5-6Z"/></svg><span><strong>Suporte</strong> por <b>e-mail</b> (por 3 meses).</span></li>
+          <li><svg aria-hidden="true" focusable="false" viewBox="0 0 22 22"><path fill-rule="evenodd" d="M11 0C4.925 0 0 4.925 0 11s4.925 11 11 11 11-4.925 11-11S17.075 0 11 0Zm4.768 9.14a1 1 0 1 0-1.536-1.28l-4.3 5.159-2.225-2.226a1 1 0 0 0-1.414 1.414l3 3a1 1 0 0 0 1.475-.067l5-6Z"/></svg><span><strong>Vídeo aulas</strong> <b>mostrando como:</b> instalar a Central, usar a Central e configurar as APIs nas redes sociais na Central.</span></li>
+        </ul>
       </div>
     </div>
 
@@ -718,7 +738,7 @@ form.addEventListener("submit", async (evento) => {
   const cena = document.querySelector(".cena"), ipad = cena.querySelector(".ipad");
   const cartao = document.querySelector(".cartao"), sobe = cartao.querySelector(".cartao-conteudo");
   const pode = matchMedia("(min-width: 1081px) and (prefers-reduced-motion: no-preference)");
-  const SOBE = 200, FOLGA = 83;                           // em px do Figma (1920); 83 = o vão do quadro entre o iPad e o texto
+  const SOBE = 200, FOLGA = 109;                          // em px do Figma (1920); 109 = o vão do quadro entre o iPad e o texto
   let m = null, fila = false;
   const noTopo = (el) => { let y = 0; for (; el; el = el.offsetParent) y += el.offsetTop; return y; };
   function medir() {
@@ -766,16 +786,16 @@ form.addEventListener("submit", async (evento) => {
     W = paisagem.clientWidth; H = paisagem.clientHeight;
     tela.width = Math.ceil(W * ESC); tela.height = Math.ceil(H * ESC);
     if (!aquarela.naturalWidth) return;
-    // onde a foto está: o mesmo cálculo do CSS (2808 px do Figma ou a largura toda, posição 55,56% 97,39%)
+    // onde a foto está: o mesmo cálculo do CSS (2928 px do Figma ou a largura toda, posição 60,71% 86,74%;
+    // no celular e no tablet a foto cobre a caixa inteira)
     const iw = aquarela.naturalWidth, ih = aquarela.naturalHeight;   // a foto e a aquarela têm o mesmo tamanho de arquivo
     const s = Math.min(innerWidth, 1920) / 1920;
-    const fw = Math.max(2808 * s, W), fh = fw * ih / iw;
-    const PL = (W - fw) * .5556, PT = (H - fh) * .9739;
-    // a aquarela acompanha a foto como no quadro antigo (foto 2668 de largura; aquarela 78 px à direita, 13 abaixo,
-    // 2574 × 1449), porque assim a casa, as araucárias e a fumaça coincidem. No quadro de 18/11 a aquarela ficou
-    // escondida embaixo da foto num lugar que não coincide (x -667, y -333,5, 2862 de largura).
-    const k = fw / 2668;
-    capa = { dx: PL + 78 * k, dy: PT + 13 * k, dw: 2574 * k, dh: 1449 * k };
+    const fw = innerWidth > 1080 ? Math.max(2928 * s, W) : Math.max(W, H * iw / ih), fh = fw * ih / iw;
+    const PL = (W - fw) * .6071, PT = (H - fh) * .8674;
+    // a aquarela fica bem em cima da foto, como no quadro de 18/11 à noite (foto 2928 × 1648; aquarela 4 px à esquerda,
+    // 2 acima, 2935 × 1652): as duas imagens têm o mesmo enquadramento, então a casa e as araucárias coincidem
+    const k = fw / 2928;
+    capa = { dx: PL - 4 * k, dy: PT - 2 * k, dw: 2935 * k, dh: 1652 * k };
   }
   aquarela.onload = medir;
   let espera;
