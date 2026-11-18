@@ -65,15 +65,14 @@ body {
     background-position: calc(50% + 48 * var(--s)) calc(73.4 * var(--s));
   }
 }
-/* as quatro linhas tracejadas do quadro (x 96 e 1824, y 73,4 e 502), por trás de tudo: a de cima passa
-   pelo meio do logo, a de baixo por trás do iPad */
-.tracejados { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+/* as três linhas tracejadas do quadro (x 96 e 1824, y 502), por trás de tudo: a horizontal passa por trás
+   do iPad. A que passava pelo logo (y 73,4) ela tirou do quadro. */
+.tracejados { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; opacity: .5; } /* 50% como no quadro */
 .tracejados i { position: absolute; display: block; }
 .tr-v { top: 0; bottom: 0; width: 2px; background: repeating-linear-gradient(to bottom, var(--linha) 0 10px, transparent 10px 20px); }
 .tr-h { left: 0; right: 0; height: 2px; background: repeating-linear-gradient(to right, var(--linha) 0 10px, transparent 10px 20px); }
 .tr-esq { left: calc(50% - 864 * var(--s) - 1px); }
 .tr-dir { left: calc(50% + 864 * var(--s) - 1px); }
-.tr-cima { top: calc(73.4 * var(--s) - 1px); }
 .tr-baixo { top: calc(502 * var(--s) - 1px); }
 img, svg, video { display: block; }
 a { color: inherit; }
@@ -148,7 +147,7 @@ h1 {
 .cartao {
   position: relative; z-index: 2;
   width: calc(1532 * var(--s)); margin: calc(-97 * var(--s)) auto calc(20 * var(--s));
-  padding: calc(168 * var(--s)) calc(127 * var(--s)) calc(136 * var(--s));
+  padding: calc(168 * var(--s)) calc(127 * var(--s)) calc(97 * var(--s)); /* embaixo, 50 px entre o conteúdo e o recorte do rodapé (no quadro são 89, ela achou vazio) */
   background: var(--creme); border: 1px solid var(--linha); border-radius: calc(54 * var(--s));
   scroll-margin-top: 20px;
 }
@@ -582,7 +581,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
 })();
 </script>
 
-<div class="tracejados" aria-hidden="true"><i class="tr-v tr-esq"></i><i class="tr-v tr-dir"></i><i class="tr-h tr-cima"></i><i class="tr-h tr-baixo"></i></div>
+<div class="tracejados" aria-hidden="true"><i class="tr-v tr-esq"></i><i class="tr-v tr-dir"></i><i class="tr-h tr-baixo"></i></div>
 <main>
 <img class="fita entra" style="--atraso: .35s" src="fita.webp" alt="" width="258" height="329">
 <header class="topo">
