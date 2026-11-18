@@ -96,6 +96,12 @@ h1 {
 .selo img { position: absolute; }
 .selo-anel { inset: 0; width: 100%; height: 100%; }
 .selo-pinha { left: 25.2%; top: 24.8%; width: 57%; height: auto; }
+/* a escrita em volta da Pinha gira devagar, em volta do centro do círculo (83,3 × 85,3 no selo.svg de 160 × 162);
+   o círculo gira junto, mas como é redondo parece parado. Quem pediu menos movimento vê parado. */
+@media (prefers-reduced-motion: no-preference) {
+  .selo-anel { transform-origin: 52.09% 52.67%; animation: selo-gira 28s linear infinite; }
+}
+@keyframes selo-gira { to { transform: rotate(360deg); } }
 
 /* ---------- o cartão do formulário, logo abaixo do iPad (o iPad fica por cima da borda de cima do cartão) ---------- */
 .cartao {
