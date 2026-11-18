@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>CentralPinhal · lista de espera</title>
-<meta name="description" content="Tarefas, hábitos, finanças, agenda, clientes e as suas redes num app para Mac, com a Pinha, a IA da Central. R$ 47 para as 5 primeiras pessoas, pagamento único. Entre na lista de espera.">
+<meta name="description" content="Tarefas, hábitos, finanças, agenda, ideias, clientes e as suas redes num app para Mac, com a Pinha, a IA da Central. Entre na lista de espera: os 10 primeiros usuários ganham 3 meses de novidades e suporte.">
 <meta property="og:title" content="CentralPinhal · lista de espera">
 <meta property="og:description" content="Mais tempo para focar no que você faz de melhor. Um app para Mac, com a Pinha, a IA da Central.">
 <meta name="theme-color" content="#FAF7ED">
@@ -13,55 +13,39 @@
 <link rel="preload" href="fontes/IvyOraText-Regular-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fontes/SpaceMono-Regular-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="casa.webp" as="image" type="image/webp">
+
 <style>
-/* Montada a partir do quadro "Página de Captura - CentralPinhal" do Figma (arquivo Studio Tchê, 2413-405).
-   Fontes: IvyOra Text Regular nos títulos e Space Mono no resto, como no Figma. */
+/* Montada a partir do quadro "Página de Captura - CentralPinhal" do Figma (arquivo Studio Tchê, 2413-405),
+   na versão de 18/11/2026: título no centro, o iPad com o vídeo da Central sobre a paisagem e o cartão do formulário.
+   No computador, as medidas seguem o quadro de 1920 px (--s = 1 px do Figma). */
 @font-face { font-family: "IvyOra Text"; font-style: normal; font-weight: 400; font-display: swap; src: url("fontes/IvyOraText-Regular-latin.woff2") format("woff2"); }
 @font-face { font-family: "IvyOra Text"; font-style: italic; font-weight: 400; font-display: swap; src: url("fontes/IvyOraText-RegularItalic-latin.woff2") format("woff2"); }
 @font-face { font-family: "Space Mono"; font-style: normal; font-weight: 400; font-display: swap; src: url("fontes/SpaceMono-Regular-latin.woff2") format("woff2"); }
 @font-face { font-family: "Space Mono"; font-style: normal; font-weight: 700; font-display: swap; src: url("fontes/SpaceMono-Bold-latin.woff2") format("woff2"); }
 
 :root {
-  --branco: #FAF7ED;        /* fora da moldura (creme, como no Figma) */
-  --fundo: #F1EBDD;         /* moldura e campos */
-  --cartao: #FAF7ED;        /* cartões */
-  --linha: #BEB084;         /* bordas finas */
-  --grade: rgba(190, 176, 132, .15); /* a grade da moldura */
+  --fundo: #F1EBDD;         /* o fundo da página, com a grade */
+  --creme: #FAF7ED;         /* o cartão do formulário */
+  --linha: #BEB084;         /* bordas finas e tracejados */
+  --grade: rgba(190, 176, 132, .15);
   --tinta: #3E2C0F;         /* marrom: só nos textos */
   --verde: #3F5633;
-  --verde-preco: #54A32B;
-  --creme: #FAF7ED;
   --amarelo: #D68732;
   --telha: #A44919;
   --azul: #4664FB;
-
   --f-titulo: "IvyOra Text", "Iowan Old Style", Palatino, Georgia, serif;
   --f-mono: "Space Mono", ui-monospace, "SF Mono", Menlo, monospace;
-  --t-titulo: clamp(2rem, 0.9rem + 1.9vw, 2.875rem); /* o mesmo tamanho nos dois títulos (o da esquerda e o do cartão) */
-  --mono: 12px; /* menor que os 15px do Figma, a pedido da Ana (referência: oratry.com.br/studio/comprar) */
+  --mono: 12px;
+  --s: calc(min(100vw, 1920px) / 1920);
   color-scheme: only light;
 }
-
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html { -webkit-text-size-adjust: 100%; }
 body {
-  margin: 0;
-  background: var(--branco);
+  margin: 0; overflow-x: hidden;
   color: var(--tinta);
   font: 400 var(--mono)/1.667 var(--f-mono);
-}
-img, svg { display: block; }
-a { color: inherit; }
-:focus-visible { outline: 2px solid var(--amarelo); outline-offset: 3px; }
-
-/* ---------- a moldura com a grade ---------- */
-.moldura {
-  position: relative;
-  margin: clamp(10px, 2.1vw, 40px) clamp(10px, 2.24vw, 43px);
-  padding: 32px 0 64px; /* menos espaço no topo, a pedido da Ana */
-  border: 1px solid var(--linha);
-  border-radius: 80px / 85px;
   background-color: var(--fundo);
   background-image:
     linear-gradient(to right, var(--grade) 1px, transparent 1px),
@@ -69,167 +53,109 @@ a { color: inherit; }
   background-size: 84px 85.75px;
   background-position: 75px 80px;
 }
+img, svg, video { display: block; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--amarelo); outline-offset: 3px; }
+em { font-style: italic; color: var(--amarelo); }
 
-.palco {
-  width: min(1388px, 100% - 220px); /* sobra espaço do lado para o selo da Pinha */
-  margin-inline: auto;
-  display: grid;
-  grid-template-columns: minmax(0, 674fr) minmax(0, 679fr);
-  /* seção 1: o título e o vídeo ficam centralizados na altura do cartão */
-  grid-template-areas: ". cartao" "texto cartao" "video cartao" ". cartao";
-  grid-template-rows: 1fr auto auto 1fr;
-  column-gap: 35px;
-  align-items: start;
-}
-/* seção 2: título, a lista com ✓ e as aulas; o rodapé fica no recorte de baixo desta moldura */
-.moldura--2 { padding: 64px 0 116px; }
-.palco--2 {
-  grid-template-areas: "titulo2 titulo2" "ganhos aulas";
-  grid-template-rows: auto auto;
-  row-gap: 40px;
-}
-.titulo-secao { grid-area: titulo2; margin: 0; font: 400 var(--t-titulo)/1.067 var(--f-titulo); text-wrap: balance; }
-.titulo-secao em { font-style: italic; color: var(--amarelo); }
-.palco--2 .ganhos, .palco--2 .aulas-bloco { margin-top: 0; }
-
-/* ---------- coluna da esquerda ---------- */
-.texto { grid-area: texto; padding-top: 29px; min-width: 0; }
+/* ---------- topo: logo, título e o texto, no centro ---------- */
+.topo { padding: calc(64 * var(--s)) 24px 0; text-align: center; }
 .marca {
-  display: flex; align-items: center; gap: 14px;
-  font: 400 clamp(1.75rem, 1rem + 1vw, 2.125rem)/1 var(--f-titulo);
-  color: var(--tinta);
+  display: inline-flex; align-items: center; gap: 12px;
+  font: 400 max(26px, calc(34 * var(--s)))/1 var(--f-titulo);
 }
-.marca svg { width: auto; height: clamp(40px, 2.5vw, 48px); flex: none; }
-.marca em, h1 em { font-style: italic; color: var(--amarelo); }
+.marca svg { width: auto; height: max(34px, calc(42 * var(--s))); }
 h1 {
-  margin: 26px 0 0;
-  font: 400 var(--t-titulo)/1.067 var(--f-titulo);
+  margin: calc(26 * var(--s)) auto 0;
+  font: 400 clamp(2.4rem, calc(70 * var(--s)), 4.375rem)/1.02 var(--f-titulo);
   text-wrap: balance;
 }
-.lead { margin: 24px 0 0; text-transform: uppercase; }
-.lead strong { font-weight: 700; }
+.lead { max-width: 64ch; margin: calc(30 * var(--s)) auto 0; font-size: 13px; line-height: 1.75; text-transform: uppercase; text-wrap: balance; }
+.lead strong { font-weight: 700; color: var(--amarelo); }
 
-/* o vídeo num cartão, com outro cartão atrás e o selo da Pinha no canto */
-.video { grid-area: video; position: relative; margin: 27px 0 0; padding: 20px 20px 0 0; min-width: 0; }
-.video::before {
-  content: ""; position: absolute; top: 0; right: 0; bottom: 20px; left: 20px;
-  background: var(--cartao); border: 1px solid var(--linha); border-radius: 30px;
+/* ---------- a cena: a paisagem, o iPad com o vídeo e o selo da Pinha ---------- */
+.cena { position: relative; margin-top: calc(40 * var(--s)); height: calc(1349 * var(--s)); }
+.paisagem {
+  position: absolute; z-index: 1; overflow: hidden;
+  left: calc(42 * var(--s)); right: calc(42 * var(--s)); top: calc(228 * var(--s)); height: calc(1121 * var(--s));
+  border-radius: calc(60 * var(--s));
+  /* a foto da casa de pedra, enquadrada como no Figma */
+  background: url("casa.webp") 79% 58% / 142% auto no-repeat, var(--verde);
 }
-.video video {
-  position: relative; display: block;
-  width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover;
-  background: var(--cartao); border: 1px solid var(--linha); border-radius: 20px;
+/* a tinta do mouse revela a aquarela por trás da foto, como no obrigado */
+.revela { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.ipad {
+  position: absolute; z-index: 3; left: 50%; top: 0;
+  width: calc(1242 * var(--s)); margin-left: calc(-621 * var(--s));
+  will-change: transform;
 }
-/* o selo fica mais para fora do vídeo, só encostando na borda dele */
-.selo { position: absolute; left: -97px; bottom: -7px; width: 140px; height: 142px; pointer-events: none; }
+.ipad-moldura { position: relative; z-index: 1; width: 100%; height: auto; pointer-events: none; }
+/* o vídeo fica atrás da moldura, no lugar da tela */
+.ipad video {
+  position: absolute; z-index: 0; left: 5.43%; top: 13.44%; width: 89.18%; height: 79.39%;
+  object-fit: cover; border-radius: 1.64% / 2.56%; background: var(--creme);
+}
+.selo { position: absolute; z-index: 4; left: calc(240 * var(--s)); top: calc(500 * var(--s)); width: calc(200 * var(--s)); height: calc(202 * var(--s)); pointer-events: none; }
 .selo img { position: absolute; }
 .selo-anel { inset: 0; width: 100%; height: 100%; }
 .selo-pinha { left: 25.2%; top: 24.8%; width: 57%; height: auto; }
 
-.ganhos {
-  grid-area: ganhos; list-style: none; margin: 32px 0 0; padding: 0; min-width: 0;
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(4, auto);
-  grid-auto-flow: column; gap: 22px 23px;
-  text-transform: uppercase;
-}
-.ganhos li { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 11px; align-items: center; }
-.ganhos li::before {
-  content: ""; width: 32px; height: 32px;
-  background: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E %3Cpath d='M16 0C7.16364 0 0 7.16364 0 16C0 24.8364 7.16364 32 16 32C24.8364 32 32 24.8364 32 16C32 7.16364 24.8364 0 16 0ZM22.9353 13.2945C23.063 13.1486 23.1602 12.9785 23.2212 12.7944C23.2822 12.6103 23.3058 12.4159 23.2906 12.2225C23.2753 12.0292 23.2216 11.8408 23.1325 11.6686C23.0434 11.4963 22.9207 11.3436 22.7717 11.2194C22.6227 11.0952 22.4504 11.0021 22.2649 10.9455C22.0794 10.889 21.8844 10.8701 21.6915 10.8899C21.4985 10.9098 21.3115 10.9681 21.1414 11.0613C20.9714 11.1545 20.8216 11.2808 20.7011 11.4327L14.4465 18.9367L11.2102 15.6989C10.9359 15.434 10.5684 15.2873 10.1871 15.2907C9.80568 15.294 9.44086 15.4469 9.17117 15.7166C8.90149 15.9863 8.74852 16.3511 8.7452 16.7325C8.74189 17.1139 8.8885 17.4813 9.15345 17.7556L13.5171 22.1193C13.66 22.2621 13.8311 22.3736 14.0195 22.4466C14.2079 22.5197 14.4095 22.5527 14.6113 22.5435C14.8131 22.5343 15.0109 22.4832 15.1919 22.3934C15.3729 22.3036 15.5332 22.177 15.6625 22.0218L22.9353 13.2945Z' fill-rule='evenodd' clip-rule='evenodd' fill='%23D68732'/%3E %3C/svg%3E") center / contain no-repeat;
-}
-
-/* ---------- cartão da lista ---------- */
+/* ---------- o cartão do formulário, por cima da paisagem (o iPad passa por cima dele ao rolar) ---------- */
 .cartao {
-  grid-area: cartao; min-width: 0;
-  background: var(--cartao); border: 1px solid var(--linha); border-radius: 50px;
-  padding: 43px 42px;
+  position: relative; z-index: 2;
+  width: calc(1532 * var(--s)); margin: calc(-349 * var(--s)) auto calc(36 * var(--s));
+  padding: calc(138 * var(--s)) calc(127 * var(--s)) calc(136 * var(--s));
+  background: var(--creme); border: 1px solid var(--linha); border-radius: calc(54 * var(--s));
   scroll-margin-top: 20px;
 }
-/* o título do cartão, no mesmo tamanho do título da esquerda, com o preço das primeiras pessoas como no Figma
-   ("Entre antes de todo" / "mundo R$ 47,00" e a nota ao lado do preço) */
-.cartao h2 { margin: 0; font: 400 var(--t-titulo)/1.067 var(--f-titulo); }
-.preco {
-  font-style: italic; color: var(--verde-preco); white-space: nowrap;
-  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.1em;
+.cartao-conteudo {
+  display: grid; grid-template-columns: minmax(0, 584fr) minmax(0, 592fr); column-gap: calc(102 * var(--s));
+  align-items: start; will-change: transform;
 }
-.preco-nota {
-  display: inline-block; vertical-align: baseline; width: 150px; margin-left: 14px;
-  font: 700 12px/14px var(--f-mono); text-transform: uppercase;
-}
-.preco-nota span { color: var(--amarelo); }
-.explica { margin: 20px 0 0; text-transform: uppercase; }
-
-.rotulo, label, legend {
-  font: 700 var(--mono)/20px var(--f-mono); text-transform: uppercase; color: var(--amarelo);
-}
-.opcional { font-weight: 400; color: var(--tinta); }
-.bonus-rotulo { margin: 24px 0 0; }
-/* aulas e material de apoio que vêm com a Central (na coluna da esquerda, depois da lista) */
-/* o título do bloco usa a fonte dos títulos, menor que os principais */
-.aulas-titulo { margin: 0; font: 400 clamp(1.5rem, 1rem + 0.7vw, 1.875rem)/1.1 var(--f-titulo); color: var(--tinta); }
-.aulas-titulo em { font-style: italic; color: var(--amarelo); }
-.aulas-bloco { grid-area: aulas; margin: 40px 0 0; min-width: 0; }
-.aulas {
-  list-style: none; margin: 14px 0 0; padding: 16px 20px;
-  display: grid; gap: 10px;
-  background: var(--cartao); border: 1px solid var(--linha); border-radius: 24px; /* o mesmo creme do cartão do formulário */
-  text-transform: uppercase; line-height: 1.5;
-}
-.aulas li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: center; }
-.aulas li::before {
-  content: ""; width: 22px; height: 22px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='12' fill='%23D68732'/%3E%3Cpath d='M10 8.2v7.6l6-3.8z' fill='%23FAF7ED'/%3E%3C/svg%3E") center / contain no-repeat;
-}
+.cartao-logo { width: auto; height: max(30px, calc(36 * var(--s))); }
+.cartao h2 { margin: calc(22 * var(--s)) 0 0; font: 400 clamp(2.1rem, calc(62 * var(--s)), 3.875rem)/1.06 var(--f-titulo); }
 .bonus {
-  margin: 12px 0 0; padding: 10px 28px 10px 16px;
-  display: grid; grid-template-columns: 60px minmax(0, 1fr); gap: 14px; align-items: center;
-  background: var(--verde); color: var(--creme); border-radius: 50px;
-  font: 400 11px/18px var(--f-mono); text-transform: uppercase;
+  margin: calc(30 * var(--s)) 0 0; padding: calc(34 * var(--s)) calc(60 * var(--s));
+  border: 1.5px dashed var(--linha); border-radius: 22px; background: var(--fundo);
+  text-transform: uppercase; line-height: 1.75;
 }
-.bonus svg { width: 60px; height: 60px; }
-.bonus p { margin: 0; }
-.bonus strong { display: block; font-weight: 700; }
+.bonus p { margin: 0; max-width: 440px; }
+.bonus p + p { margin-top: 14px; }
+.bonus strong { font-weight: 700; color: var(--amarelo); }
 
-form { margin-top: 27px; display: grid; gap: 26px; }
+.explica { margin: calc(76 * var(--s)) 0 0; text-transform: uppercase; }
+.explica b { font-weight: 700; color: var(--amarelo); }
+.explica .verde { color: var(--verde); }
+.rotulo, label, legend { font: 700 var(--mono)/20px var(--f-mono); text-transform: uppercase; color: var(--amarelo); }
+form { margin-top: calc(30 * var(--s)); display: grid; gap: calc(30 * var(--s)); }
 .campo { display: grid; gap: 12px; }
-input[type="text"], input[type="email"], input[type="tel"] {
-  width: 100%; height: 41px; padding: 0 20px;
+input[type="text"], input[type="email"] {
+  width: 100%; height: 42px; padding: 0 20px;
   font: 400 13px var(--f-mono); color: var(--tinta);
-  background: var(--fundo); border: 1px solid var(--linha); border-radius: 999px;
+  background: var(--fundo); border: 1.5px dashed var(--linha); border-radius: 999px;
   transition: border-color .15s;
 }
 input::placeholder { color: var(--linha); opacity: 1; font-size: 10px; text-transform: uppercase; }
-input:focus { outline: none; border-color: var(--amarelo); box-shadow: 0 0 0 3px rgba(214, 135, 50, .22); }
+input:focus { outline: none; border-style: solid; border-color: var(--amarelo); }
 fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
-legend { padding: 0; margin-bottom: 18px; }
-.legenda-dupla { margin-bottom: 15px; }
-
-/* opções em pílula (rádio e caixinhas) */
-.pilulas { display: flex; flex-wrap: wrap; gap: 18px 12px; }
-.pilula { position: relative; flex: 1 1 auto; }
-.pilulas--fixas .pilula { flex: 0 0 94px; }
+legend { padding: 0; margin-bottom: 14px; }
+.pilulas { display: grid; grid-template-columns: 1fr 1fr; gap: calc(44 * var(--s)); }
+.pilula { position: relative; }
 .pilula input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
 .pilula > span {
   display: flex; align-items: center; justify-content: center;
-  height: 41px; padding: 0 14px;
-  border: 1px solid var(--linha); border-radius: 999px; background: var(--fundo);
+  height: 42px; padding: 0 14px;
+  border: 1.5px dashed var(--linha); border-radius: 999px; background: var(--fundo);
   font: 700 10px/1 var(--f-mono); text-transform: uppercase; color: var(--tinta);
-  position: relative; white-space: nowrap; cursor: pointer; user-select: none;
+  white-space: nowrap; cursor: pointer; user-select: none;
   transition: background-color .15s, border-color .15s, color .15s;
 }
 .pilula:hover > span { border-color: var(--amarelo); }
-.pilula input:checked + span { background: var(--verde); border-color: var(--verde); color: var(--creme); }
-/* cada opção tem um emoji antes do texto (os do iOS nos aparelhos da Apple);
-   ao escolher, o ✓ entra no lugar do emoji (a largura não muda) */
-.emoji {
-  flex: none; width: 16px; margin-right: 7px; text-align: center;
-  font: 14px/1 "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
-}
-.pilula input:checked + span .emoji { display: none; }
-/* ao passar o mouse na opção, o emoji cresce um pouquinho (bem sutil) */
-.emoji { transition: transform .3s ease; }
+.pilula input:checked + span { background: var(--verde); border: 1.5px solid var(--verde); color: var(--creme); }
+/* cada opção tem um emoji antes do texto; ao escolher, o ✓ entra no lugar dele */
+.emoji { flex: none; width: 16px; margin-right: 7px; text-align: center; font: 14px/1 "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; transition: transform .3s ease; }
 .pilula:hover .emoji, .pilula input:focus-visible + span .emoji { transform: scale(1.15); }
-@media (prefers-reduced-motion: reduce) { .emoji { transition: none; } .pilula:hover .emoji { transform: none; } }
+.pilula input:checked + span .emoji { display: none; }
 .pilula input:checked + span::before {
   content: "✓"; flex: none; width: 16px; margin-right: 7px; text-align: center;
   font: 700 12px/1 var(--f-mono); color: var(--creme);
@@ -237,25 +163,22 @@ legend { padding: 0; margin-bottom: 18px; }
 }
 @keyframes marcar { from { transform: scale(0); opacity: 0; } to { transform: none; opacity: 1; } }
 .pilula input:focus-visible + span { outline: 2px solid var(--amarelo); outline-offset: 2px; }
-
 .armadilha { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 
 /* o botão azul do Studio Tchê, com o aro claro, pulsando devagar */
 .botao {
   appearance: none; cursor: pointer;
-  width: 100%; min-height: 72px; padding: 8px 24px;
+  width: 100%; min-height: 80px; padding: 8px 24px; margin-top: calc(4 * var(--s));
   border: 9px solid rgba(70, 100, 251, .5); border-radius: 999px;
   background: var(--azul) padding-box; color: #F6F5EF;
   font: 700 clamp(13px, 0.4vw + 7px, 15px)/1.25 var(--f-mono); text-transform: uppercase;
   display: inline-flex; align-items: center; justify-content: center; text-align: center;
-  position: relative;
-  transition: background-color .18s;
+  position: relative; transition: background-color .18s;
   animation: pulsar 2.4s ease-in-out infinite;
 }
 .botao::after {
   content: ""; position: absolute; inset: -9px; border-radius: inherit;
-  border: 2px solid var(--azul); pointer-events: none;
-  opacity: 0; animation: onda 2.4s ease-out infinite;
+  border: 2px solid var(--azul); pointer-events: none; opacity: 0; animation: onda 2.4s ease-out infinite;
 }
 @keyframes pulsar { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
 @keyframes onda { 0% { opacity: .6; transform: scale(1); } 100% { opacity: 0; transform: scale(1.06, 1.45); } }
@@ -264,36 +187,23 @@ legend { padding: 0; margin-bottom: 18px; }
 .botao:focus-visible { outline: 3px solid var(--amarelo); outline-offset: 4px; }
 .botao:disabled { opacity: .6; cursor: progress; }
 .botao:disabled, .botao:disabled::after { animation: none; }
-@media (prefers-reduced-motion: reduce) { .botao, .botao::after { animation: none; } }
-/* o texto rola para cima ao passar o mouse, como no site do Studio Tchê */
 .rolo { position: relative; display: inline-flex; flex-direction: column; overflow: hidden; }
 .rolo-texto { display: block; transition: transform .42s cubic-bezier(.22, 1, .36, 1); }
 .rolo-texto--copia { position: absolute; inset: 0; transform: translateY(100%); }
 .botao:hover .rolo-texto { transform: translateY(-100%); }
 .botao:hover .rolo-texto--copia { transform: translateY(0); }
+.aviso { margin: 0; padding: 10px 16px; border: 1px solid var(--telha); border-radius: 20px; color: var(--telha); font-size: 12px; line-height: 1.5; }
 
-.aviso {
-  margin: 0; padding: 10px 16px;
-  border: 1px solid var(--telha); border-radius: 20px;
-  color: var(--telha); font-size: 12px; line-height: 1.5;
-}
-.letras-miudas { margin-top: 27px; font: 400 10px/14px var(--f-mono); text-transform: uppercase; }
-.letras-miudas p { margin: 0; }
-.letras-miudas p + p { margin-top: 14px; }
-.letras-miudas b { font-weight: 700; color: var(--amarelo); }
-
-/* ---------- rodapé no recorte de baixo da moldura ---------- */
+/* ---------- rodapé no recorte de baixo do cartão ---------- */
 .rodape {
   position: absolute; left: 50%; bottom: -1px; transform: translateX(-50%);
-  width: min(1092px, 100% - 160px); height: 47px;
-  display: flex;
+  width: min(1092px, 100% - 160px); height: 47px; display: flex;
 }
 .rodape-curva { flex: none; height: 47px; }
+.rodape-curva path:first-child { fill: var(--fundo); }
 .rodape-meio {
-  flex: 1; min-width: 0;
-  display: flex; align-items: center; justify-content: center; gap: 20px;
-  padding-top: 14px;
-  background: var(--branco); border-top: 1px solid var(--linha);
+  flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 20px;
+  padding-top: 14px; background: var(--fundo); border-top: 1px solid var(--linha);
   font: 400 10px/14px var(--f-mono); text-transform: uppercase; white-space: nowrap;
 }
 .rodape-meio p { margin: 0; }
@@ -303,6 +213,13 @@ legend { padding: 0; margin-bottom: 18px; }
 .rodape-links { display: flex; gap: 20px; }
 .rodape-logo img { width: 73px; height: 24px; }
 
+/* entradas suaves ao abrir (só para quem não pediu menos movimento) */
+.anima .entra { opacity: 0; transform: translate3d(0, 18px, 0); transition: opacity .8s ease var(--atraso, 0s), transform .9s cubic-bezier(.22, 1, .36, 1) var(--atraso, 0s); }
+.anima .entra.visivel { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .emoji { transition: none; } .pilula:hover .emoji { transform: none; }
+  .botao, .botao::after { animation: none; }
+}
 /* ---------- abertura (quadro "Página Loading" do Figma): fundo creme com a sombra de folhas e a grade;
    a pinha se monta dentro do selo; na saída, a tinta verde sai do selo, se espalha e se abre na página ---------- */
 .abertura { display: none; }
@@ -342,44 +259,25 @@ html.carregando .abertura { position: fixed; inset: 0; z-index: 1000; display: g
 
 /* ---------- tablet e celular: uma coluna ---------- */
 @media (max-width: 1080px) {
-  .moldura { padding: 32px 0 40px; border-radius: 40px; }
-  .palco {
-    width: min(680px, 100% - 40px);
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "texto" "cartao" "video";
-    grid-template-rows: auto;
-  }
-  .palco--2 { grid-template-areas: "titulo2" "ganhos" "aulas"; row-gap: 32px; }
-  .moldura--2 { padding-top: 40px; }
-  .texto { padding-top: 0; }
-  h1 { margin-top: 24px; }
-  .lead { margin-top: 24px; }
-  .cartao { margin-top: 32px; border-radius: 36px; padding: 32px 24px; }
-  .video { margin-top: 40px; }
-  .selo { left: -20px; }
-  .moldura--2 { padding-bottom: 0; }
-  .rodape { position: static; transform: none; width: auto; height: auto; margin: 40px auto 0; }
+  .topo { padding: 40px 20px 0; }
+  h1 { font-size: clamp(2.1rem, 6.4vw, 3.4rem); }
+  .lead { font-size: 12px; }
+  .cena { height: auto; margin-top: 32px; padding-bottom: 96px; }
+  .ipad { position: relative; left: auto; margin: 0 auto; width: min(94vw, 760px); }
+  .paisagem { left: 12px; right: 12px; top: 26%; height: auto; bottom: 0; border-radius: 28px; }
+  .selo { left: 3vw; top: auto; bottom: 40px; width: clamp(96px, 22vw, 150px); height: auto; aspect-ratio: 160 / 162; }
+  .cartao { width: auto; margin: -56px 12px 24px; padding: 36px 22px 32px; border-radius: 28px; }
+  .cartao-conteudo { grid-template-columns: minmax(0, 1fr); row-gap: 8px; }
+  .cartao h2 { margin-top: 16px; }
+  .bonus { margin-top: 22px; padding: 22px 22px; }
+  .explica { margin-top: 30px; }
+  form { margin-top: 22px; gap: 24px; }
+  .pilulas { gap: 12px; }
+  .rodape { position: static; transform: none; width: auto; height: auto; margin: 28px auto 0; }
   .rodape-curva { display: none; }
-  .rodape-meio {
-    flex-wrap: wrap; gap: 8px 16px; padding: 4px 20px 28px;
-    background: none; border: 0; white-space: normal; text-align: center;
-  }
-}
-@media (max-width: 600px) {
-  .moldura { border-radius: 28px; padding: 24px 0 32px; }
-  .palco { width: calc(100% - 32px); }
-  .marca { gap: 14px; }
-  .preco-nota { display: block; width: auto; margin: 10px 0 0; }
-  .so-computador { display: none; }
-  .cartao { border-radius: 28px; padding: 26px 18px; }
-  .bonus { border-radius: 28px; padding: 12px 18px 12px 12px; grid-template-columns: 48px minmax(0, 1fr); gap: 12px; }
-  .bonus svg { width: 48px; height: 48px; }
-  .pilula > span { padding: 0 12px; }
-  input[type="text"], input[type="email"], input[type="tel"] { font-size: 16px; } /* sem zoom no iPhone */
+  .rodape-meio { flex-wrap: wrap; gap: 8px 16px; padding: 0; background: none; border: 0; white-space: normal; text-align: center; }
+  input[type="text"], input[type="email"] { font-size: 16px; } /* sem zoom no iPhone */
   input::placeholder { font-size: 11px; }
-  .selo { left: -12px; bottom: -14px; width: 112px; height: 113px; }
-  .ganhos { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; grid-auto-flow: row; gap: 18px; }
-  .moldura--2 { padding: 32px 0 0; }
 }
 </style>
 <script>
@@ -632,10 +530,8 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
 </script>
 
 <main>
-<div class="moldura">
-  <div class="palco">
-    <section class="texto" aria-labelledby="titulo">
-      <div class="marca entra" style="--atraso: .05s">
+<header class="topo">
+  <div class="marca entra" style="--atraso: .05s">
         <svg class="logo" aria-hidden="true" focusable="false" viewBox="0 0 56 68" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M38.5858 65.199C34.1772 67.5008 29.9013 68.3421 24.9338 67.8764C21.7402 67.577 18.689 66.6293 15.8822 65.0768C12.2945 63.0922 9.19278 60.376 6.6611 57.158C4.84 54.8437 3.43855 52.2904 2.34641 49.5604C1.12622 46.5099 0.390028 43.3714 0.129308 40.0923C-0.131412 36.8133 0.0137245 33.8797 0.460298 30.7721C1.34556 24.6179 3.34529 18.5609 6.62301 13.2789C8.77707 9.80745 11.5708 6.61576 14.945 4.3054C18.6128 1.79211 22.7528 0.182477 27.2449 0.017639C29.7798 -0.0749593 32.2517 0.191015 34.6626 0.95807C37.0734 1.72513 39.1973 2.80872 41.218 4.26206C45.1452 7.08598 48.2299 10.8589 50.4457 15.1486C53.2604 20.5968 54.8956 26.4837 55.3993 32.5958C55.7073 36.3365 55.5281 40.1029 54.7505 43.7792C54.2606 46.0955 53.5001 48.2699 52.5189 50.4102C51.3972 52.8578 49.9873 55.0736 48.285 57.1501C45.6233 60.3963 42.3095 63.2551 38.5865 65.199H38.5858ZM28.0224 17.0754C29.657 20.9678 33.0359 23.3754 37.2875 22.9755C38.4854 22.8625 39.5887 22.5236 40.5698 21.8623C41.0906 21.511 41.2994 20.9514 41.0387 20.3275C40.2566 18.4572 38.8019 16.8889 36.9802 15.9544C35.6266 15.2602 34.1608 15.0455 32.6642 15.2077L29.9959 15.496C29.9059 15.5059 29.7227 15.4513 29.6741 15.3903C29.4015 15.0494 30.6605 11.2693 30.8818 10.6133C31.1117 9.93223 31.331 9.28798 31.4774 8.58856C31.5779 8.1085 31.3159 7.63828 30.8542 7.48395C29.5986 7.06365 26.7878 7.21995 25.4231 7.43601C24.8307 7.52992 24.4846 8.09274 24.6206 8.66212C24.7966 9.39765 25.0113 10.082 25.2418 10.807C25.4421 11.4368 26.621 15.1368 26.3386 15.4014C26.2768 15.4592 26.1015 15.4953 25.9971 15.4822C25.19 15.3791 24.4419 15.2648 23.6289 15.2241C22.2577 15.1558 20.9245 15.3266 19.6643 15.8769C17.9771 16.6138 16.552 17.7899 15.454 19.2571C14.9115 19.9821 14.289 21.0453 15.144 21.75C16.8627 23.1652 19.7529 23.3511 21.8604 22.85C24.8373 22.1014 26.8988 19.9322 28.0224 17.0754ZM40.2638 32.0987C42.0671 32.1657 44.3769 31.8018 45.7304 30.7025C46.1395 30.3702 46.3208 29.8684 46.2091 29.3477C45.7888 27.39 43.8121 24.6816 42.0002 23.6729C40.2999 24.7355 38.444 25.3187 36.4344 25.3791C33.3452 25.4658 30.497 24.656 28.0677 22.6386C24.0801 25.7895 18.205 26.6196 13.8365 23.6821C12.2413 24.9942 10.1326 27.3026 9.56514 29.2708C9.19343 30.5882 10.6192 31.2587 11.6325 31.6127C12.6537 31.9693 13.6749 32.0691 14.7612 32.1085C20.2146 32.3069 25.4047 29.4941 28.0382 24.6573C30.4188 29.1126 35.2582 31.9135 40.2644 32.0987H40.2638ZM35.9596 34.038C37.3643 37.7432 40.5823 40.4214 44.4997 40.6933C45.8532 40.7294 48.0479 40.5764 48.1517 38.8314C48.2634 36.9558 47.2842 34.6468 45.9766 33.2348C43.7569 34.5319 41.1444 34.7814 38.6029 34.4911C36.1054 34.2009 34.0446 33.4108 31.9148 32.121C29.3011 33.464 26.6676 33.4318 24.1116 32.0737C22.9006 32.8579 21.666 33.4594 20.2987 33.9198C17.017 34.8806 12.7004 35.0073 9.65577 33.2322C8.43163 34.6671 7.34016 36.8672 7.45114 38.748C7.61204 41.0801 11.1662 40.8213 12.7549 40.4627C16.1606 39.6937 18.9156 37.3131 20.2606 34.0478C21.5057 37.2592 24.5976 40.0543 28.094 40.0457C31.7874 40.0365 34.698 37.4024 35.9583 34.0387L35.9596 34.038ZM28.0467 43.4101C29.2433 45.8124 31.0223 47.6053 33.3261 48.7375C34.8176 49.5111 36.3976 49.9702 38.0729 50.1245C40.3084 50.2677 42.2957 49.6871 43.4903 47.6979C44.3539 46.2308 44.5739 44.4766 44.0268 42.848C42.4815 42.8178 41.0505 42.3975 39.7154 41.6002C38.3921 42.2241 36.9815 42.4421 35.5314 42.2681C34.503 42.1453 33.5645 41.8314 32.6293 41.3631C31.1287 42.3561 29.4298 42.8565 27.6356 42.7731C26.0831 42.689 24.6574 42.2484 23.3065 41.4807C21.0197 42.5918 18.4066 42.6214 16.1127 41.4872C14.752 42.2234 13.3124 42.6917 11.7304 42.7935C11.2713 43.9427 11.1695 45.1603 11.4119 46.3555C11.6391 47.4936 12.2827 48.4098 13.233 49.0711C15.9131 50.9369 19.9578 50.0772 22.7088 48.7355C25.0488 47.5941 26.862 45.7993 28.0461 43.4095L28.0467 43.4101ZM36.3648 53.1993C36.4778 52.9208 36.5763 52.6673 36.6032 52.3784C34.9482 51.983 33.4148 51.459 31.9161 50.6912C29.4357 52.0047 26.554 52.0139 24.0735 50.6847C22.3693 51.5273 20.585 52.0237 18.7245 52.3928C18.8013 52.9832 19.0535 53.4587 19.3287 53.9571C20.9948 56.6543 24.4301 59.2004 27.1621 60.7293C27.8497 61.1141 28.5701 61.0327 29.2111 60.5888C31.7224 58.8504 34.8898 55.9142 36.3661 53.1999L36.3648 53.1993Z" fill="#3F5633"/>
 <path d="M28.0229 43.3487C26.8382 45.7385 25.025 47.5334 22.6857 48.6748C19.9347 50.0164 15.8899 50.8761 13.2098 49.0103C12.2595 48.349 11.616 47.4329 11.3887 46.2948C11.1464 45.0995 11.2482 43.882 11.7072 42.7327C13.2886 42.6309 14.7288 42.1627 16.0896 41.4265C18.3842 42.5606 20.9966 42.5311 23.2833 41.4199C24.6349 42.187 26.06 42.6283 27.6125 42.7123C29.4073 42.7958 31.1056 42.2953 32.6062 41.3024C33.5414 41.7706 34.4792 42.0839 35.5083 42.2073C36.9583 42.3814 38.3683 42.1633 39.6923 41.5394C41.0274 42.336 42.4584 42.757 44.0037 42.7872C44.5507 44.4159 44.3301 46.1707 43.4671 47.6371C42.2719 49.6264 40.2847 50.2062 38.0498 50.0637C36.3745 49.9094 34.7944 49.4504 33.303 48.6767C30.9992 47.5445 29.2201 45.7517 28.0236 43.3494L28.0229 43.3487Z" fill="#FBF7ED"/>
@@ -644,107 +540,67 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
 <path d="M27.9978 17.014C26.8735 19.8707 24.812 22.0399 21.8357 22.7886C19.7289 23.2896 16.838 23.1038 15.1194 21.6885C14.2643 20.9839 14.8869 19.9206 15.4294 19.1956C16.5274 17.7291 17.9518 16.5523 19.6396 15.8154C20.8999 15.2651 22.233 15.0944 23.6043 15.1627C24.4167 15.2034 25.1653 15.3176 25.9724 15.4208C26.0762 15.4339 26.2515 15.3978 26.3139 15.34C26.5963 15.0753 25.4175 11.3753 25.2172 10.7455C24.9867 10.0198 24.7719 9.33553 24.5959 8.60066C24.46 8.03193 24.8061 7.46846 25.3985 7.37455C26.7631 7.15849 29.5739 7.00219 30.8296 7.42249C31.2913 7.57682 31.5533 8.04704 31.4528 8.5271C31.307 9.22652 31.0877 9.87076 30.8572 10.5518C30.6358 11.2079 29.3769 14.9873 29.6494 15.3288C29.6987 15.3905 29.8813 15.4444 29.9712 15.4345L32.6395 15.1462C34.1362 14.9847 35.6027 15.1994 36.9555 15.8929C38.7773 16.8268 40.2319 18.3957 41.0141 20.2661C41.2748 20.8893 41.066 21.4495 40.5452 21.8008C39.5634 22.4622 38.4607 22.8017 37.2629 22.914C33.0112 23.3139 29.6317 20.9064 27.9978 17.014Z" fill="#FBF7ED"/>
 <path d="M36.3411 53.1382C34.8654 55.8531 31.6974 58.7893 29.1861 60.527C28.5451 60.9703 27.8247 61.0524 27.1371 60.6675C24.4051 59.1387 20.9698 56.5925 19.3037 53.8954C19.0292 53.3976 18.7763 52.9214 18.6995 52.331C20.56 51.962 22.345 51.4655 24.0485 50.6229C26.5296 51.9521 29.4107 51.9429 31.8911 50.6295C33.3898 51.3978 34.9226 51.9212 36.5782 52.3166C36.5513 52.6056 36.4528 52.8591 36.3398 53.1375L36.3411 53.1382Z" fill="#FBF7ED"/>
 </svg>
-        <span>Central<em>Pinhal</em></span>
-      </div>
-      <h1 id="titulo" class="entra" style="--atraso: .15s">Mais tempo para focar no que <em>você faz de melhor</em>.</h1>
-      <p class="lead entra" style="--atraso: .25s"><strong>A central que eu uso todo dia:</strong> tarefas, hábitos, finanças, agenda, ideias, clientes, demandas, criação de conteúdo e estratégia para as redes sociais, e muitooo mais... Tudo <strong>num app para o seu Mac</strong>, com a Pinha, a IA da Central.</p>
-    </section>
+    <span>Central<em>Pinhal</em></span>
+  </div>
+  <h1 id="titulo" class="entra" style="--atraso: .12s">Mais tempo para focar<br> no que <em>você faz de melhor.</em></h1>
+  <p class="lead entra" style="--atraso: .2s"><strong>A central que organiza a sua vida para você:</strong> tarefas, hábitos, finanças, agenda, ideias, clientes, demandas, criação de conteúdo e estratégia para as redes sociais, e muitooo mais...</p>
+</header>
 
-    <figure class="video entra" style="--atraso: .35s">
-      <video id="video-central" src="centralpinhal.mp4?v=7" poster="centralpinhal-capa.jpg?v=7" muted loop playsinline preload="none"
-             aria-label="A CentralPinhal funcionando: a criação da conta, o Início, a Pinha, Tarefas, Hábitos, Segundo cérebro, Financeiro e Agenda"></video>
-      <div class="selo" aria-hidden="true">
-        <img class="selo-anel" src="selo.svg" alt="" width="160" height="162">
-        <img class="selo-pinha" src="pinhas/selo.png" alt="" width="200" height="197">
-      </div>
-    </figure>
+<section class="cena" aria-label="A CentralPinhal num iPad">
+  <!-- a paisagem (foto da casa de pedra); a tinta do mouse revela a aquarela por trás -->
+  <div class="paisagem"><canvas class="revela" aria-hidden="true"></canvas></div>
+  <!-- o iPad com o vídeo da Central na tela; ao rolar, ele desce e passa por cima do cartão -->
+  <div class="ipad entra" style="--atraso: .3s">
+    <video id="video-central" src="central-ipad.mp4?v=1" poster="central-ipad-capa.jpg?v=1" muted loop playsinline preload="none"
+           aria-label="A CentralPinhal funcionando, aba por aba: Início, Tarefas, Hábitos, Segundo cérebro, Financeiro, Agenda e Conteúdo"></video>
+    <img class="ipad-moldura" src="ipad.webp" alt="" width="2320" height="1674">
+  </div>
+  <div class="selo" aria-hidden="true">
+    <img class="selo-anel" src="selo.svg" alt="" width="160" height="162">
+    <img class="selo-pinha" src="pinhas/selo.png" alt="" width="200" height="197">
+  </div>
+</section>
 
-    <aside class="cartao entra" style="--atraso: .2s" id="lista" aria-labelledby="titulo-lista">
-      <h2 id="titulo-lista">Entre antes de todo<br class="so-computador"> mundo <span class="preco">R$&nbsp;47,00</span><span class="preco-nota"><span>*pagamento único,</span> valor das 5 primeiras pessoas</span></h2>
-      <p class="explica">Deixe seu e-mail e receba o convite assim que a CentralPinhal abrir.</p>
-
-      <p class="rotulo bonus-rotulo">Para as 5 primeiras pessoas</p>
-      <div class="bonus">
-        <svg class="bonus-icone" aria-hidden="true" focusable="false" viewBox="0 0 61 61" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle opacity="0.5" cx="30.4998" cy="30.4998" r="30.4998" fill="#FAF7ED"/>
-<circle cx="30.9553" cy="30.9543" r="20.7994" fill="#FAF7ED"/>
-<path d="M30.6342 35.1471C29.9823 36.4621 28.9845 37.4498 27.6972 38.0779C26.1834 38.8162 23.9577 39.2892 22.4829 38.2625C21.9599 37.8986 21.6058 37.3945 21.4808 36.7682C21.3474 36.1105 21.4034 35.4405 21.656 34.8081C22.5262 34.7521 23.3187 34.4944 24.0675 34.0893C25.3302 34.7134 26.7678 34.6972 28.0261 34.0857C28.7698 34.5078 29.554 34.7506 30.4083 34.7969C31.396 34.8428 32.3305 34.5674 33.1563 34.021C33.6709 34.2787 34.1869 34.451 34.7532 34.519C35.5511 34.6148 36.327 34.4948 37.0556 34.1515C37.7903 34.5898 38.5777 34.8215 39.428 34.8381C39.7291 35.7343 39.6077 36.6999 39.1328 37.5069C38.4751 38.6015 37.3815 38.9206 36.1518 38.8422C35.2299 38.7573 34.3604 38.5047 33.5397 38.079C32.272 37.4559 31.293 36.4694 30.6346 35.1474L30.6342 35.1471Z" fill="#3E2C0F"/>
-<path d="M34.9885 29.9898C34.295 31.8412 32.6933 33.2903 30.6609 33.2954C28.7366 33.3001 27.0352 31.762 26.3504 29.9949C25.6103 31.7917 24.0943 33.1017 22.2201 33.5249C21.3456 33.7222 19.3902 33.8646 19.3016 32.5813C19.2406 31.5463 19.8412 30.3357 20.5148 29.5461C22.1902 30.5232 24.5655 30.4531 26.3713 29.9244C27.1234 29.6711 27.8031 29.3401 28.4695 28.9086C29.8757 29.6559 31.3248 29.6736 32.7635 28.9346C33.9351 29.6444 35.0694 30.0791 36.4438 30.2388C37.8423 30.3986 39.2802 30.2612 40.5014 29.5475C41.2209 30.3245 41.7593 31.5955 41.6982 32.6272C41.6412 33.5874 40.4334 33.6716 39.6886 33.6517C37.5326 33.5021 35.7618 32.028 34.9892 29.9895L34.9885 29.9898Z" fill="#3E2C0F"/>
-<path d="M37.3572 28.9225C34.6024 28.8206 31.9394 27.2793 30.6294 24.8277C29.1799 27.4896 26.3242 29.0374 23.3233 28.9279C22.7256 28.9063 22.1636 28.8513 21.6017 28.6551C21.0441 28.4603 20.2595 28.0913 20.4641 27.3664C20.7767 26.2834 21.9367 25.0127 22.8145 24.2911C25.2184 25.9079 28.4513 25.4507 30.6456 23.7168C31.9824 24.8266 33.5497 25.2722 35.2496 25.2249C36.3558 25.1913 37.3767 24.8707 38.3123 24.286C39.3094 24.8411 40.3971 26.3314 40.6284 27.4087C40.6899 27.6953 40.5901 27.9714 40.365 28.1542C39.6202 28.7592 38.3492 28.9594 37.3568 28.9225H37.3572Z" fill="#3E2C0F"/>
-<path d="M30.6205 20.6558C30.0018 22.2278 28.8675 23.4215 27.2297 23.8334C26.0704 24.1092 24.4796 24.0069 23.5338 23.2281C23.0633 22.8404 23.4059 22.2553 23.7044 21.8563C24.3086 21.0494 25.0925 20.4018 26.0212 19.9963C26.7147 19.6935 27.4483 19.5995 28.2029 19.6371C28.6499 19.6595 29.0619 19.7224 29.506 19.7791C29.5631 19.7863 29.6596 19.7665 29.6939 19.7347C29.8493 19.589 29.2007 17.553 29.0904 17.2064C28.9636 16.8071 28.8454 16.4305 28.7486 16.0262C28.6738 15.7132 28.8642 15.4031 29.1902 15.3515C29.9411 15.2326 31.4878 15.1466 32.1788 15.3778C32.4329 15.4628 32.5771 15.7215 32.5218 15.9857C32.4415 16.3706 32.3208 16.7251 32.194 17.0998C32.0722 17.4608 31.3794 19.5406 31.5294 19.7285C31.5565 19.7625 31.657 19.7921 31.7065 19.7867L33.1748 19.628C33.9984 19.5391 34.8053 19.6573 35.5498 20.0389C36.5522 20.5528 37.3527 21.4162 37.7831 22.4454C37.9266 22.7883 37.8117 23.0966 37.5251 23.2899C36.9848 23.6538 36.3781 23.8407 35.7189 23.9025C33.3793 24.1225 31.5196 22.7977 30.6205 20.6558Z" fill="#3E2C0F"/>
-<path d="M35.2111 40.5339C34.3991 42.0278 32.6558 43.6436 31.2739 44.5998C30.9212 44.8437 30.5248 44.8889 30.1464 44.6771C28.643 43.8358 26.7527 42.4347 25.8358 40.9506C25.6848 40.6766 25.5456 40.4146 25.5034 40.0897C26.5272 39.8866 27.5094 39.6134 28.4468 39.1498C29.8121 39.8812 31.3975 39.8762 32.7624 39.1534C33.5871 39.5762 34.4306 39.8642 35.3416 40.0818C35.3268 40.2408 35.2726 40.3803 35.2104 40.5335L35.2111 40.5339Z" fill="#3E2C0F"/>
+<section class="cartao" id="lista" aria-labelledby="titulo-lista">
+  <div class="cartao-conteudo">
+    <div class="cartao-texto">
+        <svg class="cartao-logo" aria-hidden="true" focusable="false" viewBox="0 0 56 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M38.5858 65.199C34.1772 67.5008 29.9013 68.3421 24.9338 67.8764C21.7402 67.577 18.689 66.6293 15.8822 65.0768C12.2945 63.0922 9.19278 60.376 6.6611 57.158C4.84 54.8437 3.43855 52.2904 2.34641 49.5604C1.12622 46.5099 0.390028 43.3714 0.129308 40.0923C-0.131412 36.8133 0.0137245 33.8797 0.460298 30.7721C1.34556 24.6179 3.34529 18.5609 6.62301 13.2789C8.77707 9.80745 11.5708 6.61576 14.945 4.3054C18.6128 1.79211 22.7528 0.182477 27.2449 0.017639C29.7798 -0.0749593 32.2517 0.191015 34.6626 0.95807C37.0734 1.72513 39.1973 2.80872 41.218 4.26206C45.1452 7.08598 48.2299 10.8589 50.4457 15.1486C53.2604 20.5968 54.8956 26.4837 55.3993 32.5958C55.7073 36.3365 55.5281 40.1029 54.7505 43.7792C54.2606 46.0955 53.5001 48.2699 52.5189 50.4102C51.3972 52.8578 49.9873 55.0736 48.285 57.1501C45.6233 60.3963 42.3095 63.2551 38.5865 65.199H38.5858ZM28.0224 17.0754C29.657 20.9678 33.0359 23.3754 37.2875 22.9755C38.4854 22.8625 39.5887 22.5236 40.5698 21.8623C41.0906 21.511 41.2994 20.9514 41.0387 20.3275C40.2566 18.4572 38.8019 16.8889 36.9802 15.9544C35.6266 15.2602 34.1608 15.0455 32.6642 15.2077L29.9959 15.496C29.9059 15.5059 29.7227 15.4513 29.6741 15.3903C29.4015 15.0494 30.6605 11.2693 30.8818 10.6133C31.1117 9.93223 31.331 9.28798 31.4774 8.58856C31.5779 8.1085 31.3159 7.63828 30.8542 7.48395C29.5986 7.06365 26.7878 7.21995 25.4231 7.43601C24.8307 7.52992 24.4846 8.09274 24.6206 8.66212C24.7966 9.39765 25.0113 10.082 25.2418 10.807C25.4421 11.4368 26.621 15.1368 26.3386 15.4014C26.2768 15.4592 26.1015 15.4953 25.9971 15.4822C25.19 15.3791 24.4419 15.2648 23.6289 15.2241C22.2577 15.1558 20.9245 15.3266 19.6643 15.8769C17.9771 16.6138 16.552 17.7899 15.454 19.2571C14.9115 19.9821 14.289 21.0453 15.144 21.75C16.8627 23.1652 19.7529 23.3511 21.8604 22.85C24.8373 22.1014 26.8988 19.9322 28.0224 17.0754ZM40.2638 32.0987C42.0671 32.1657 44.3769 31.8018 45.7304 30.7025C46.1395 30.3702 46.3208 29.8684 46.2091 29.3477C45.7888 27.39 43.8121 24.6816 42.0002 23.6729C40.2999 24.7355 38.444 25.3187 36.4344 25.3791C33.3452 25.4658 30.497 24.656 28.0677 22.6386C24.0801 25.7895 18.205 26.6196 13.8365 23.6821C12.2413 24.9942 10.1326 27.3026 9.56514 29.2708C9.19343 30.5882 10.6192 31.2587 11.6325 31.6127C12.6537 31.9693 13.6749 32.0691 14.7612 32.1085C20.2146 32.3069 25.4047 29.4941 28.0382 24.6573C30.4188 29.1126 35.2582 31.9135 40.2644 32.0987H40.2638ZM35.9596 34.038C37.3643 37.7432 40.5823 40.4214 44.4997 40.6933C45.8532 40.7294 48.0479 40.5764 48.1517 38.8314C48.2634 36.9558 47.2842 34.6468 45.9766 33.2348C43.7569 34.5319 41.1444 34.7814 38.6029 34.4911C36.1054 34.2009 34.0446 33.4108 31.9148 32.121C29.3011 33.464 26.6676 33.4318 24.1116 32.0737C22.9006 32.8579 21.666 33.4594 20.2987 33.9198C17.017 34.8806 12.7004 35.0073 9.65577 33.2322C8.43163 34.6671 7.34016 36.8672 7.45114 38.748C7.61204 41.0801 11.1662 40.8213 12.7549 40.4627C16.1606 39.6937 18.9156 37.3131 20.2606 34.0478C21.5057 37.2592 24.5976 40.0543 28.094 40.0457C31.7874 40.0365 34.698 37.4024 35.9583 34.0387L35.9596 34.038ZM28.0467 43.4101C29.2433 45.8124 31.0223 47.6053 33.3261 48.7375C34.8176 49.5111 36.3976 49.9702 38.0729 50.1245C40.3084 50.2677 42.2957 49.6871 43.4903 47.6979C44.3539 46.2308 44.5739 44.4766 44.0268 42.848C42.4815 42.8178 41.0505 42.3975 39.7154 41.6002C38.3921 42.2241 36.9815 42.4421 35.5314 42.2681C34.503 42.1453 33.5645 41.8314 32.6293 41.3631C31.1287 42.3561 29.4298 42.8565 27.6356 42.7731C26.0831 42.689 24.6574 42.2484 23.3065 41.4807C21.0197 42.5918 18.4066 42.6214 16.1127 41.4872C14.752 42.2234 13.3124 42.6917 11.7304 42.7935C11.2713 43.9427 11.1695 45.1603 11.4119 46.3555C11.6391 47.4936 12.2827 48.4098 13.233 49.0711C15.9131 50.9369 19.9578 50.0772 22.7088 48.7355C25.0488 47.5941 26.862 45.7993 28.0461 43.4095L28.0467 43.4101ZM36.3648 53.1993C36.4778 52.9208 36.5763 52.6673 36.6032 52.3784C34.9482 51.983 33.4148 51.459 31.9161 50.6912C29.4357 52.0047 26.554 52.0139 24.0735 50.6847C22.3693 51.5273 20.585 52.0237 18.7245 52.3928C18.8013 52.9832 19.0535 53.4587 19.3287 53.9571C20.9948 56.6543 24.4301 59.2004 27.1621 60.7293C27.8497 61.1141 28.5701 61.0327 29.2111 60.5888C31.7224 58.8504 34.8898 55.9142 36.3661 53.1999L36.3648 53.1993Z" fill="#3F5633"/>
+<path d="M28.0229 43.3487C26.8382 45.7385 25.025 47.5334 22.6857 48.6748C19.9347 50.0164 15.8899 50.8761 13.2098 49.0103C12.2595 48.349 11.616 47.4329 11.3887 46.2948C11.1464 45.0995 11.2482 43.882 11.7072 42.7327C13.2886 42.6309 14.7288 42.1627 16.0896 41.4265C18.3842 42.5606 20.9966 42.5311 23.2833 41.4199C24.6349 42.187 26.06 42.6283 27.6125 42.7123C29.4073 42.7958 31.1056 42.2953 32.6062 41.3024C33.5414 41.7706 34.4792 42.0839 35.5083 42.2073C36.9583 42.3814 38.3683 42.1633 39.6923 41.5394C41.0274 42.336 42.4584 42.757 44.0037 42.7872C44.5507 44.4159 44.3301 46.1707 43.4671 47.6371C42.2719 49.6264 40.2847 50.2062 38.0498 50.0637C36.3745 49.9094 34.7944 49.4504 33.303 48.6767C30.9992 47.5445 29.2201 45.7517 28.0236 43.3494L28.0229 43.3487Z" fill="#FBF7ED"/>
+<path d="M35.9364 33.9767C34.6762 37.3411 31.7656 39.9745 28.0721 39.9837C24.5751 39.9923 21.4832 37.1973 20.2387 33.9859C18.8937 37.2511 16.1388 39.6317 12.733 40.4008C11.1437 40.7593 7.59018 41.0181 7.42928 38.6861C7.3183 36.8052 8.40977 34.6052 9.63391 33.1702C12.6785 34.946 16.9951 34.8186 20.2768 33.8578C21.6435 33.3974 22.8788 32.7959 24.0898 32.0117C26.6451 33.3699 29.2785 33.402 31.893 32.059C34.0221 33.3488 36.0835 34.1389 38.5811 34.4292C41.1226 34.7194 43.7357 34.4699 45.9548 33.1728C47.2623 34.5848 48.2408 36.8945 48.1298 38.7695C48.0261 40.5144 45.8313 40.6674 44.4778 40.6313C40.5598 40.3594 37.3418 37.6806 35.9377 33.976L35.9364 33.9767Z" fill="#FBF7ED"/>
+<path d="M40.2404 32.037C35.2342 31.8518 30.3948 29.0509 28.0142 24.5956C25.38 29.4331 20.1906 32.2458 14.7372 32.0468C13.6509 32.0074 12.6297 31.9076 11.6085 31.551C10.5952 31.197 9.16944 30.5265 9.54114 29.2091C10.1092 27.2409 12.2173 24.9319 13.8125 23.6204C18.181 26.5586 24.0561 25.7278 28.0437 22.5769C30.473 24.5937 33.3212 25.4034 36.4104 25.3174C38.4206 25.2563 40.2759 24.6738 41.9762 23.6112C43.7881 24.6199 45.7648 27.3283 46.1851 29.286C46.2968 29.8067 46.1155 30.3085 45.7064 30.6408C44.3529 31.7401 42.0431 32.104 40.2398 32.037H40.2404Z" fill="#FBF7ED"/>
+<path d="M27.9978 17.014C26.8735 19.8707 24.812 22.0399 21.8357 22.7886C19.7289 23.2896 16.838 23.1038 15.1194 21.6885C14.2643 20.9839 14.8869 19.9206 15.4294 19.1956C16.5274 17.7291 17.9518 16.5523 19.6396 15.8154C20.8999 15.2651 22.233 15.0944 23.6043 15.1627C24.4167 15.2034 25.1653 15.3176 25.9724 15.4208C26.0762 15.4339 26.2515 15.3978 26.3139 15.34C26.5963 15.0753 25.4175 11.3753 25.2172 10.7455C24.9867 10.0198 24.7719 9.33553 24.5959 8.60066C24.46 8.03193 24.8061 7.46846 25.3985 7.37455C26.7631 7.15849 29.5739 7.00219 30.8296 7.42249C31.2913 7.57682 31.5533 8.04704 31.4528 8.5271C31.307 9.22652 31.0877 9.87076 30.8572 10.5518C30.6358 11.2079 29.3769 14.9873 29.6494 15.3288C29.6987 15.3905 29.8813 15.4444 29.9712 15.4345L32.6395 15.1462C34.1362 14.9847 35.6027 15.1994 36.9555 15.8929C38.7773 16.8268 40.2319 18.3957 41.0141 20.2661C41.2748 20.8893 41.066 21.4495 40.5452 21.8008C39.5634 22.4622 38.4607 22.8017 37.2629 22.914C33.0112 23.3139 29.6317 20.9064 27.9978 17.014Z" fill="#FBF7ED"/>
+<path d="M36.3411 53.1382C34.8654 55.8531 31.6974 58.7893 29.1861 60.527C28.5451 60.9703 27.8247 61.0524 27.1371 60.6675C24.4051 59.1387 20.9698 56.5925 19.3037 53.8954C19.0292 53.3976 18.7763 52.9214 18.6995 52.331C20.56 51.962 22.345 51.4655 24.0485 50.6229C26.5296 51.9521 29.4107 51.9429 31.8911 50.6295C33.3898 51.3978 34.9226 51.9212 36.5782 52.3166C36.5513 52.6056 36.4528 52.8591 36.3398 53.1375L36.3411 53.1382Z" fill="#FBF7ED"/>
 </svg>
-        <p><strong>Atualizações por 3 meses:</strong> toda novidade e correção da Central nesse período, mais suporte por e-mail.</p>
+      <h2 id="titulo-lista">Mais tempo para focar no que <em>você faz de melhor.</em></h2>
+      <div class="bonus">
+        <p><strong>Os 10 primeiros usuários recebem:</strong></p>
+        <p>Novidades e correções da Central e suporte por e-mail, por 3 meses.</p>
       </div>
+    </div>
 
+    <div class="cartao-form">
+      <p class="explica"><b>Deixe seu contato</b> e receba o convite assim que a <b class="verde">CentralPinhal</b> abrir.</p>
       <form id="form-lista" autocomplete="on">
         <div class="campo">
           <label for="email">E-mail:</label>
           <input type="email" id="email" name="email" autocomplete="email" required maxlength="160" placeholder="Seu melhor e-mail" inputmode="email">
         </div>
-
         <fieldset>
           <legend>Qual sistema você usa?</legend>
-          <div class="pilulas pilulas--fixas">
+          <div class="pilulas">
             <label class="pilula"><input type="radio" id="sis-apple" name="mac" value="Apple" required><span><span class="emoji" aria-hidden="true">🍎</span>Apple</span></label>
             <label class="pilula"><input type="radio" id="sis-windows" name="mac" value="Windows"><span><span class="emoji" aria-hidden="true">🪟</span>Windows</span></label>
           </div>
         </fieldset>
-
-        <fieldset>
-          <legend class="legenda-dupla">O que você mais quer organizar?<br><span class="opcional">(escolha quantos quiser)</span></legend>
-          <div class="pilulas">
-            <label class="pilula"><input type="checkbox" id="i-tarefas" name="interesse" value="Tarefas"><span><span class="emoji" aria-hidden="true">✅</span>Tarefas</span></label>
-            <label class="pilula"><input type="checkbox" id="i-habitos" name="interesse" value="Hábitos"><span><span class="emoji" aria-hidden="true">🔁</span>Hábitos</span></label>
-            <label class="pilula"><input type="checkbox" id="i-ideias" name="interesse" value="Ideias e notas"><span><span class="emoji" aria-hidden="true">💡</span>Ideias e notas</span></label>
-            <label class="pilula"><input type="checkbox" id="i-agenda" name="interesse" value="Agenda"><span><span class="emoji" aria-hidden="true">📅</span>Agenda</span></label>
-            <label class="pilula"><input type="checkbox" id="i-financeiro" name="interesse" value="Financeiro"><span><span class="emoji" aria-hidden="true">💰</span>Financeiro</span></label>
-            <label class="pilula"><input type="checkbox" id="i-clientes" name="interesse" value="Clientes"><span><span class="emoji" aria-hidden="true">👥</span>Clientes</span></label>
-            <label class="pilula"><input type="checkbox" id="i-conteudos" name="interesse" value="Conteúdos"><span><span class="emoji" aria-hidden="true">📸</span>Conteúdos</span></label>
-            <label class="pilula"><input type="checkbox" id="i-projetos" name="interesse" value="Projetos"><span><span class="emoji" aria-hidden="true">🗂️</span>Projetos</span></label>
-            <label class="pilula"><input type="checkbox" id="i-demandas" name="interesse" value="Demandas clientes"><span><span class="emoji" aria-hidden="true">📥</span>Demandas clientes</span></label>
-          </div>
-        </fieldset>
-
         <div class="armadilha" aria-hidden="true">
           <label for="site">Deixe este campo vazio</label>
           <input type="text" id="site" name="site" tabindex="-1" autocomplete="off">
         </div>
-
         <p class="aviso" id="aviso" role="alert" hidden></p>
         <button class="botao" type="submit" id="enviar"><span class="rolo"><span class="rolo-texto">Quero entrar na lista de espera</span><span class="rolo-texto rolo-texto--copia" aria-hidden="true">Quero entrar na lista de espera</span></span></button>
       </form>
-
-      <div class="letras-miudas">
-        <p>Seu e-mail serve só para avisar sobre a CentralPinhal. Nada de spam, e você sai da lista quando quiser.</p>
-        <p><b>Do que você precisa:</b> um Mac com macOS 15 ou mais novo e uma conta do Claude a partir do plano Pro. O Claude Code monta a Central no seu Mac, seguindo o guia que vem junto.</p>
-      </div>
-    </aside>
-  </div>
-</div>
-
-<section class="moldura moldura--2" aria-labelledby="titulo-secao">
-  <div class="palco palco--2">
-    <h2 class="titulo-secao entra" id="titulo-secao">O que a Central faz <em>por você</em></h2>
-    <ul class="ganhos">
-      <li class="entra">Use 2 perfis, o pessoal e o da sua empresa, cada um com o seu logo e as suas cores.</li>
-      <li class="entra">Organize suas tarefas e seus hábitos, com a contagem de dias seguidos de cada hábito.</li>
-      <li class="entra">Tenha clareza de tudo o que precisa ser feito na sua semana, com as tarefas e as demandas organizadas.</li>
-      <li class="entra">Sem ideias para criar conteúdo? Todo domingo, a Pinha monta uma estratégia para cada rede, com ideias de posts.</li>
-      <li class="entra">A IA escreve a copy e cria as imagens dos seus conteúdos. É só pedir para a Pinha, e ela faz.</li>
-      <li class="entra">Toda segunda, a Pinha lê a sua semana e conta o que funcionou.</li>
-      <li class="entra">Os posts, os agendados e os números das suas redes num painel só.</li>
-      <li class="entra">A IA usa o seu plano do Claude, e os seus dados ficam no seu Mac.</li>
-    </ul>
-
-    <section class="aulas-bloco entra" aria-labelledby="titulo-aulas">
-      <h2 class="aulas-titulo" id="titulo-aulas">Vem com <em>aulas e material de apoio</em></h2>
-      <ul class="aulas">
-        <li>Como instalar a Central no seu Mac</li>
-        <li>Como usar a Central no seu dia a dia</li>
-        <li>Como conectar as APIs da Meta (Instagram e Facebook), do Pinterest e do YouTube</li>
-      </ul>
-    </section>
+    </div>
   </div>
 
   <footer class="rodape">
@@ -814,7 +670,7 @@ form.addEventListener("submit", async (evento) => {
     email: String(d.get("email") || "").trim(),
     whatsapp: "",
     mac: String(d.get("mac") || ""),
-    interesses: d.getAll("interesse").join(", "),
+    interesses: "",
     origem: deOndeVeio(),
   });
 
@@ -836,6 +692,123 @@ form.addEventListener("submit", async (evento) => {
     rotulo("Quero entrar na lista de espera");
   }
 });
+</script>
+
+<script>
+// Ao rolar (no computador): o iPad desce e passa por cima do cartão, enquanto o texto do cartão sobe.
+// Só mexe com transform, uma vez por quadro. Quem pediu menos movimento vê tudo parado.
+(function () {
+  const ipad = document.querySelector(".ipad"), sobe = document.querySelector(".cartao-conteudo");
+  const pode = matchMedia("(min-width: 1081px) and (prefers-reduced-motion: no-preference)");
+  const DESCE = 200, SOBE = 200;                          // em px do Figma (1920)
+  let fila = false;
+  function atualiza() {
+    fila = false;
+    if (!pode.matches) { ipad.style.translate = ""; sobe.style.translate = ""; return; }
+    const s = Math.min(innerWidth, 1920) / 1920;
+    const fim = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    const p = Math.min(1, Math.max(0, scrollY / fim));
+    const e = p * p * (3 - 2 * p);                          // começa e termina macio
+    ipad.style.translate = "0 " + (e * DESCE * s).toFixed(1) + "px";
+    sobe.style.translate = "0 " + ((1 - e) * SOBE * s).toFixed(1) + "px";
+  }
+  const pede = () => { if (!fila) { fila = true; requestAnimationFrame(atualiza); } };
+  addEventListener("scroll", pede, { passive: true });
+  addEventListener("resize", pede);
+  if (pode.addEventListener) pode.addEventListener("change", pede);
+  atualiza();
+})();
+</script>
+<script>
+// Tinta do mouse na paisagem (como no obrigado): por onde o mouse passa, gotas e pingos de tinta revelam a aquarela
+// que fica "por trás" da foto. Leve: canvas com metade da resolução, que só desenha enquanto há gotas.
+// Só em computador com mouse.
+(function () {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches || !matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+  const cena = document.querySelector(".cena"), paisagem = cena.querySelector(".paisagem");
+  const tela = paisagem.querySelector(".revela"), g = tela.getContext("2d"), ESC = .5;
+  let W = 0, H = 0, capa = null;
+  const aquarela = new Image();
+  aquarela.src = "paisagem.webp?v=2";
+  function medir() {
+    W = paisagem.clientWidth; H = paisagem.clientHeight;
+    tela.width = Math.ceil(W * ESC); tela.height = Math.ceil(H * ESC);
+    if (!aquarela.naturalWidth) return;
+    // onde a foto está: o mesmo cálculo do CSS (142% da largura, posição 79% 58%)
+    const iw = aquarela.naturalWidth, ih = aquarela.naturalHeight;   // a foto e a aquarela têm o mesmo tamanho de arquivo
+    const fw = W * 1.42, fh = fw * ih / iw;
+    const PL = (W - fw) * .79, PT = (H - fh) * .58;
+    // a aquarela no mesmo lugar em relação à foto que no Figma (foto x -607, y -13, 2668 de largura;
+    // aquarela x -529, y 0, 2574×1449), para os elementos coincidirem
+    const k = fw / 2668;
+    capa = { dx: PL + (-529 + 607) * k, dy: PT + (0 + 13) * k, dw: 2574 * k, dh: 1449 * k };
+  }
+  aquarela.onload = medir;
+  let espera;
+  addEventListener("resize", () => { clearTimeout(espera); espera = setTimeout(medir, 120); });
+  const formas = Array.from({ length: 6 }, (_, n) => {
+    const f = new Path2D(), N = 40, fase = n * 1.7;
+    for (let i = 0; i <= N; i++) {
+      const t = i / N * Math.PI * 2;
+      const r = 1 + .12 * Math.sin(3 * t + fase) + .07 * Math.sin(5 * t + fase * 2) + .04 * Math.sin(9 * t + fase * 3);
+      i ? f.lineTo(Math.cos(t) * r, Math.sin(t) * r) : f.moveTo(Math.cos(t) * r, Math.sin(t) * r);
+    }
+    f.closePath();
+    return f;
+  });
+  const gotas = [];
+  let ultimo = null, rodando = false;
+  cena.addEventListener("pointermove", (e) => {
+    if (!capa) return;
+    const r = paisagem.getBoundingClientRect();
+    const x = e.clientX - r.left, y = e.clientY - r.top;
+    const dist = ultimo ? Math.hypot(x - ultimo.x, y - ultimo.y) : 0;
+    const passos = Math.min(5, Math.max(1, Math.round(dist / 18)));
+    for (let i = 1; i <= passos; i++) {
+      const t = i / passos;
+      const gota = {
+        x: (ultimo ? ultimo.x + (x - ultimo.x) * t : x) + (Math.random() - .5) * 16,
+        y: (ultimo ? ultimo.y + (y - ultimo.y) * t : y) + (Math.random() - .5) * 16,
+        r: 30 + Math.random() * 28 + Math.min(dist, 90) * .35,
+        rot: Math.random() * 6.28, forma: formas[(Math.random() * formas.length) | 0], vida: 1, espalha: .45,
+      };
+      gotas.push(gota);
+      if (Math.random() < .55) {                          // pingos espirrados em volta da pincelada
+        const qtos = 1 + ((Math.random() * 3) | 0);
+        for (let k = 0; k < qtos; k++) {
+          const ang = Math.random() * 6.28, longe = gota.r * (1.15 + Math.random() * .9);
+          gotas.push({ x: gota.x + Math.cos(ang) * longe, y: gota.y + Math.sin(ang) * longe,
+            r: gota.r * (.05 + Math.random() * .12), rot: Math.random() * 6.28,
+            forma: formas[(Math.random() * formas.length) | 0], vida: .9 + Math.random() * .1, espalha: .15 });
+        }
+      }
+    }
+    if (gotas.length > 140) gotas.splice(0, gotas.length - 140);
+    ultimo = { x, y };
+    if (!rodando) { rodando = true; requestAnimationFrame(quadro); }
+  });
+  cena.addEventListener("pointerleave", () => { ultimo = null; });
+  function quadro() {
+    g.setTransform(ESC, 0, 0, ESC, 0, 0);
+    g.globalCompositeOperation = "source-over";
+    g.clearRect(0, 0, W, H);
+    g.fillStyle = "#000";
+    for (let i = gotas.length - 1; i >= 0; i--) {
+      const d = gotas[i];
+      d.vida -= .012;                                     // some em uns 1,4 s
+      if (d.vida <= 0) { gotas.splice(i, 1); continue; }
+      const cresce = d.r * (1 + (1 - d.vida) * d.espalha);
+      g.globalAlpha = Math.min(1, d.vida * 1.8);
+      g.save(); g.translate(d.x, d.y); g.rotate(d.rot); g.scale(cresce, cresce); g.fill(d.forma); g.restore();
+    }
+    g.globalAlpha = 1;
+    g.globalCompositeOperation = "source-in";             // só onde tem tinta, aparece a aquarela
+    g.drawImage(aquarela, capa.dx, capa.dy, capa.dw, capa.dh);
+    g.globalCompositeOperation = "source-over";
+    if (gotas.length) requestAnimationFrame(quadro); else { g.clearRect(0, 0, W, H); rodando = false; }
+  }
+  medir();
+})();
 </script>
 </body>
 </html>
