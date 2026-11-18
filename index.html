@@ -74,22 +74,27 @@ h1 {
 .lead strong { font-weight: 700; color: var(--amarelo); }
 
 /* ---------- a cena: a paisagem, o iPad com o vídeo e o selo da Pinha ---------- */
-.cena { position: relative; margin-top: calc(40 * var(--s)); height: calc(1349 * var(--s)); }
+.cena { position: relative; margin-top: calc(40 * var(--s)); height: calc(1649 * var(--s)); }
 .paisagem {
   position: absolute; z-index: 1; overflow: hidden;
-  left: calc(42 * var(--s)); right: calc(42 * var(--s)); top: calc(228 * var(--s)); height: calc(1121 * var(--s));
+  left: calc(42 * var(--s)); right: calc(42 * var(--s)); top: calc(228 * var(--s)); height: calc(1421 * var(--s));
   border-radius: calc(60 * var(--s));
-  /* a foto da casa de pedra, enquadrada como no Figma */
-  background: url("casa.webp") 79% 58% / 142% auto no-repeat, var(--verde);
+  /* a foto da casa de pedra, enquadrada como no Figma. A paisagem é 300 px mais alta que no Figma
+     para o iPad ter caminho ao descer; a foto cresce o mínimo para cobrir essa altura. */
+  background: url("casa.webp") 79% 100% / max(142%, calc(2884 * var(--s))) auto no-repeat, var(--verde);
 }
 /* a tinta do mouse revela a aquarela por trás da foto, como no obrigado */
 .revela { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .ipad {
   position: absolute; z-index: 3; left: 50%; top: 0;
-  width: calc(1242 * var(--s)); margin-left: calc(-621 * var(--s));
+  width: calc(1242 * var(--s)); margin-left: calc(-621 * var(--s)); aspect-ratio: 2320 / 1674;
   will-change: transform;
 }
-.ipad-moldura { position: relative; z-index: 1; width: 100%; height: auto; pointer-events: none; }
+/* a imagem tem a sombra inteira em volta do iPad; a caixa .ipad é só o corpo e a caneta */
+.ipad-moldura {
+  position: absolute; z-index: 1; left: -6.767%; top: -.239%; width: 106.897%; height: auto; max-width: none;
+  pointer-events: none;
+}
 /* o vídeo fica atrás da moldura, no lugar da tela */
 .ipad video {
   position: absolute; z-index: 0; left: 5.43%; top: 13.44%; width: 89.18%; height: 79.39%;
@@ -264,7 +269,7 @@ html.carregando .abertura { position: fixed; inset: 0; z-index: 1000; display: g
   .lead { font-size: 12px; }
   .cena { height: auto; margin-top: 32px; padding-bottom: 96px; }
   .ipad { position: relative; left: auto; margin: 0 auto; width: min(94vw, 760px); }
-  .paisagem { left: 12px; right: 12px; top: 26%; height: auto; bottom: 0; border-radius: 28px; }
+  .paisagem { left: 12px; right: 12px; top: 26%; height: auto; bottom: 0; border-radius: 28px; background-position: 79% 58%, 0 0; background-size: 142% auto, auto; }
   .selo { left: 3vw; top: auto; bottom: 40px; width: clamp(96px, 22vw, 150px); height: auto; aspect-ratio: 160 / 162; }
   .cartao { width: auto; margin: -56px 12px 24px; padding: 36px 22px 32px; border-radius: 28px; }
   .cartao-conteudo { grid-template-columns: minmax(0, 1fr); row-gap: 8px; }
@@ -553,7 +558,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
   <div class="ipad entra" style="--atraso: .3s">
     <video id="video-central" src="central-ipad.mp4?v=1" poster="central-ipad-capa.jpg?v=1" muted loop playsinline preload="none"
            aria-label="A CentralPinhal funcionando, aba por aba: Início, Tarefas, Hábitos, Segundo cérebro, Financeiro, Agenda e Conteúdo"></video>
-    <img class="ipad-moldura" src="ipad.webp" alt="" width="2320" height="1674">
+    <img class="ipad-moldura" src="ipad.webp?v=2" alt="" width="2480" height="1814">
   </div>
   <div class="selo" aria-hidden="true">
     <img class="selo-anel" src="selo.svg" alt="" width="160" height="162">
@@ -695,27 +700,47 @@ form.addEventListener("submit", async (evento) => {
 </script>
 
 <script>
-// Ao rolar (no computador): o iPad desce e passa por cima do cartão, enquanto o texto do cartão sobe.
-// Só mexe com transform, uma vez por quadro. Quem pediu menos movimento vê tudo parado.
+// Ao rolar (no computador): o iPad desce junto com a tela por cima da paisagem, inteiro e no meio da tela,
+// até pousar logo acima do texto do cartão; aí ele para e o texto do cartão sobe até o lugar.
+// Só mexe com translate, uma vez por quadro. Quem pediu menos movimento vê tudo parado.
 (function () {
-  const ipad = document.querySelector(".ipad"), sobe = document.querySelector(".cartao-conteudo");
+  const cena = document.querySelector(".cena"), ipad = cena.querySelector(".ipad");
+  const cartao = document.querySelector(".cartao"), sobe = cartao.querySelector(".cartao-conteudo");
   const pode = matchMedia("(min-width: 1081px) and (prefers-reduced-motion: no-preference)");
-  const DESCE = 200, SOBE = 200;                          // em px do Figma (1920)
-  let fila = false;
+  const SOBE = 200, FOLGA = 40;                           // em px do Figma (1920)
+  let m = null, fila = false;
+  const noTopo = (el) => { let y = 0; for (; el; el = el.offsetParent) y += el.offsetTop; return y; };
+  function medir() {
+    // offsetTop não conta o translate nem a entrada suave: são as posições paradas
+    const s = Math.min(innerWidth, 1920) / 1920, alto = ipad.offsetHeight;
+    const comeca = noTopo(ipad);                            // onde o iPad está com a página no topo
+    const pousa = noTopo(sobe) - FOLGA * s - alto;          // onde ele para: logo acima do texto do cartão
+    const fica = Math.max(0, (innerHeight - alto) / 2);     // enquanto desce, fica no meio da tela
+    const inicio = Math.max(0, comeca - fica), curso = Math.max(0, pousa - comeca);
+    // o fim da rolagem medido com o texto no lugar (o texto ainda abaixado aumentaria a página)
+    const antes = sobe.style.translate;
+    sobe.style.translate = "";
+    const fim = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    sobe.style.translate = antes;
+    m = { s, inicio, curso, fim };
+  }
   function atualiza() {
     fila = false;
     if (!pode.matches) { ipad.style.translate = ""; sobe.style.translate = ""; return; }
-    const s = Math.min(innerWidth, 1920) / 1920;
-    const fim = Math.max(1, document.documentElement.scrollHeight - innerHeight);
-    const p = Math.min(1, Math.max(0, scrollY / fim));
+    if (!m) medir();
+    const y = scrollY, solta = m.inicio + m.curso;
+    ipad.style.translate = "0 " + Math.min(m.curso, Math.max(0, y - m.inicio)).toFixed(1) + "px";
+    const p = m.fim > solta ? Math.min(1, Math.max(0, (y - solta) / (m.fim - solta))) : 1;
     const e = p * p * (3 - 2 * p);                          // começa e termina macio
-    ipad.style.translate = "0 " + (e * DESCE * s).toFixed(1) + "px";
-    sobe.style.translate = "0 " + ((1 - e) * SOBE * s).toFixed(1) + "px";
+    sobe.style.translate = "0 " + ((1 - e) * SOBE * m.s).toFixed(1) + "px";
   }
   const pede = () => { if (!fila) { fila = true; requestAnimationFrame(atualiza); } };
+  const remede = () => { m = null; pede(); };
   addEventListener("scroll", pede, { passive: true });
-  addEventListener("resize", pede);
-  if (pode.addEventListener) pode.addEventListener("change", pede);
+  addEventListener("resize", remede);
+  addEventListener("load", remede);
+  if (document.fonts) document.fonts.ready.then(remede);
+  if (pode.addEventListener) pode.addEventListener("change", remede);
   atualiza();
 })();
 </script>
@@ -734,10 +759,11 @@ form.addEventListener("submit", async (evento) => {
     W = paisagem.clientWidth; H = paisagem.clientHeight;
     tela.width = Math.ceil(W * ESC); tela.height = Math.ceil(H * ESC);
     if (!aquarela.naturalWidth) return;
-    // onde a foto está: o mesmo cálculo do CSS (142% da largura, posição 79% 58%)
+    // onde a foto está: o mesmo cálculo do CSS (no computador: 142% da largura ou 2884 px, posição 79% 100%)
     const iw = aquarela.naturalWidth, ih = aquarela.naturalHeight;   // a foto e a aquarela têm o mesmo tamanho de arquivo
-    const fw = W * 1.42, fh = fw * ih / iw;
-    const PL = (W - fw) * .79, PT = (H - fh) * .58;
+    const largo = matchMedia("(min-width: 1081px)").matches, s = Math.min(innerWidth, 1920) / 1920;
+    const fw = largo ? Math.max(W * 1.42, 2884 * s) : W * 1.42, fh = fw * ih / iw;
+    const PL = (W - fw) * .79, PT = (H - fh) * (largo ? 1 : .58);
     // a aquarela no mesmo lugar em relação à foto que no Figma (foto x -607, y -13, 2668 de largura;
     // aquarela x -529, y 0, 2574×1449), para os elementos coincidirem
     const k = fw / 2668;
