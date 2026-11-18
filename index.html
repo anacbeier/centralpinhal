@@ -100,7 +100,8 @@ h1 {
   position: absolute; z-index: 0; left: 5.43%; top: 13.44%; width: 89.18%; height: 79.39%;
   object-fit: cover; border-radius: 1.64% / 2.56%; background: var(--creme);
 }
-.selo { position: absolute; z-index: 4; left: calc(240 * var(--s)); top: calc(500 * var(--s)); width: calc(200 * var(--s)); height: calc(202 * var(--s)); pointer-events: none; }
+/* o selo fica dentro do iPad, com o centro em cima da borda esquerda (como no Figma), e desce junto com ele */
+.selo { position: absolute; z-index: 2; left: -7.97%; top: 55.79%; width: 16.1%; aspect-ratio: 200 / 202; pointer-events: none; }
 .selo img { position: absolute; }
 .selo-anel { inset: 0; width: 100%; height: 100%; }
 .selo-pinha { left: 25.2%; top: 24.8%; width: 57%; height: auto; }
@@ -270,7 +271,7 @@ html.carregando .abertura { position: fixed; inset: 0; z-index: 1000; display: g
   .cena { height: auto; margin-top: 32px; padding-bottom: 96px; }
   .ipad { position: relative; left: auto; margin: 0 auto; width: min(94vw, 760px); }
   .paisagem { left: 12px; right: 12px; top: 26%; height: auto; bottom: 0; border-radius: 28px; background-position: 79% 58%, 0 0; background-size: 142% auto, auto; }
-  .selo { left: 3vw; top: auto; bottom: 40px; width: clamp(96px, 22vw, 150px); height: auto; aspect-ratio: 160 / 162; }
+  .selo { left: -2%; top: 80%; width: clamp(96px, 22vw, 150px); }
   .cartao { width: auto; margin: -56px 12px 24px; padding: 36px 22px 32px; border-radius: 28px; }
   .cartao-conteudo { grid-template-columns: minmax(0, 1fr); row-gap: 8px; }
   .cartao h2 { margin-top: 16px; }
@@ -559,10 +560,10 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
     <video id="video-central" src="central-ipad.mp4?v=1" poster="central-ipad-capa.jpg?v=1" muted loop playsinline preload="none"
            aria-label="A CentralPinhal funcionando, aba por aba: Início, Tarefas, Hábitos, Segundo cérebro, Financeiro, Agenda e Conteúdo"></video>
     <img class="ipad-moldura" src="ipad.webp?v=2" alt="" width="2480" height="1814">
-  </div>
-  <div class="selo" aria-hidden="true">
-    <img class="selo-anel" src="selo.svg" alt="" width="160" height="162">
-    <img class="selo-pinha" src="pinhas/selo.png" alt="" width="200" height="197">
+    <div class="selo" aria-hidden="true">
+      <img class="selo-anel" src="selo.svg" alt="" width="160" height="162">
+      <img class="selo-pinha" src="pinhas/selo.png" alt="" width="200" height="197">
+    </div>
   </div>
 </section>
 
@@ -577,7 +578,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
 <path d="M27.9978 17.014C26.8735 19.8707 24.812 22.0399 21.8357 22.7886C19.7289 23.2896 16.838 23.1038 15.1194 21.6885C14.2643 20.9839 14.8869 19.9206 15.4294 19.1956C16.5274 17.7291 17.9518 16.5523 19.6396 15.8154C20.8999 15.2651 22.233 15.0944 23.6043 15.1627C24.4167 15.2034 25.1653 15.3176 25.9724 15.4208C26.0762 15.4339 26.2515 15.3978 26.3139 15.34C26.5963 15.0753 25.4175 11.3753 25.2172 10.7455C24.9867 10.0198 24.7719 9.33553 24.5959 8.60066C24.46 8.03193 24.8061 7.46846 25.3985 7.37455C26.7631 7.15849 29.5739 7.00219 30.8296 7.42249C31.2913 7.57682 31.5533 8.04704 31.4528 8.5271C31.307 9.22652 31.0877 9.87076 30.8572 10.5518C30.6358 11.2079 29.3769 14.9873 29.6494 15.3288C29.6987 15.3905 29.8813 15.4444 29.9712 15.4345L32.6395 15.1462C34.1362 14.9847 35.6027 15.1994 36.9555 15.8929C38.7773 16.8268 40.2319 18.3957 41.0141 20.2661C41.2748 20.8893 41.066 21.4495 40.5452 21.8008C39.5634 22.4622 38.4607 22.8017 37.2629 22.914C33.0112 23.3139 29.6317 20.9064 27.9978 17.014Z" fill="#FBF7ED"/>
 <path d="M36.3411 53.1382C34.8654 55.8531 31.6974 58.7893 29.1861 60.527C28.5451 60.9703 27.8247 61.0524 27.1371 60.6675C24.4051 59.1387 20.9698 56.5925 19.3037 53.8954C19.0292 53.3976 18.7763 52.9214 18.6995 52.331C20.56 51.962 22.345 51.4655 24.0485 50.6229C26.5296 51.9521 29.4107 51.9429 31.8911 50.6295C33.3898 51.3978 34.9226 51.9212 36.5782 52.3166C36.5513 52.6056 36.4528 52.8591 36.3398 53.1375L36.3411 53.1382Z" fill="#FBF7ED"/>
 </svg>
-      <h2 id="titulo-lista">Mais tempo para focar no que <em>você faz de melhor.</em></h2>
+      <h2 id="titulo-lista">Quem organiza agora <em>é a Pinha.</em></h2>
       <div class="bonus">
         <p><strong>Os 10 primeiros usuários recebem:</strong></p>
         <p>Novidades e correções da Central e suporte por e-mail, por 3 meses.</p>
