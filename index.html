@@ -164,6 +164,11 @@ main { overflow-y: clip; }
 .cartao-texto { display: flex; flex-direction: column; }
 .cartao-form { align-self: end; }
 .cartao-logo { align-self: flex-start; width: auto; height: max(32px, calc(45 * var(--s))); }
+/* a pinha (no topo e no cartão) cresce um pouco quando o mouse passa por cima, com um quiquezinho no fim */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .marca svg, .cartao-logo { transform-origin: 50% 55%; transition: transform .35s cubic-bezier(.34, 1.56, .64, 1); }
+  .marca svg:hover, .cartao-logo:hover { transform: scale(1.12); }
+}
 .cartao h2 { margin: calc(29 * var(--s)) 0 calc(18 * var(--s)); font: 400 clamp(2.1rem, calc(62 * var(--s)), 3.875rem)/1.06 var(--f-titulo); }
 .bonus {
   margin: auto 0 0; padding: max(16px, calc(23 * var(--s))) max(18px, calc(29 * var(--s)));
