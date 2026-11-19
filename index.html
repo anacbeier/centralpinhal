@@ -731,14 +731,37 @@ function vaiProObrigado() {
 
 // O vídeo toca sem som, em loop, só enquanto está na tela. Quem pede menos movimento no sistema
 // vê o vídeo parado, com os controles do navegador para tocar quando quiser.
+// Antes ele só tentava tocar quando o iPad entrava na tela; se algo pausasse depois (o Safari no modo de economia
+// de bateria, a aba em segundo plano, voltar com o botão de voltar, a internet engasgando), ficava parado na capa.
+// Agora ele tenta de novo sempre que for para estar tocando: ao voltar para a aba, no primeiro toque ou clique,
+// e a cada 3 s enquanto estiver na tela e parado.
 (function () {
   const video = document.getElementById("video-central");
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) { video.controls = true; return; }
+  let pronto = false, naTela = false;
+  const quer = () => pronto && naTela && document.visibilityState === "visible";
+  function tenta() {
+    if (!quer()) { if (!video.paused) video.pause(); return; }
+    if (!video.paused) return;
+    const p = video.play();
+    if (p) p.catch(() => {}); // bloqueado ou interrompido: a próxima tentativa resolve
+  }
+  function comeca() {
+    if (pronto) return;
+    pronto = true;
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver((itens) => { naTela = itens[itens.length - 1].isIntersecting; tenta(); }, { threshold: 0.3 }).observe(video);
+    } else { naTela = true; tenta(); }
+    document.addEventListener("visibilitychange", tenta);
+    addEventListener("pageshow", tenta);                    // voltou com o botão de voltar
+    ["pointerdown", "touchend", "keydown"].forEach((t) => addEventListener(t, tenta, { passive: true }));
+    setInterval(() => { if (quer() && video.paused) tenta(); }, 3000);
+  }
   // espera o loading sair, para o vídeo não disputar com a transição
-  const olhar = () => new IntersectionObserver((itens) => {
-    if (itens[0].isIntersecting) video.play().catch(() => {}); else video.pause();
-  }, { threshold: 0.3 }).observe(video);
-  if (document.getElementById("abertura")) addEventListener("abertura-fim", olhar, { once: true }); else olhar();
+  if (document.getElementById("abertura")) {
+    addEventListener("abertura-fim", comeca, { once: true });
+    setTimeout(comeca, 10000);                              // se o loading não avisar, começa mesmo assim
+  } else comeca();
 })();
 
 // Os ✓ dos bônus são marcados quando a caixa aparece na tela (depois do loading). Só para quem não pediu menos movimento.
