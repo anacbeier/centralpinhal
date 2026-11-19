@@ -342,14 +342,17 @@ html.carregando .abertura { position: fixed; inset: 0; z-index: 1000; display: g
   .topo { padding: 40px 20px 0; }
   h1 { font-size: clamp(2.1rem, 6.4vw, 3.4rem); }
   .lead { font-size: 12px; }
-  .cena { height: auto; margin-top: 32px; padding-bottom: 96px; }
-  .paisagem { left: 12px; right: 12px; top: 26%; height: auto; bottom: 0; border-radius: 28px; background-size: cover; }
+  /* no celular a paisagem aparece dos lados do iPad (um pouco menor) e numa faixa larga entre ele e o cartão */
+  .cena { height: auto; margin-top: 32px; padding-bottom: clamp(150px, 42vw, 260px); }
+  .paisagem { left: 12px; right: 12px; top: 22%; height: auto; bottom: 0; border-radius: 28px; background-size: cover; }
   .fita { left: 14px; top: -3px; width: 40px; }
-  .ipad { position: relative; left: auto; margin: 0 auto; width: min(94vw, 760px); }
+  .ipad { position: relative; left: auto; margin: 0 auto; width: min(84vw, 700px); }
   .selo { left: -2%; top: 50%; width: clamp(84px, 24vw, 140px); }
   .cartao { width: auto; margin: -56px 12px 24px; padding: 36px 22px 32px; border-radius: 28px; }
   .cartao-conteudo { grid-template-columns: minmax(0, 1fr); row-gap: 8px; }
-  .cartao h2 { margin: 16px 0 0; }
+  /* no celular a pinha e o título do cartão ficam no meio (a lista dos ✓ continua à esquerda) */
+  .cartao-logo { align-self: center; }
+  .cartao h2 { margin: 16px 0 0; text-align: center; }
   .bonus { margin-top: 22px; padding: 20px 18px; }
   .explica { margin-top: 30px; }
   form { margin-top: 22px; gap: 24px; }
