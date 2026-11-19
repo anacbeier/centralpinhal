@@ -129,6 +129,12 @@ main { flex: 1; display: grid; place-items: center; padding-top: calc(var(--roda
 }
 .marca svg { width: auto; height: clamp(40px, 2.5vw, 48px); flex: none; }
 .marca em { font-style: italic; color: var(--amarelo); }
+/* a pinha cresce um pouco com o mouse em cima do logo (como na página da lista), com um quiquezinho no fim */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .marca svg { transform-origin: 50% 55%; transition: transform .35s cubic-bezier(.34, 1.56, .64, 1); }
+  .marca:hover svg { transform: scale(1.12); }
+}
+.marca:focus-visible svg { transform: scale(1.12); }
 h1 {
   margin: 22px 0 0;
   font: 400 clamp(2rem, 0.9rem + 1.9vw, 2.875rem)/1.067 var(--f-titulo);
