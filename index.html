@@ -18,8 +18,8 @@
 /* Montada a partir do quadro "Página de Captura - CentralPinhal" do Figma (arquivo Studio Tchê, 2413-405),
    na versão de 18/11/2026 (noite, com as linhas tracejadas): a fita vermelha no alto, título no centro, o iPad com o vídeo da Central sobre o
    fundo creme com grade e o cartão do formulário logo abaixo, com o iPad encostando por cima dele. Atrás, a paisagem
-   (x 41, y 557, 1836 × 1218), com a foto em x -663, y -373 dela, 2928 de largura; a aquarela da tinta do mouse fica
-   exatamente em cima da foto (as duas imagens têm o mesmo enquadramento).
+   (x 41, y 557, 1836 × 1218): a foto "Céu azul sobre montanhas ao entardecer" em x -192, y -13 dela, 2214 de largura;
+   por trás, a aquarela "Araucárias ao entardecer na Serra Gaúcha", revelada pela tinta do mouse (a mesma cena).
    No computador, as medidas seguem o quadro de 1920 px (--s = 1 px do Figma). */
 @font-face { font-family: "IvyOra Text"; font-style: normal; font-weight: 400; font-display: swap; src: url("fontes/IvyOraText-Regular-latin.woff2") format("woff2"); }
 @font-face { font-family: "IvyOra Text"; font-style: italic; font-weight: 400; font-display: swap; src: url("fontes/IvyOraText-RegularItalic-latin.woff2") format("woff2"); }
@@ -110,9 +110,9 @@ h1 {
   position: absolute; z-index: 1; overflow: hidden;
   left: calc(42 * var(--s)); right: calc(42 * var(--s)); top: calc(182 * var(--s)); height: calc(1218 * var(--s));
   border-radius: calc(83 * var(--s));
-  /* a foto da casa de pedra, enquadrada como no Figma: 2928 px de largura em x -663, y -373
-     (60,71% e 86,74% dão esses deslocamentos em 1920 e mantêm o enquadramento em telas mais largas) */
-  background: url("casa.webp") 60.71% 86.74% / max(calc(2928 * var(--s)), 100%) auto no-repeat, var(--verde);
+  /* a foto do céu azul sobre as montanhas, enquadrada como no Figma: 2214 px de largura em x -192, y -13
+     (50,79% e 46,43% dão esses deslocamentos em 1920 e mantêm o enquadramento em telas mais largas) */
+  background: url("ceu-montanhas.webp") 50.79% 46.43% / max(calc(2214 * var(--s)), 100%) auto no-repeat, var(--verde);
 }
 /* a tinta do mouse revela a aquarela por trás da foto, como no obrigado */
 .revela { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
@@ -803,21 +803,21 @@ form.addEventListener("submit", async (evento) => {
   const tela = paisagem.querySelector(".revela"), g = tela.getContext("2d"), ESC = .5;
   let W = 0, H = 0, capa = null;
   const aquarela = new Image();
-  aquarela.src = "paisagem.webp?v=2";
+  aquarela.src = "araucarias-aquarela.webp";
   function medir() {
     W = paisagem.clientWidth; H = paisagem.clientHeight;
     tela.width = Math.ceil(W * ESC); tela.height = Math.ceil(H * ESC);
     if (!aquarela.naturalWidth) return;
-    // onde a foto está: o mesmo cálculo do CSS (2928 px do Figma ou a largura toda, posição 60,71% 86,74%;
+    // onde a foto está: o mesmo cálculo do CSS (2214 px do Figma ou a largura toda, posição 50,79% 46,43%;
     // no celular e no tablet a foto cobre a caixa inteira)
     const iw = aquarela.naturalWidth, ih = aquarela.naturalHeight;   // a foto e a aquarela têm o mesmo tamanho de arquivo
     const s = Math.min(innerWidth, 1920) / 1920;
-    const fw = innerWidth > 1080 ? Math.max(2928 * s, W) : Math.max(W, H * iw / ih), fh = fw * ih / iw;
-    const PL = (W - fw) * .6071, PT = (H - fh) * .8674;
-    // a aquarela fica bem em cima da foto, como no quadro de 18/11 à noite (foto 2928 × 1648; aquarela 4 px à esquerda,
-    // 2 acima, 2935 × 1652): as duas imagens têm o mesmo enquadramento, então a casa e as araucárias coincidem
-    const k = fw / 2928;
-    capa = { dx: PL - 4 * k, dy: PT - 2 * k, dw: 2935 * k, dh: 1652 * k };
+    const fw = innerWidth > 1080 ? Math.max(2214 * s, W) : Math.max(W, H * iw / ih), fh = fw * ih / iw;
+    const PL = (W - fw) * .5079, PT = (H - fh) * .4643;
+    // a aquarela fica onde ela pôs no Figma (foto 2214 × 1246; aquarela 8 px à direita, 2 abaixo, 2205 × 1241),
+    // quase em cima da foto: é a mesma cena, então o sol e as araucárias coincidem
+    const k = fw / 2214;
+    capa = { dx: PL + 8 * k, dy: PT + 2 * k, dw: 2205 * k, dh: 1241 * k };
   }
   aquarela.onload = medir;
   let espera;
