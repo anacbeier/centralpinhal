@@ -102,6 +102,8 @@ h1 {
 }
 /* ao abrir, ela só aparece, sem sair do lugar */
 .anima .fita.entra { transform: none; }
+/* enquanto balança, a fita é desenhada num canvas por cima do lugar dela (ver o script da fita) */
+.fita-tela { position: absolute; z-index: 4; pointer-events: none; }
 
 /* ---------- a cena: a paisagem, o iPad com o vídeo e o selo da Pinha ---------- */
 .cena { position: relative; margin-top: calc(36 * var(--s)); height: calc(899 * var(--s)); }
@@ -495,6 +497,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
   }
   // Cada parte com a classe "entra" aparece quando chega na tela; as que chegam juntas entram uma depois da outra.
   function comecaEntradas() {
+    dispatchEvent(new Event("abertura-saindo")); // a fita começa a balançar quando a página aparece
     const itens = document.querySelectorAll(".entra");
     if (!document.documentElement.classList.contains("anima")) return;
     if (!("IntersectionObserver" in window)) { itens.forEach((el) => el.classList.add("visivel")); return; }
@@ -610,7 +613,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
 
 <div class="tracejados" aria-hidden="true"><i class="tr-v tr-esq"></i><i class="tr-v tr-dir"></i><i class="tr-h tr-baixo"></i></div>
 <main>
-<img class="fita entra" style="--atraso: .35s" src="fita.webp" alt="" width="258" height="329">
+<img class="fita" src="fita.webp" alt="" width="258" height="329">
 <header class="topo">
   <div class="marca entra" style="--atraso: .05s">
         <svg class="logo" aria-hidden="true" focusable="false" viewBox="0 0 56 68" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -731,6 +734,102 @@ function vaiProObrigado() {
 
 // O vídeo toca sem som, em loop, só enquanto está na tela. Quem pede menos movimento no sistema
 // vê o vídeo parado, com os controles do navegador para tocar quando quiser.
+// A fita balança como um pano: quando a página aparece e quando o mouse passa por ela (no celular, num toque).
+// Presa reta no alto (entre as páginas do livro), ela vai para um lado e para o outro, cada balanço menor que o
+// anterior, até parar reta como na imagem. Cada trecho segue o balanço com um pequeno atraso (mais embaixo, mais
+// atraso), então a ponta vem depois e a fita dobra como pano. Cada empurrão (a abertura, o mouse) soma um balanço
+// que vai morrendo; o mouse empurra para o lado em que está andando, mais forte quanto mais rápido.
+// A imagem é desenhada em fatias finas que seguem essa curva; quando tudo para, o canvas sai e a imagem volta
+// (iguais, então não pula). Quem pediu menos movimento vê a fita parada.
+(function () {
+  const img = document.querySelector(".fita");
+  if (!img || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const GRAU = Math.PI / 180, PERIODO = 1.2, AMORTECE = 1.05, ATRASO = .11, M = 40, MAX = 20 * GRAU;
+  const om = 2 * Math.PI / PERIODO;
+  const X = new Float32Array(M), Y = new Float32Array(M), A = new Float32Array(M);
+  let empurroes = [], tela = null, g = null, geo = null;
+  const agora = () => performance.now() / 1000;
+  // o ângulo no alto da parte que balança, somando os empurrões (cada um começa parado e vai morrendo)
+  function balanco(t) {
+    let s = 0;
+    for (const [t0, a] of empurroes) { const d = t - t0; if (d > 0) s += a * Math.exp(-AMORTECE * d) * Math.sin(om * d); }
+    return Math.max(-MAX, Math.min(MAX, s));
+  }
+  function monta() {
+    const w = img.offsetWidth, h = img.offsetHeight, lado = Math.ceil(w * .6), baixo = Math.ceil(h * .05);
+    const W = w + 2 * lado, H = h + baixo, dpr = Math.min(2, devicePixelRatio || 1);
+    tela = document.createElement("canvas");
+    tela.className = "fita-tela"; tela.setAttribute("aria-hidden", "true");
+    tela.width = Math.round(W * dpr); tela.height = Math.round(H * dpr);
+    tela.style.cssText = "left:" + (img.offsetLeft - lado) + "px;top:" + img.offsetTop + "px;width:" + W + "px;height:" + H + "px";
+    img.after(tela);
+    g = tela.getContext("2d");
+    geo = { w, h, lado, dpr, ds: h / (M - 1), nw: img.naturalWidth, nh: img.naturalHeight };
+  }
+  // a curva da fita no instante t: ângulo de cada trecho (zero no alto, que está preso) somado até a ponta
+  function curva(t) {
+    for (let j = 0; j < M; j++) {
+      const u = j / (M - 1), p = u < .22 ? (u / .22) * (u / .22) * (3 - 2 * u / .22) : 1;
+      A[j] = balanco(t - ATRASO * u) * p;
+    }
+    X[0] = 0; Y[0] = 0;
+    for (let j = 1; j < M; j++) {
+      const a = (A[j - 1] + A[j]) / 2;
+      X[j] = X[j - 1] + Math.sin(a) * geo.ds; Y[j] = Y[j - 1] + Math.cos(a) * geo.ds;
+    }
+  }
+  function desenha() {
+    const { w, h, lado, dpr, ds, nw, nh } = geo, fatia = h / nh, cx = lado + w / 2;
+    g.setTransform(1, 0, 0, 1, 0, 0);
+    g.clearRect(0, 0, tela.width, tela.height);
+    for (let r = 0; r < nh; r++) {
+      const f = Math.min(M - 1.0001, (r + .5) * fatia / ds), j = f | 0, k = f - j;
+      const x = X[j] + (X[j + 1] - X[j]) * k, y = Y[j] + (Y[j + 1] - Y[j]) * k;
+      const th = A[j] + (A[j + 1] - A[j]) * k, co = Math.cos(th), si = Math.sin(th);
+      g.setTransform(co * dpr, -si * dpr, si * dpr, co * dpr, (cx + x) * dpr, (y - fatia * .5) * dpr);
+      g.drawImage(img, 0, r, nw, 1, -w / 2, 0, w, fatia * 1.6);
+    }
+  }
+  function quadro() {
+    const t = agora();
+    // tira os empurrões que já morreram (menos de 0,1 grau); sem nenhum, a imagem parada volta
+    empurroes = empurroes.filter(([t0, a]) => Math.abs(a) * Math.exp(-AMORTECE * (t - t0)) > .1 * GRAU);
+    if (!empurroes.length) { img.style.visibility = ""; tela.remove(); tela = null; return; }
+    curva(t); desenha();
+    requestAnimationFrame(quadro);
+  }
+  function empurra(a) {
+    if (!img.complete || !img.naturalWidth || !img.offsetWidth) return;
+    empurroes.push([agora(), a]);
+    if (empurroes.length > 14) empurroes.shift();
+    if (!tela) { monta(); img.style.visibility = "hidden"; requestAnimationFrame(quadro); }
+  }
+
+  // na abertura: o empurrão de quando o livro abre
+  const abre = () => { if (img.complete) empurra(13 * GRAU); else img.addEventListener("load", () => empurra(13 * GRAU), { once: true }); };
+  if (document.getElementById("abertura")) addEventListener("abertura-saindo", abre, { once: true }); else abre();
+
+  // o mouse passando pela fita (ou um toque nela, no celular)
+  const naFita = (x, y) => { const r = img.getBoundingClientRect(); return x > r.left - 4 && x < r.right + 4 && y > r.top - 4 && y < r.bottom + 4; };
+  let ux = null, ut = 0, dentro = false, ultimo = 0;
+  addEventListener("pointermove", (e) => {
+    if (e.pointerType !== "mouse" || document.documentElement.classList.contains("carregando")) return;
+    const vx = ux === null ? 0 : (e.clientX - ux) / Math.max(8, e.timeStamp - ut) * 1000; // px por segundo
+    ux = e.clientX; ut = e.timeStamp;
+    const em = naFita(e.clientX, e.clientY);
+    if (em && e.timeStamp - ultimo > 140 && (Math.abs(vx) > 40 || !dentro)) {
+      let a = Math.max(-1, Math.min(1, vx / 1600)) * 9 * GRAU;
+      if (Math.abs(a) < 2.5 * GRAU) a = (vx < 0 ? -1 : 1) * 2.5 * GRAU;
+      empurra(a); ultimo = e.timeStamp;
+    }
+    dentro = em;
+  }, { passive: true });
+  addEventListener("pointerdown", (e) => {
+    if (e.pointerType === "mouse" || !naFita(e.clientX, e.clientY)) return;
+    empurra((Math.random() < .5 ? -1 : 1) * 8 * GRAU);
+  }, { passive: true });
+})();
+
 // Antes ele só tentava tocar quando o iPad entrava na tela; se algo pausasse depois (o Safari no modo de economia
 // de bateria, a aba em segundo plano, voltar com o botão de voltar, a internet engasgando), ficava parado na capa.
 // Agora ele tenta de novo sempre que for para estar tocando: ao voltar para a aba, no primeiro toque ou clique,
