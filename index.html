@@ -346,10 +346,16 @@ html.carregando .abertura { position: fixed; inset: 0; z-index: 1000; display: g
      larga entre ele e o cartão */
   .cena { height: auto; margin-top: 32px; padding-bottom: clamp(150px, 42vw, 260px); }
   .paisagem { left: 0; right: 0; top: 22%; height: auto; bottom: 0; border-radius: 0; background-size: cover; }
+  /* e continua descendo por trás do cartão, aparecendo dos lados dele até mais ou menos o meio: é a mata de baixo
+     da mesma foto, maior (a foto inteira esticada até ali mostraria só o céu acima do cartão) */
+  .cena::after {
+    content: ""; position: absolute; z-index: 1; left: 0; right: 0; top: 100%; height: 420px; pointer-events: none;
+    background: url("ceu-montanhas.webp") 50% 100% / auto 300% no-repeat, var(--verde);
+  }
   .fita { left: 14px; top: -3px; width: 40px; }
   .ipad { position: relative; left: auto; margin: 0 auto; width: min(84vw, 700px); }
-  /* o selo desce para o canto de baixo do iPad, sem cobrir o vídeo */
-  .selo { left: -2%; top: 91%; width: clamp(84px, 24vw, 140px); }
+  /* o selo fica menor, no canto de baixo do iPad, subindo um pouco em cima dele */
+  .selo { left: -3%; top: 80%; width: clamp(64px, 18vw, 108px); }
   .cartao { width: auto; margin: -56px 12px 24px; padding: 36px 22px 32px; border-radius: 28px; }
   .cartao-conteudo { grid-template-columns: minmax(0, 1fr); row-gap: 8px; }
   /* no celular a pinha e o título do cartão ficam no meio (a lista dos ✓ continua à esquerda) */
