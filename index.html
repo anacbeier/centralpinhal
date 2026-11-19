@@ -143,6 +143,10 @@ h1 {
 }
 @keyframes selo-gira { to { transform: rotate(360deg); } }
 
+/* a página termina no fim do cartão: enquanto o texto do cartão espera para subir (200 px mais baixo),
+   ele não pode esticar a página, senão quem rola rápido até o fim vê uma faixa vazia embaixo do rodapé */
+main { overflow-y: clip; }
+
 /* ---------- o cartão do formulário, logo abaixo do iPad (o iPad fica por cima da borda de cima do cartão) ---------- */
 .cartao {
   position: relative; z-index: 2;
