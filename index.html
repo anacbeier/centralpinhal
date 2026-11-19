@@ -342,12 +342,14 @@ html.carregando .abertura { position: fixed; inset: 0; z-index: 1000; display: g
   .topo { padding: 40px 20px 0; }
   h1 { font-size: clamp(2.1rem, 6.4vw, 3.4rem); }
   .lead { font-size: 12px; }
-  /* no celular a paisagem aparece dos lados do iPad (um pouco menor) e numa faixa larga entre ele e o cartão */
+  /* no celular a paisagem vai de uma ponta à outra da tela e aparece dos lados do iPad (um pouco menor) e numa faixa
+     larga entre ele e o cartão */
   .cena { height: auto; margin-top: 32px; padding-bottom: clamp(150px, 42vw, 260px); }
-  .paisagem { left: 12px; right: 12px; top: 22%; height: auto; bottom: 0; border-radius: 28px; background-size: cover; }
+  .paisagem { left: 0; right: 0; top: 22%; height: auto; bottom: 0; border-radius: 0; background-size: cover; }
   .fita { left: 14px; top: -3px; width: 40px; }
   .ipad { position: relative; left: auto; margin: 0 auto; width: min(84vw, 700px); }
-  .selo { left: -2%; top: 50%; width: clamp(84px, 24vw, 140px); }
+  /* o selo desce para o canto de baixo do iPad, sem cobrir o vídeo */
+  .selo { left: -2%; top: 91%; width: clamp(84px, 24vw, 140px); }
   .cartao { width: auto; margin: -56px 12px 24px; padding: 36px 22px 32px; border-radius: 28px; }
   .cartao-conteudo { grid-template-columns: minmax(0, 1fr); row-gap: 8px; }
   /* no celular a pinha e o título do cartão ficam no meio (a lista dos ✓ continua à esquerda) */
