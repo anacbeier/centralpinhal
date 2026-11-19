@@ -178,7 +178,25 @@ main { overflow-y: clip; }
 .bonus ul { margin: 0; padding: 0; list-style: none; }
 .bonus li { display: grid; grid-template-columns: 18px minmax(0, 1fr); column-gap: 12px; align-items: start; }
 .bonus li + li { margin-top: 20px; }
-.bonus svg { width: 18px; height: 18px; margin-top: 1px; fill: var(--amarelo); }
+.bonus svg { width: 18px; height: 18px; margin-top: 1px; overflow: visible; }
+.bonus circle { fill: var(--amarelo); }
+.bonus .risco { fill: none; stroke: var(--fundo); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+/* os ✓ dos bônus: quando a caixa aparece na tela, cada bolinha salta e o risco do ✓ se desenha, um depois do outro;
+   com o mouse em cima de uma linha, o ✓ dela cresce um pouco */
+@media (prefers-reduced-motion: no-preference) {
+  .anima .bonus circle { transform-box: fill-box; transform-origin: center; transform: scale(0); }
+  .anima .bonus .risco { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .anima .bonus.marcado circle { animation: bolinha .5s cubic-bezier(.34, 1.56, .64, 1) var(--d, 0s) forwards; }
+  .anima .bonus.marcado .risco { animation: risco .32s cubic-bezier(.65, 0, .35, 1) calc(var(--d, 0s) + .22s) forwards; }
+  .bonus li:nth-child(2) { --d: .2s; }
+  .bonus li:nth-child(3) { --d: .4s; }
+  .bonus svg { transition: transform .3s cubic-bezier(.34, 1.56, .64, 1); }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .bonus li:hover svg { transform: scale(1.18); }
+}
+@keyframes bolinha { from { transform: scale(0); } to { transform: scale(1); } }
+@keyframes risco { to { stroke-dashoffset: 0; } }
 .bonus b { font-weight: 700; }
 .bonus strong { font-weight: 700; color: var(--amarelo); }
 
@@ -638,9 +656,9 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentEl
       <h2 id="titulo-lista">Os <em>10 primeiros<br> usuários</em> recebem:</h2>
       <div class="bonus">
         <ul>
-          <li><svg aria-hidden="true" focusable="false" viewBox="0 0 22 22"><path fill-rule="evenodd" d="M11 0C4.925 0 0 4.925 0 11s4.925 11 11 11 11-4.925 11-11S17.075 0 11 0Zm4.768 9.14a1 1 0 1 0-1.536-1.28l-4.3 5.159-2.225-2.226a1 1 0 0 0-1.414 1.414l3 3a1 1 0 0 0 1.475-.067l5-6Z"/></svg><span><strong>Novidades</strong> e <strong>correções</strong> da Central (por 3 meses).</span></li>
-          <li><svg aria-hidden="true" focusable="false" viewBox="0 0 22 22"><path fill-rule="evenodd" d="M11 0C4.925 0 0 4.925 0 11s4.925 11 11 11 11-4.925 11-11S17.075 0 11 0Zm4.768 9.14a1 1 0 1 0-1.536-1.28l-4.3 5.159-2.225-2.226a1 1 0 0 0-1.414 1.414l3 3a1 1 0 0 0 1.475-.067l5-6Z"/></svg><span><strong>Suporte</strong> por <b>e-mail</b> (por 3 meses).</span></li>
-          <li><svg aria-hidden="true" focusable="false" viewBox="0 0 22 22"><path fill-rule="evenodd" d="M11 0C4.925 0 0 4.925 0 11s4.925 11 11 11 11-4.925 11-11S17.075 0 11 0Zm4.768 9.14a1 1 0 1 0-1.536-1.28l-4.3 5.159-2.225-2.226a1 1 0 0 0-1.414 1.414l3 3a1 1 0 0 0 1.475-.067l5-6Z"/></svg><span><strong>Vídeo aulas</strong> <b>mostrando como:</b> instalar a Central, usar a Central e configurar as APIs nas redes sociais na Central.</span></li>
+          <li><svg aria-hidden="true" focusable="false" viewBox="0 0 22 22"><circle cx="11" cy="11" r="11"/><path class="risco" d="M7 11.5l3 2.9 5-5.9" pathLength="1"/></svg><span><strong>Novidades</strong> e <strong>correções</strong> da Central (por 3 meses).</span></li>
+          <li><svg aria-hidden="true" focusable="false" viewBox="0 0 22 22"><circle cx="11" cy="11" r="11"/><path class="risco" d="M7 11.5l3 2.9 5-5.9" pathLength="1"/></svg><span><strong>Suporte</strong> por <b>e-mail</b> (por 3 meses).</span></li>
+          <li><svg aria-hidden="true" focusable="false" viewBox="0 0 22 22"><circle cx="11" cy="11" r="11"/><path class="risco" d="M7 11.5l3 2.9 5-5.9" pathLength="1"/></svg><span><strong>Vídeo aulas</strong> <b>mostrando como:</b> instalar a Central, usar a Central e configurar as APIs nas redes sociais na Central.</span></li>
         </ul>
       </div>
     </div>
@@ -721,6 +739,22 @@ function vaiProObrigado() {
     if (itens[0].isIntersecting) video.play().catch(() => {}); else video.pause();
   }, { threshold: 0.3 }).observe(video);
   if (document.getElementById("abertura")) addEventListener("abertura-fim", olhar, { once: true }); else olhar();
+})();
+
+// Os ✓ dos bônus são marcados quando a caixa aparece na tela (depois do loading). Só para quem não pediu menos movimento.
+(function () {
+  const caixa = document.querySelector(".bonus");
+  if (!caixa || !document.documentElement.classList.contains("anima")) return;
+  const marca = () => caixa.classList.add("marcado");
+  if (!("IntersectionObserver" in window)) { marca(); return; }
+  let olho = null;
+  const olhar = () => {
+    if (olho) return;
+    olho = new IntersectionObserver((v) => { if (v[0].isIntersecting) { marca(); olho.disconnect(); } }, { threshold: 0.6 });
+    olho.observe(caixa);
+  };
+  if (document.getElementById("abertura")) addEventListener("abertura-fim", olhar, { once: true }); else olhar();
+  setTimeout(olhar, 7000); // se o loading não avisar que acabou, os ✓ funcionam mesmo assim
 })();
 
 form.addEventListener("submit", async (evento) => {
